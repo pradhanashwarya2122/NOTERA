@@ -15,6 +15,7 @@ import time
 import urllib.error
 import urllib.request
 import uuid
+import webbrowser
 import zipfile
 from pathlib import Path
 
@@ -185,7 +186,7 @@ def merge_states(mine, theirs):
 
 
 # ---------------------------------------------------------------- git sync
-CONFIG_FILE = BASE_DIR / "sync_config.json"
+CONFIG_FILE = HOME_DIR / "sync_config.json"
 SYNC = {"status": "off", "msg": "Local only", "last": 0}
 _sync_lock = threading.RLock()
 _kick = threading.Event()
@@ -231,6 +232,28 @@ def _init_repo(remote):
         git("remote", "add", "origin", remote)
 
 
+_vis_cache = {}
+
+
+def repo_is_public(remote):
+    """Notes are private. If anyone could open the repo without signing in, refuse to push them there."""
+    m = re.match(r"https://github\.com/([^/]+)/([^/]+?)(?:\.git)?/?$", remote.strip())
+    if not m:
+        return False
+    hit = _vis_cache.get(remote)
+    if hit and time.time() - hit[0] < 120:
+        return hit[1]
+    pub = False
+    try:
+        req = urllib.request.Request("https://github.com/%s/%s" % m.groups(), method="HEAD", headers={"User-Agent": "notera"})
+        with urllib.request.urlopen(req, timeout=8) as r:
+            pub = r.status == 200
+    except Exception:
+        pub = False
+    _vis_cache[remote] = (time.time(), pub)
+    return pub
+
+
 def sync_now():
     """Commit local notes, merge with the private notes repo page by page, and push. Safe to call any time."""
     remote = load_config().get("notes_remote")
@@ -243,6 +266,9 @@ def sync_now():
     with _sync_lock:
         _set_sync("syncing", "Syncing")
         try:
+            if repo_is_public(remote) and not load_config().get("allow_public"):
+                _set_sync("error", "That notes repo is public. Make it private on GitHub, then sync again.")
+                return SYNC
             _init_repo(remote)
             rc, _, err = git("fetch", "origin", timeout=180)
             if rc != 0:
@@ -253,19 +279,19 @@ def sync_now():
                 git("checkout", "-f", "-B", "main", "origin/main")
             for attempt in range(3):
                 with _state_lock:
-                    git("add", ".gitignore", "pages.json")
+                    git("add", *[f for f in (".gitignore", "pages.json") if (DATA_DIR / f).exists()])
                     if git("diff", "--cached", "--quiet")[0] != 0:
                         git("commit", "-m", "notes " + time.strftime("%Y-%m-%d %H:%M:%S"))
                     if has_remote and git("merge-base", "--is-ancestor", "origin/main", "HEAD")[0] != 0:
                         rc, remote_text, _ = git("show", "origin/main:pages.json")
-                        if rc == 0:
-                            merged = merge_states(load_state(), json.loads(remote_text))
-                            git("merge", "-s", "ours", "--no-edit", "--allow-unrelated-histories", "origin/main")
-                            if json.dumps(merged, ensure_ascii=False, indent=2) != PAGES_FILE.read_text(encoding="utf-8"):
-                                save_state(merged)
+                        merged = merge_states(load_state(), json.loads(remote_text)) if rc == 0 else None
+                        git("merge", "-s", "ours", "--no-edit", "--allow-unrelated-histories", "origin/main")
+                        if merged is not None and json.dumps(merged, ensure_ascii=False, indent=2) != PAGES_FILE.read_text(encoding="utf-8"):
+                            save_state(merged)
+                        if PAGES_FILE.exists():
                             git("add", "pages.json")
-                            if git("diff", "--cached", "--quiet")[0] != 0:
-                                git("commit", "-m", "merge " + time.strftime("%Y-%m-%d %H:%M:%S"))
+                        if git("diff", "--cached", "--quiet")[0] != 0:
+                            git("commit", "-m", "merge " + time.strftime("%Y-%m-%d %H:%M:%S"))
                 rc, _, err = git("push", "origin", "HEAD:main", timeout=180)
                 if rc == 0:
                     _set_sync("synced", "Synced")
@@ -503,6 +529,20 @@ def me_route():
             me["emoji"] = str(body["emoji"])[:4]
         _write_json(IDENT_FILE, me)
     return jsonify(me)
+
+
+@app.route("/api/onboard", methods=["GET", "POST"])
+def onboard_route():
+    me = get_identity()
+    if request.method == "POST":
+        me["onboarded"] = True
+        _write_json(IDENT_FILE, me)
+        return jsonify({"ok": True})
+    needed = not me.get("onboarded") and not PAGES_FILE.exists()
+    if not me.get("onboarded") and PAGES_FILE.exists():
+        me["onboarded"] = True  # an existing notebook never sees the welcome screen
+        _write_json(IDENT_FILE, me)
+    return jsonify({"needed": needed, "git": shutil.which("git") is not None, "remote": load_config().get("notes_remote", "")})
 
 
 @app.route("/api/net", methods=["GET"])
@@ -788,12 +828,25 @@ if __name__ == "__main__":
         _interactive = True
         print("Syncing notes...", sync_now()["msg"])
         sys.exit(0)
+    port = int(os.environ.get("NOTERA_PORT", 5151))
+    url = "http://127.0.0.1:%d/" % port
+    try:  # already running? just bring up the browser instead of failing on the busy port
+        with urllib.request.urlopen(url + "api/rev", timeout=1.5):
+            if "--open" in sys.argv:
+                webbrowser.open(url)
+            print("Notera is already running at", url)
+            sys.exit(0)
+    except (OSError, urllib.error.URLError):
+        pass
     threading.Thread(target=_sync_loop, daemon=True).start()
     threading.Thread(target=_net_loop, daemon=True).start()
+    if "--open" in sys.argv:
+        threading.Timer(1.2, webbrowser.open, [url]).start()
     if get_net().get("host"):
         try:
             host_relay()
         except OSError:
             pass
     _kick.set()
-    app.run(host="127.0.0.1", port=int(os.environ.get("NOTERA_PORT", 5151)), debug=False, threaded=True)
+    print("Notera is running at", url, "(close this window to stop it)")
+    app.run(host="127.0.0.1", port=port, debug=False, threaded=True)

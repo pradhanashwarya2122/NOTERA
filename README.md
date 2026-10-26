@@ -1,48 +1,55 @@
 # NOTERA
 
-A calm, colourful notes app that runs on your own computer. One Flask server and one HTML file.
+A calm, colourful notes app for coding notes, LeetCode solutions and revision. It runs on your own computer
+(one small Python server and one HTML file) on **Windows and Mac**.
 
-- Notion-style pages, sub-pages, tags, favourites, quick find (`Ctrl+P`), page outline and collapsible headings
-- **Paste prompt** box: paste a whole ChatGPT / Claude / DeepSeek answer and it stays in one box, with tables,
-  code, diagrams, step cards, quizzes and array visuals rebuilt
-- Runnable Python blocks, image and SVG support, four-plus themes, choosable fonts
-- Your notes sync between your own laptops through a private GitHub repo
-- A tiny **sharing network**: pair with a friend using a 6-digit key and share chosen pages
+## Start it
 
-## Run
-```
-start.bat
-```
-Needs Python 3.10+ and Git. It installs Flask and opens http://127.0.0.1:5151/.
+| System | What to do |
+| --- | --- |
+| Windows | Double-click **`start.bat`** |
+| Mac / Linux | Double-click **`start.command`** (first time: right-click, Open) or run `./start.command` |
+
+You need [Python 3.10+](https://www.python.org/downloads/) and, for syncing, [Git](https://git-scm.com/downloads).
+The first run sets itself up in a private `.venv` folder and opens http://127.0.0.1:5151/ in your browser.
+
+### First run: pick how to begin
+- **Start fresh** with a clean notebook.
+- **Fetch my notes** from your own *private* GitHub repo (paste its address, sign in to GitHub once).
+- **Join a friend** by entering their 6-digit share key.
+- **Share my notes** by creating a 6-digit key for a friend.
+
+## Made for coding notes
+- **Folders and subfolders** in the sidebar (New folder, or the folder icon on any folder). Drag pages onto a folder.
+- **Templates** (From template): *LeetCode problem* (problem, hint, approach, solution, complexity, edge cases,
+  mistakes, key idea), *Concept notes* and *Bug and fix log*. In any page type `/leetcode`.
+- **Code blocks** for Python (runnable), JavaScript, TypeScript, Java, C++, C, Go, SQL and Shell, each with a label such as
+  *Brute force* or *Optimal*.
+- **Callouts** for `/hint`, `/pitfall`, `/idea` and `/complexity`, and colour-coded tags: `easy`, `medium`, `hard`,
+  `solved`, `unsolved`, `revise`.
+- **Revision**: press *Revise* on a page and pick a day. Due pages appear on Home and in the sidebar.
+- **Paste prompt**: paste a whole ChatGPT / Claude / DeepSeek answer into one box. Tables, code, diagrams, step cards,
+  quizzes and array visuals are rebuilt.
+- Quick find (`Ctrl+P`), page outline (`Alt+O`), collapsible headings, six themes, choosable fonts.
 
 ## Your own laptops (private repo sync)
-Put your private notes repo address in `sync_config.json`:
-```
-{"notes_remote": "https://github.com/YOU/notera-notes.git"}
-```
-On the second laptop: clone this repo, run `start.bat`, sign in to GitHub once. Notes merge page by page.
+Create an empty **private** repo on GitHub, then on first run choose *Fetch my notes* and paste its address (or later
+from the profile area). Notera refuses to sync notes to a repo that is public. Every save is committed and pushed in the
+background, and the second laptop pulls and merges page by page.
 
 ## Sharing with a friend (6-digit key)
-Every install creates a small identity the first time it runs: a user id like `NTR-4F9A21`, a name and an avatar colour.
-Open your profile (top of the sidebar):
+Each install creates an identity on first run: a user id like `NTR-4F9A21`, a name and a colour.
 
-1. **Pick a relay.** The relay is a tiny server that introduces two people and passes along only the pages they share.
-   - Same Wi-Fi: one person clicks **Host it on this computer**. The other enters the address it shows
+1. **Pick a relay**, the tiny server that introduces two people and passes along only the pages they share.
+   - Same Wi-Fi: one person clicks *Host it on this computer*. The other enters the address it shows
      (for example `http://192.168.1.20:5252`).
-   - Anywhere: deploy `relay.py` free on Render, Railway or Fly (a `Procfile` is included; start command
-     `gunicorn relay:app`), then put its address in `network_config.json` and commit it, so everyone who clones
-     this repo joins the same network:
-     ```
-     {"relay": "https://your-relay.onrender.com"}
-     ```
-2. **Pair.** One person clicks **Create a share key** and sends the 6 digits. The other enters them under
-   **Join**. A key works once and expires in 10 minutes.
-3. **Share pages.** Click the people icon on a page in the sidebar. Edits sync both ways within seconds.
-   Pages you don't share never leave your computer.
-4. **Stop any time.** **Stop sharing** unlinks you. Your pages stay on your computer; they just stop syncing.
-
-The relay stores only the pages people explicitly share. Anyone who has a room link can read that room, so treat
-the 6-digit key like a short-lived invitation and share it only with the person you mean.
+   - Anywhere: deploy `relay.py` (a `Procfile` is included; start command `gunicorn relay:app`) on Render, Railway or
+     Fly, then put its address in `network_config.json` and commit it so every clone uses the same relay:
+     `{"relay": "https://your-relay.onrender.com"}`
+2. **Pair.** One person creates a key; the other enters the 6 digits. A key works once and expires in 10 minutes.
+3. **Share pages** with the people icon on a page. Edits sync both ways. Unshared pages never leave your computer.
+4. **Stop sharing** any time. Your pages stay on your computer.
 
 ## Privacy
-This repo contains only the app. `notes_data/`, `identity.json` and `net.json` are git-ignored.
+This repo contains only the app. `notes_data/`, `identity.json`, `net.json`, `sync_config.json` and `.venv/` are
+git-ignored, so your notes are never published with the code.

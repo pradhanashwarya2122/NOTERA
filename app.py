@@ -1,13 +1,19 @@
+import getpass
 import hashlib
 import json
+import socket
 import os
+import random
 import re
 import shutil
 import subprocess
+import secrets
 import sys
 import tempfile
 import threading
 import time
+import urllib.error
+import urllib.request
 import uuid
 import zipfile
 from pathlib import Path
@@ -15,7 +21,8 @@ from pathlib import Path
 from flask import Flask, jsonify, request, send_from_directory, send_file
 
 BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR / "notes_data"
+DATA_DIR = Path(os.environ.get("NOTERA_DATA", BASE_DIR / "notes_data"))
+HOME_DIR = Path(os.environ.get("NOTERA_HOME", BASE_DIR))  # identity.json and net.json live here (never synced to git)
 PAGES_FILE = DATA_DIR / "pages.json"
 BACKUP_DIR = DATA_DIR / "backups"
 FULL_BACKUP_DIR = DATA_DIR / "full_backups"
@@ -271,6 +278,172 @@ def sync_now():
     return SYNC
 
 
+# ---------------------------------------------------------------- identity + sharing network
+IDENT_FILE = HOME_DIR / "identity.json"
+NET_FILE = HOME_DIR / "net.json"
+NET_DEFAULT = BASE_DIR / "network_config.json"
+PALETTE = ["#e03e3e", "#d9730d", "#dfab01", "#0f7b6c", "#0b6e99", "#6940a5", "#ad1a72", "#64473a"]
+NETST = {"status": "off", "msg": "", "members": [], "messages": [], "key": None, "keyexp": 0, "last": 0}
+_net_lock = threading.RLock()
+
+
+def _read_json(path):
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def _write_json(path, data):
+    Path(path).write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def get_identity():
+    """A stable per-person identity made on first run: an id like NTR-4F9A21 plus an editable name and colour."""
+    d = _read_json(IDENT_FILE)
+    if not d.get("id"):
+        try:
+            name = getpass.getuser().replace(".", " ").replace("_", " ").title()
+        except Exception:
+            name = "Writer"
+        d = {"id": "NTR-" + secrets.token_hex(3).upper(), "name": name or "Writer", "color": random.choice(PALETTE), "emoji": "", "created": time.time()}
+        _write_json(IDENT_FILE, d)
+    return d
+
+
+def get_net():
+    d = _read_json(NET_FILE)
+    d.setdefault("relay", os.environ.get("NOTERA_RELAY") or _read_json(NET_DEFAULT).get("relay", ""))
+    return d
+
+
+_relay_srv = None
+
+
+def lan_ip():
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sk:
+            sk.connect(("10.255.255.255", 1))
+            return sk.getsockname()[0]
+    except OSError:
+        return "127.0.0.1"
+
+
+def host_relay():
+    """Run the relay inside this app so two computers on the same network can pair with no hosting."""
+    global _relay_srv
+    if _relay_srv:
+        return
+    import relay as relaymod
+    from werkzeug.serving import make_server
+
+    _relay_srv = make_server("0.0.0.0", 5252, relaymod.app, threaded=True)
+    threading.Thread(target=_relay_srv.serve_forever, daemon=True).start()
+
+
+def relay_call(path, body=None):
+    relay = (get_net().get("relay") or "").strip().rstrip("/")
+    if not relay:
+        return 0, {"error": "Add a relay address first (see README: Sharing)."}
+    req = urllib.request.Request(relay + "/relay" + path, data=json.dumps(body or {}).encode(), headers={"Content-Type": "application/json"}, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=12) as r:
+            return r.status, json.loads(r.read().decode() or "{}")
+    except urllib.error.HTTPError as e:
+        try:
+            return e.code, json.loads(e.read().decode() or "{}")
+        except Exception:
+            return e.code, {"error": "Relay error %s" % e.code}
+    except Exception as e:
+        return 0, {"error": "Can't reach the relay: %s" % str(e)[:80]}
+
+
+def _public_user(me):
+    return {"id": me["id"], "name": me["name"], "color": me["color"], "emoji": me.get("emoji", "")}
+
+
+def net_sync():
+    """Push the pages I chose to share, pull the room's merged copy, and apply anything newer."""
+    with _net_lock:
+        net, me = get_net(), get_identity()
+        room = net.get("room")
+        if not room:
+            NETST.update(status="off", members=[], messages=[])
+            return
+        with _state_lock:
+            state = load_state()
+            pages = state.get("pages", [])
+            ids = {pg["id"] for pg in pages}
+            payload = [dict(pg) for pg in pages if pg.get("share")]
+            tombs = net.setdefault("tombs", {})
+            for sid in net.get("shared_ids", []):
+                if sid not in ids and sid not in tombs:
+                    tombs[sid] = int(time.time() * 1000)
+            payload += [{"id": i, "deleted": True, "mt": t} for i, t in tombs.items()]
+            code, data = relay_call("/room/%s/sync" % room, {"user_id": me["id"], "pages": payload})
+            if code == 403:
+                net.pop("room", None), net.pop("shared_ids", None), net.pop("tombs", None)
+                _write_json(NET_FILE, net)
+                NETST.update(status="off", msg="The shared space was closed.", members=[], messages=[], key=None)
+                return
+            if code != 200:
+                NETST.update(status="offline", msg=data.get("error", "Offline"))
+                return
+            changed = False
+            for bp in data.get("pages", []):
+                local = next((x for x in pages if x["id"] == bp["id"]), None)
+                if bp.get("deleted"):
+                    if local and bp.get("mt", 0) >= local.get("mt", 0):
+                        pages.remove(local)
+                        changed = True
+                elif local is None or bp.get("mt", 0) > local.get("mt", 0):
+                    if local is None and tombs.get(bp["id"], 0) >= bp.get("mt", 0):
+                        continue
+                    bp["share"] = True
+                    if local is None:
+                        pages.append(bp)
+                    else:
+                        pages[pages.index(local)] = bp
+                    changed = True
+            if changed:
+                if not pages:
+                    pages.append({"id": uuid.uuid4().hex[:8], "title": "", "parent": None, "tags": [], "fav": False, "open": True, "blocks": [{"id": uuid.uuid4().hex[:8], "t": "p", "h": ""}]})
+                state["pages"] = pages
+                save_state(state)
+            net["shared_ids"] = [pg["id"] for pg in pages if pg.get("share")]
+            _write_json(NET_FILE, net)
+        NETST.update(status="synced", msg="Connected", members=data.get("members", []), messages=data.get("messages", []), last=time.time())
+        if len(NETST["members"]) > 1:
+            NETST["key"] = None
+
+
+def _net_loop():
+    while True:
+        time.sleep(3)
+        try:
+            if get_net().get("room"):
+                net_sync()
+        except Exception as e:
+            NETST.update(status="error", msg=str(e)[:100])
+
+
+def _net_view():
+    net = get_net()
+    return {
+        "identity": get_identity(),
+        "relay": net.get("relay", ""),
+        "joined": bool(net.get("room")),
+        "status": NETST["status"],
+        "msg": NETST["msg"],
+        "members": NETST["members"],
+        "messages": NETST["messages"],
+        "key": NETST["key"] if NETST["keyexp"] > time.time() else None,
+        "keyexp": NETST["keyexp"],
+        "hosting": _relay_srv is not None,
+        "lan": "http://%s:5252" % lan_ip(),
+    }
+
+
 def _sync_loop():
     while True:
         kicked = _kick.wait(timeout=20)
@@ -298,7 +471,7 @@ def get_state():
 
 @app.route("/api/rev", methods=["GET"])
 def get_rev():
-    return jsonify({"rev": file_rev(), "sync": SYNC})
+    return jsonify({"rev": file_rev(), "sync": SYNC, "net": {"joined": bool(get_net().get("room")), "peers": max(0, len(NETST["members"]) - 1), "status": NETST["status"], "messages": len(NETST["messages"])}})
 
 
 @app.route("/api/state", methods=["POST"])
@@ -315,6 +488,111 @@ def put_state():
         resp["rev"] = file_rev()
     _kick.set()
     return jsonify(resp)
+
+
+@app.route("/api/me", methods=["GET", "POST"])
+def me_route():
+    me = get_identity()
+    if request.method == "POST":
+        body = request.get_json(force=True)
+        if str(body.get("name", "")).strip():
+            me["name"] = str(body["name"]).strip()[:40]
+        if body.get("color"):
+            me["color"] = str(body["color"])[:12]
+        if "emoji" in body:
+            me["emoji"] = str(body["emoji"])[:4]
+        _write_json(IDENT_FILE, me)
+    return jsonify(me)
+
+
+@app.route("/api/net", methods=["GET"])
+def net_route():
+    return jsonify(_net_view())
+
+
+@app.route("/api/net/relay", methods=["POST"])
+def net_relay_route():
+    net = get_net()
+    net["relay"] = str(request.get_json(force=True).get("relay", "")).strip()
+    _write_json(NET_FILE, net)
+    return jsonify(_net_view())
+
+
+@app.route("/api/net/host", methods=["POST"])
+def net_host_route():
+    try:
+        host_relay()
+    except OSError as e:
+        return jsonify({"ok": False, "error": "Could not start the relay: %s" % e}), 500
+    net = get_net()
+    net["relay"], net["host"] = "http://127.0.0.1:5252", True
+    _write_json(NET_FILE, net)
+    return jsonify({"ok": True, **_net_view()})
+
+
+@app.route("/api/net/create", methods=["POST"])
+def net_create_route():
+    with _net_lock:
+        net = get_net()
+        if net.get("room"):
+            return jsonify({"ok": False, "error": "You are already sharing. Stop sharing first."}), 409
+        code, data = relay_call("/pair/create", {"user": _public_user(get_identity())})
+        if code != 200:
+            return jsonify({"ok": False, "error": data.get("error", "Failed")}), 502
+        net["room"], net["shared_ids"], net["tombs"] = data["room"], [], {}
+        _write_json(NET_FILE, net)
+        NETST.update(key=data["key"], keyexp=data["expires"], status="synced", msg="Waiting for someone to enter your key")
+    net_sync()
+    return jsonify({"ok": True, **_net_view()})
+
+
+@app.route("/api/net/join", methods=["POST"])
+def net_join_route():
+    key = str(request.get_json(force=True).get("key", "")).strip()
+    with _net_lock:
+        net = get_net()
+        if net.get("room"):
+            return jsonify({"ok": False, "error": "You are already sharing. Stop sharing first."}), 409
+        code, data = relay_call("/pair/join", {"key": key, "user": _public_user(get_identity())})
+        if code != 200:
+            return jsonify({"ok": False, "error": data.get("error", "Failed")}), 400 if code else 502
+        net["room"], net["shared_ids"], net["tombs"] = data["room"], [], {}
+        _write_json(NET_FILE, net)
+        NETST.update(key=None, members=data.get("members", []), messages=data.get("messages", []), status="synced", msg="Connected")
+    net_sync()
+    return jsonify({"ok": True, **_net_view()})
+
+
+@app.route("/api/net/leave", methods=["POST"])
+def net_leave_route():
+    with _net_lock:
+        net, me = get_net(), get_identity()
+        room = net.get("room")
+        if room:
+            relay_call("/room/%s/leave" % room, {"user_id": me["id"]})
+        for k in ("room", "shared_ids", "tombs"):
+            net.pop(k, None)
+        _write_json(NET_FILE, net)
+        with _state_lock:
+            state = load_state()
+            for pg in state.get("pages", []):
+                if pg.pop("share", None):
+                    pg["mt"] = int(time.time() * 1000)  # unsharing is an edit, so it syncs to the other laptop too
+            save_state(state)
+        NETST.update(status="off", msg="", members=[], messages=[], key=None, keyexp=0)
+    return jsonify({"ok": True, **_net_view()})
+
+
+@app.route("/api/net/message", methods=["POST"])
+def net_message_route():
+    text = str(request.get_json(force=True).get("text", "")).strip()
+    net = get_net()
+    if not net.get("room") or not text:
+        return jsonify({"ok": False}), 400
+    code, data = relay_call("/room/%s/message" % net["room"], {"user_id": get_identity()["id"], "text": text})
+    if code == 200:
+        NETST["messages"] = data.get("messages", [])
+    return jsonify({"ok": code == 200, **_net_view()})
 
 
 @app.route("/api/sync/now", methods=["POST"])
@@ -511,5 +789,11 @@ if __name__ == "__main__":
         print("Syncing notes...", sync_now()["msg"])
         sys.exit(0)
     threading.Thread(target=_sync_loop, daemon=True).start()
+    threading.Thread(target=_net_loop, daemon=True).start()
+    if get_net().get("host"):
+        try:
+            host_relay()
+        except OSError:
+            pass
     _kick.set()
-    app.run(host="127.0.0.1", port=5151, debug=False, threaded=True)
+    app.run(host="127.0.0.1", port=int(os.environ.get("NOTERA_PORT", 5151)), debug=False, threaded=True)

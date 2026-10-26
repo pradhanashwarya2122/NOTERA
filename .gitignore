@@ -1,6 +1,8 @@
-# your notes live in their own PRIVATE repo (notes_data/), never in this one
 notes_data/
 __pycache__/
 SAVES/
 *.pyc
 NOTES TERMINAL*
+identity.json
+net.json
+relay_data.json

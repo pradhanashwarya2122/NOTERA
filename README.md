@@ -20,6 +20,11 @@ The first run sets itself up in a private `.venv` folder and opens http://127.0.
 - **Share my notes** by creating a 6-digit key for a friend.
 
 ## Made for coding notes
+- **Library**: click *Pages* in the sidebar (or *Library*) for a full-screen organiser. Drag pages onto folders, tick several and press *Move*, rename folders in place.
+- **Folder first**: *New page* asks which folder it belongs in (type to search or create one; Shift-click skips). *New folder* is created right in the sidebar, name it and press Enter.
+- **Flashcards**: type `/flashcard`, write a question and an answer. *Review* in the sidebar runs a spaced-repetition session (Again, Hard, Good, Easy).
+- **Practice tracker** on Home: easy, medium and hard counts from your tags, a day streak, and a *Today* button for a daily note.
+- **Code input**: the *Input* button on a code block feeds `input()`, like LeetCode's testcase box, and shows the run time. Press `?` for all shortcuts; *Print or save as PDF* is in the `...` menu.
 - **Columns and layouts**: drag any block by its handle and drop it on another block's left or right edge to put them side by side
   (up to four columns). Drag the divider to resize; it snaps to 1/4, 1/3, 1/2, 2/3 and 3/4 with a live percentage. *Layout* on a row
   offers presets, and columns stack on narrow windows. Image beside text just works.

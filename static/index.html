@@ -556,7 +556,7 @@ body.sidecol #edge{display:block}
 #acc .am{font:14px/1.45 var(--ui)}#acc .am b{font-weight:650;margin-right:4px}#acc .am.me b{color:var(--y)}#acc .am.sys{color:var(--mut);font-size:13px;font-style:italic}
 #acc .amrow{display:flex;gap:8px}#acc .aacts{display:flex;gap:8px;justify-content:space-between}
 /* Home */
-body.home #outl,body.home #olb{display:none}
+body.solo #outl,body.solo #olb{display:none}body.solo #main{padding-right:0}body.libv #ed{max-width:1280px}
 .home{max-width:880px;margin:0 auto}
 .home .hh{margin-bottom:26px}
 .home .hq{font:italic 400 17px var(--serif);color:var(--mut);margin-bottom:10px}
@@ -704,13 +704,123 @@ body.sidecol #main{margin-left:0}
 .cw .ig i{position:absolute;left:calc(18px + var(--c)*1ch - var(--sx,0px));top:calc(14px + var(--t)*1.65em + .22em);height:calc(var(--n)*1.65em - .44em);width:1px;background:color-mix(in srgb,var(--tx) 16%,transparent);transition:background-color .15s}
 .cw .ig i.on{width:2px;background:color-mix(in srgb,var(--y) 65%,transparent);margin-left:-.5px}
 .cw pre{z-index:1}
+
+/* ===== nav additions, library, picker ===== */
+.cntb{background:var(--purple)!important;color:#fff!important;border-radius:999px!important;padding:0 7px!important;font:600 11px var(--ui)!important;min-width:20px;text-align:center}
+.sec.secl{display:flex;align-items:center;justify-content:space-between;cursor:pointer;border-radius:6px;margin:0 2px;padding-right:8px;transition:background-color .15s,color .15s}
+.sec.secl:hover{background:var(--veil2);color:var(--tx)}.sec.secl span{display:flex;opacity:.7}
+.rn{width:100%;min-width:0;background:var(--bg)!important;border:1px solid var(--y)!important;border-radius:6px!important;padding:2px 8px!important;font:600 14.5px var(--ui)!important;outline:0;color:var(--tx);box-shadow:0 0 0 3px color-mix(in srgb,var(--y) 16%,transparent)}
+#pkr,#rvw,#shc{position:fixed;inset:0;z-index:75;display:flex;justify-content:center;align-items:flex-start;padding-top:12vh;background:rgba(10,10,10,.34);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:opacity .16s,visibility .16s}
+#pkr.show,#rvw.show,#shc.show{opacity:1;visibility:visible}
+.pkbox,.shbox{width:min(560px,92vw);background:var(--panel);border:1px solid var(--ln);border-radius:16px;box-shadow:0 34px 90px -22px rgba(0,0,0,.5);overflow:hidden;animation:ntFadeUp .25s var(--ease)}
+.pkh{font:600 13px var(--ui);letter-spacing:.3px;text-transform:uppercase;color:var(--mut);padding:16px 20px 4px}
+.pkq{width:calc(100% - 28px);margin:8px 14px 6px;background:var(--bg);border:1px solid var(--ln);border-radius:10px;padding:11px 14px;font:500 16px var(--ui);outline:0;color:var(--tx)}
+.pkq:focus{border-color:color-mix(in srgb,var(--y) 55%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--y) 14%,transparent)}
+.pkl{max-height:min(44vh,360px);overflow:auto;padding:4px 8px 8px}
+.pki{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:9px;cursor:pointer}
+.pki.on{background:color-mix(in srgb,var(--y) 11%,transparent)}
+.pkic{display:flex;color:var(--mut)}.pki.on .pkic{color:var(--y)}.pki.cr .pkic,.pki.cr .pkt{color:var(--y)}
+.pkt{font:550 15px var(--ui);color:var(--tx);white-space:nowrap}.pks{font:13px var(--ui);color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.pke{padding:18px 14px;font:14px var(--ui);color:var(--mut)}
+.pkf{display:flex;gap:16px;flex-wrap:wrap;padding:10px 20px;border-top:1px solid var(--ln);font:12px var(--ui);color:var(--mut)}
+.shg{display:grid;grid-template-columns:1fr 1fr;gap:4px 24px;padding:8px 20px 20px}
+.shg div{display:flex;gap:12px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--ln)}.shg kbd{font:600 12px var(--mono);background:var(--veil2);padding:2px 8px;border-radius:6px;white-space:nowrap;min-width:84px;text-align:center}.shg span{font:14px var(--ui);color:var(--mut)}
+@media(max-width:620px){.shg{grid-template-columns:1fr}}
+/* library */
+.lib{max-width:1280px;margin:0 auto}
+.lbh{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+.lbh h1{font:600 46px/1.1 var(--serif);letter-spacing:-.9px;font-variation-settings:'SOFT' 100,'opsz' 96}
+.lbs{font:500 14.5px var(--ui);color:var(--mut);margin-top:6px}
+.lbt{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+#libq{background:var(--bg);border:1px solid var(--ln);border-radius:10px;padding:9px 14px;font:500 14.5px var(--ui);outline:0;width:180px;color:var(--tx)}#libq:focus{border-color:color-mix(in srgb,var(--y) 55%,transparent)}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;align-items:start}
+.lcard{background:var(--bg);border:1px solid var(--ln);border-radius:16px;overflow:hidden;transition:border-color .15s,box-shadow .2s,background-color .15s}
+.lcard.dz,.lr.lf.dz{border-color:var(--y);background:color-mix(in srgb,var(--y) 7%,var(--bg));box-shadow:0 0 0 4px color-mix(in srgb,var(--y) 14%,transparent)}
+.lcard header{display:flex;align-items:center;gap:10px;padding:13px 14px 11px 14px;border-bottom:1px solid var(--ln);background:var(--veil1)}
+.lcard .lct{font:600 16px var(--ui);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fic.sm{width:30px;height:30px;border-radius:9px}
+.lcard .cnt,.lr .cnt{font:500 11.5px var(--ui);color:var(--mut);background:var(--veil2);padding:0 8px;border-radius:999px}
+.lca{display:flex;gap:1px;opacity:0;transition:opacity .15s}.lcard header:hover .lca{opacity:1}
+.lca button{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:7px;color:var(--mut)}.lca button:hover{background:var(--veil2);color:var(--tx)}
+.lbody{padding:8px;min-height:56px}
+.ldrop{padding:18px 12px;text-align:center;font:13.5px var(--ui);color:var(--mut);border:1px dashed var(--ln);border-radius:10px}
+.lr{display:flex;align-items:center;gap:8px;padding:6px 8px 6px calc(8px + var(--d)*16px);border-radius:9px;cursor:default;transition:background-color .12s}
+.lr:hover{background:var(--veil2)}.lr.sel{background:color-mix(in srgb,var(--y) 10%,transparent)}.lr.dragging{opacity:.4}
+.lr .lck{width:15px;height:15px;accent-color:var(--y);opacity:0;flex-shrink:0;cursor:pointer;margin:0}.lr:hover .lck,.lr.sel .lck{opacity:1}
+.lr .ar{width:16px;height:16px;display:flex;align-items:center;justify-content:center;color:var(--mut);cursor:pointer;flex-shrink:0}.lr .ar svg{transition:transform .2s var(--ease)}.lr .ar.open svg{transform:rotate(90deg)}
+.lr .pi{width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;color:var(--pc);background:color-mix(in srgb,var(--pc) 15%,transparent);flex-shrink:0}
+.lr .lt{flex:1;min-width:0;font:500 14.5px var(--ui);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}.lr.lf .lt{font-weight:600}
+.lr .lm{font:12px var(--ui);color:var(--mut);flex-shrink:0}
+.lmv{display:flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;font:500 12px var(--ui);color:var(--mut);opacity:0;flex-shrink:0}.lr:hover .lmv{opacity:1}.lmv:hover{background:var(--veil2);color:var(--tx)}
+.lr .rn{flex:1}
+#libsel{position:fixed;left:50%;bottom:26px;transform:translate(-50%,16px);display:flex;gap:6px;align-items:center;background:var(--tx);color:var(--bg);padding:8px 10px 8px 16px;border-radius:14px;box-shadow:0 20px 50px -14px rgba(0,0,0,.5);opacity:0;visibility:hidden;transition:opacity .18s,transform .28s var(--ease),visibility .18s;z-index:40}
+#libsel.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+#libsel b{font:600 14px var(--ui);margin-right:8px}#libsel button{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:9px;font:600 13.5px var(--ui);color:var(--bg)}#libsel button:hover{background:color-mix(in srgb,var(--bg) 18%,transparent)}#libsel .dg{color:#ff8b8b}
+/* folder view */
+.fv{max-width:1000px;margin:0 auto}
+.fh{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+#fti{flex:1;min-width:0;background:none;border:0;outline:0;font:600 clamp(28px,4vw,42px)/1.15 var(--serif);letter-spacing:-.7px;color:var(--tx);text-overflow:ellipsis}
+.fm{font:500 14px var(--ui);color:var(--mut);margin:0 0 20px 68px}
+@media(max-width:620px){.fm{margin-left:0}}
+.hb.c5{background:color-mix(in srgb,var(--yellow) 14%,var(--bg));color:color-mix(in srgb,var(--yellow) 78%,#6a4a00);border-color:color-mix(in srgb,var(--yellow) 34%,transparent)}
+.hb.c6{background:color-mix(in srgb,var(--purple) 12%,var(--bg));color:var(--purple);border-color:color-mix(in srgb,var(--purple) 26%,transparent)}
+/* practice tracker */
+.hprac{display:grid;grid-template-columns:1fr auto;gap:14px;margin-bottom:18px}
+.hp1{padding:18px 20px;border:1px solid var(--ln);border-radius:14px;background:var(--bg)}
+.hpb{display:flex;height:12px;border-radius:999px;overflow:hidden;gap:3px;background:var(--veil2)}.hpb i{display:block;border-radius:999px;min-width:6px}
+.hpl{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font:500 13.5px var(--ui);color:var(--mut)}.hpl i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}.hpl b{color:var(--tx);margin-left:3px}
+.hpn{font:13px/1.5 var(--ui);color:var(--mut);margin-top:10px}
+.hp2{display:flex;gap:12px}.hp2 div{display:flex;flex-direction:column;justify-content:center;min-width:120px;padding:14px 18px;border-radius:14px;background:color-mix(in srgb,var(--orange) 9%,var(--bg))}.hp2 div+div{background:color-mix(in srgb,var(--purple) 9%,var(--bg))}
+.hp2 b{font:600 34px/1.1 var(--serif)}.hp2 span{font:500 13px var(--ui);color:var(--mut)}
+@media(max-width:700px){.hprac{grid-template-columns:1fr}}
+/* flashcards */
+.qa{width:100%;border:1px solid color-mix(in srgb,var(--purple) 28%,transparent);border-radius:14px;background:color-mix(in srgb,var(--purple) 4%,var(--bg));overflow:hidden;margin:6px 0}
+.qah{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-bottom:1px solid color-mix(in srgb,var(--purple) 18%,transparent);background:color-mix(in srgb,var(--purple) 7%,transparent)}
+.qal{display:inline-flex;align-items:center;gap:7px;font:700 11.5px var(--ui);letter-spacing:.7px;text-transform:uppercase;color:var(--purple)}
+.qas{font:600 12px var(--ui);color:var(--mut)}.qas.due{color:#fff;background:var(--purple);padding:1px 9px;border-radius:999px}
+.qa .qaq{padding:14px 18px 8px;font:600 17px/1.5 var(--serif)}
+.qaw{position:relative;padding:0 18px 14px}
+.qa .qaa{padding:8px 0;color:color-mix(in srgb,var(--tx) 88%,transparent);transition:filter .25s}
+.qa:not(.open) .qaa{filter:blur(9px);user-select:none;pointer-events:none;min-height:40px}
+.qar{position:absolute;left:50%;top:50%;transform:translate(-50%,-60%);padding:8px 18px;border-radius:10px;background:var(--purple);color:#fff;font:600 14px var(--ui);box-shadow:0 10px 24px -10px var(--purple)}
+.qa.open .qar{display:none}
+.qab{display:none;gap:8px;padding:0 18px 16px}.qa.open .qab{display:flex}
+.qab button{flex:1;padding:8px 6px;border-radius:9px;border:1px solid var(--ln);background:var(--bg);font:600 13.5px var(--ui);transition:background-color .15s,border-color .15s}
+.qab [data-r="again"]:hover{border-color:var(--red);color:var(--red)}.qab [data-r="hard"]:hover{border-color:var(--orange);color:var(--orange)}.qab [data-r="good"]:hover{border-color:var(--green);color:var(--green)}.qab [data-r="easy"]:hover{border-color:var(--blue);color:var(--blue)}
+.rbox{width:min(640px,92vw);background:var(--panel);border:1px solid var(--ln);border-radius:20px;box-shadow:0 40px 100px -26px rgba(0,0,0,.55);padding:26px 30px 28px;display:flex;flex-direction:column;gap:18px;animation:ntFadeUp .3s var(--ease)}
+.rtop{display:flex;align-items:center;gap:12px;font:600 13px var(--ui);color:var(--mut)}.rtop .rpg{flex:1;text-align:center;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rtop button{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--mut)}.rtop button:hover{background:var(--veil2);color:var(--tx)}
+.rq{font:600 26px/1.35 var(--serif);letter-spacing:-.3px}.rans{font:17px/1.6 var(--ui);color:var(--tx);padding:16px 18px;border-radius:12px;background:var(--veil1);border:1px solid var(--ln)}
+.rbtns{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.rbtns button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 6px;border-radius:12px;border:1px solid var(--ln);background:var(--bg);transition:transform .15s var(--ease),border-color .15s}.rbtns button:hover{transform:translateY(-2px)}
+.rbtns b{font:600 15px var(--ui)}.rbtns i{font:500 11.5px var(--mono);font-style:normal;color:var(--mut)}
+.rbtns [data-r="again"]:hover{border-color:var(--red)}.rbtns [data-r="hard"]:hover{border-color:var(--orange)}.rbtns [data-r="good"]:hover{border-color:var(--green)}.rbtns [data-r="easy"]:hover{border-color:var(--blue)}
+.rshow{align-self:flex-start;padding:12px 22px;font-size:15px!important}.rshow kbd{font:500 11px var(--mono);opacity:.75;margin-left:8px}
+.rbox h2{font:600 32px var(--serif);letter-spacing:-.5px}.rbox p{font:16px/1.55 var(--ui);color:var(--mut)}
+.rdue{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:12px;background:color-mix(in srgb,var(--purple) 7%,var(--bg))}.rdue b{font:600 12px var(--ui);text-transform:uppercase;letter-spacing:.4px;color:var(--purple);margin-bottom:4px}.rdue a{padding:5px 8px;border-radius:7px;cursor:pointer;font:500 15px var(--ui)}.rdue a:hover{background:var(--veil2)}
+.rbox .abtn{align-self:flex-start;font:600 15px var(--ui);padding:10px 20px;border-radius:10px;border:1px solid var(--ln);background:var(--bg)}.rbox .abtn.pri{background:var(--y);border-color:var(--y);color:#fff}
+/* code: custom input + timing */
+.rms{font:500 12px var(--mono);color:var(--mut);margin-right:6px}
+.stdw{display:none;border-top:1px solid var(--ln);padding:8px 16px 10px;background:var(--veil1)}.stdw.open{display:block}
+.stdl{font:600 11.5px var(--ui);letter-spacing:.4px;text-transform:uppercase;color:var(--mut);margin-bottom:6px}
+.stdin{width:100%;min-height:54px;resize:vertical;background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:8px 10px;font:13.5px/1.55 var(--mono);color:var(--tx);outline:0}
+.stdin:focus{border-color:color-mix(in srgb,var(--y) 55%,transparent)}
+/* print / save as PDF */
+@media print{
+ body{display:block!important;height:auto!important;overflow:visible!important;background:#fff!important}
+ #side,#edge,#lay,#olb,#outl,#sctoggle,#toast,#acc,#tpl,#rvm,#wel,#pkr,#rvw,#shc,#libsel,#sb,#ft,.add,.dh,.addcol,.rowtb,.cdiv,.tl,.foldbtn,.szc,.qab,.qar,.ch .b,.lsel{display:none!important}
+ #main{margin:0!important;overflow:visible!important;height:auto!important}
+ #ed{max-width:none!important;padding:0!important}
+ .blk{break-inside:avoid}.blk[data-t="p"] .ce,.blk[data-t="doc"] .ce{border-color:#ddd!important}
+ .qa:not(.open) .qaa{filter:none!important}
+}
 </style>
 </head><body>
 <div id="side"><div class="sin">
 <div class="brand"><div class="mark">N</div><h1>Notera</h1><button id="sctb" title="Hide sidebar (Ctrl+\)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button></div>
 <button id="prof" class="prof" title="Your profile and sharing"><span id="av"></span><span class="pn"><b id="pname">Writer</b><i id="pid"></i></span><span class="pnet" id="pnet"></span></button>
 <div class="top"><input id="q" placeholder="Filter pages and notes"><div class="tags" id="tf"></div></div>
-<div class="nav"><button class="nv" id="homeb" data-ic="home"><span class="lbl">Home</span></button><button class="nv" id="qsb" data-ic="search"><span class="lbl">Quick find</span><kbd>Ctrl P</kbd></button><button class="nv" id="np" title="Create a new blank page" data-ic="plus"><span class="lbl">New page</span></button><button class="nv" id="nfb" title="Create a folder. Folders can hold pages and more folders" data-ic="folderPlus"><span class="lbl">New folder</span></button><button class="nv" id="tplb" title="Start from a ready-made layout, like a LeetCode problem" data-ic="template"><span class="lbl">From template</span></button></div>
+<div class="nav"><button class="nv" id="homeb" data-ic="home"><span class="lbl">Home</span></button><button class="nv" id="qsb" data-ic="search"><span class="lbl">Quick find</span><kbd>Ctrl P</kbd></button><button class="nv" id="revb" title="Review flashcards and pages that are due" data-ic="rev"><span class="lbl">Review</span><kbd id="revn" class="cntb"></kbd></button><button class="nv" id="np" title="Create a new blank page" data-ic="plus"><span class="lbl">New page</span></button><button class="nv" id="nfb" title="Create a folder. Folders can hold pages and more folders" data-ic="folderPlus"><span class="lbl">New folder</span></button><button class="nv" id="libb" title="Open every page and folder full screen to organise them" data-ic="expand"><span class="lbl">Library</span></button><button class="nv" id="tplb" title="Start from a ready-made layout, like a LeetCode problem" data-ic="template"><span class="lbl">From template</span></button></div>
 <div id="tree"></div>
 <div class="foot"><div id="sv" title="Click to sync now">Saved</div><button id="mm" title="More: save, export, import, undo, themes, history" data-ic="more"></button></div>
 <div class="menu" id="mmenu">
@@ -720,10 +830,12 @@ body.sidecol #main{margin-left:0}
 <button class="b mi" id="re" title="Redo (Alt+Shift+Z)" data-ic="redo"><span class="lbl">Redo</span></button>
 <button class="b mi" id="ex" title="Download your notes as one portable .json file" data-ic="download"><span class="lbl">Export notes</span></button>
 <button class="b mi" id="im" title="Load pages from an exported .json file" data-ic="upload"><span class="lbl">Import notes</span></button>
+<button class="b mi" id="shb" title="See every keyboard shortcut (press ?)" data-ic="clip"><span class="lbl">Keyboard shortcuts</span></button>
+<button class="b mi" id="prb" title="Print this page or save it as a PDF" data-ic="download"><span class="lbl">Print or save as PDF</span></button>
 <button class="b mi" id="ms" title="Save everything now and write a full backup of the NOTERA folder (Ctrl/Cmd+S)" data-ic="save"><span class="lbl">Master save</span></button>
 </div>
 <div class="rsz" id="rsz" title="Drag to resize"></div>
-</div></div><div id="edge"></div><div id="acc"></div><div id="tpl"></div><div id="wel"></div><div id="rvm"></div>
+</div></div><div id="edge"></div><div id="acc"></div><div id="tpl"></div><div id="wel"></div><div id="rvm"></div><div id="pkr"></div><div id="rvw"></div><div id="shc"></div>
 <button id="sctoggle" title="Show sidebar (Ctrl+\)"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
 <div id="main"><div id="ed"></div></div>
 <button id="lay"></button>
@@ -774,7 +886,7 @@ const ICONS={
  spacebar:'<rect x="4" y="14" width="16" height="6" rx="1.8"/><path d="M8 17h8"/>',
 };
 function ic(name,size){return `<svg viewBox="0 0 24 24" width="${size||14}" height="${size||14}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[name]||''}</svg>`}
-Object.assign(ICONS,{folder:'<path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>',folderOpen:'<path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v1H3z"/><path d="M3 10h18l-1.7 7.2a2 2 0 01-2 1.8H5a2 2 0 01-2-2z"/>',folderPlus:'<path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M12 11v5M9.5 13.5h5"/>',template:'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 9h16M9 9v11"/>',rev:'<path d="M20 12a8 8 0 11-2.6-5.9"/><path d="M20 4v5h-5"/>',home:'<path d="M4 11l8-7 8 7v8a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"/>',search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/>',more:'<circle cx="5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="19" cy="12" r="1.3" fill="currentColor"/>',users:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M17 14c2.6 0 4 1.9 4 4.5"/>',chev:'<path d="M9 6l6 6-6 6"/>'});
+Object.assign(ICONS,{expand:'<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',move:'<path d="M5 12h14M13 6l6 6-6 6"/>',card:'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/>',folder:'<path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>',folderOpen:'<path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v1H3z"/><path d="M3 10h18l-1.7 7.2a2 2 0 01-2 1.8H5a2 2 0 01-2-2z"/>',folderPlus:'<path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M12 11v5M9.5 13.5h5"/>',template:'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 9h16M9 9v11"/>',rev:'<path d="M20 12a8 8 0 11-2.6-5.9"/><path d="M20 4v5h-5"/>',home:'<path d="M4 11l8-7 8 7v8a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"/>',search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/>',more:'<circle cx="5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="19" cy="12" r="1.3" fill="currentColor"/>',users:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M17 14c2.6 0 4 1.9 4 4.5"/>',chev:'<path d="M9 6l6 6-6 6"/>'});
 document.querySelectorAll('[data-ic]').forEach(b=>b.insertAdjacentHTML('afterbegin',ic(b.dataset.ic,13)));
 const TAGC={easy:'var(--green)',medium:'var(--orange)',hard:'var(--red)',solved:'var(--green)',unsolved:'var(--red)',revise:'var(--purple)',leetcode:'var(--orange)',important:'var(--pink)',dsa:'var(--blue)'};
 const tc=t=>{if(TAGC[t.toLowerCase()])return TAGC[t.toLowerCase()];let h=0;for(const c of t)h=(h*31+c.charCodeAt(0))>>>0;return PCOL[h%8]};const CAL=[['lightbulb','var(--yellow)'],['warning','var(--orange)'],['check','var(--green)'],['sparkle','var(--pink)'],['info','var(--blue)'],['sparkle','var(--purple)']];const PCOL=['var(--red)','var(--orange)','var(--yellow)','var(--green)','var(--blue)','var(--purple)','var(--pink)','var(--brown)'];const pcol=id=>{let h=0;for(const c of String(id))h=(h*31+c.charCodeAt(0))>>>0;return PCOL[h%8]};const DC=['#ffe14d','#ff6ac1','#4fd1ff','#4ecb71','#b38cff'];
@@ -814,21 +926,21 @@ function renderSide(){
  $('#tf').querySelectorAll('.tg').forEach(e=>e.onclick=()=>{tagF=tagF===e.dataset.t?null:e.dataset.t;renderSide()});
  const filt=q||tagF;let h='';
  const row=(p,d)=>{const k=kids(p.id),isF=!!p.folder,due=p.rev&&p.rev.due<=Date.now();
-  return`<div class="pg ${!homeOn&&p.id===cur?'on':''}${isF?' fl':''}" data-id="${p.id}" style="padding-left:${8+d*14}px"><span class="ar${p.open?' open':''}" data-a="${p.id}">${k.length?ic('chev',12):''}</span><span class="pi" style="--pc:${pcol(p.id)}">${isF?ic(p.open&&k.length?'folderOpen':'folder',14):(p.icon||ic('doc',13))}</span><span class="t">${esc(p.title||(isF?'Untitled folder':'Untitled'))}</span>${isF&&k.length?'<span class="cnt">'+k.length+'</span>':''}${due?'<span class="rvd" title="Due for revision"></span>':''}${p.share?'<span class="shb" title="Shared">'+ic('users',12)+'</span>':''}<span class="ac">${isF?`<button data-s="${p.id}" title="New page in this folder">${ic('plus',13)}</button><button data-nf="${p.id}" title="New subfolder">${ic('folderPlus',13)}</button>`:`<button data-sh="${p.id}" class="${p.share?'on':''}" title="${p.share?'Stop sharing this page':'Share this page with your friend'}">${ic('users',13)}</button><button data-f="${p.id}" class="${p.fav?'on':''}" title="Favorite">${ic('star',13)}</button><button data-s="${p.id}" title="Add subpage">${ic('plus',13)}</button>`}<button data-d="${p.id}" title="Delete">${ic('trash',13)}</button></span></div>`+(p.open||filt?k.map(c=>row(c,d+1)).join(''):'')};
+  return`<div class="pg ${!homeOn&&p.id===cur?'on':''}${isF?' fl':''}" data-id="${p.id}" style="padding-left:${8+d*14}px"><span class="ar${p.open?' open':''}" data-a="${p.id}">${k.length?ic('chev',12):''}</span><span class="pi" style="--pc:${pcol(p.id)}">${isF?ic(p.open&&k.length?'folderOpen':'folder',14):(p.icon||ic('doc',13))}</span>${p.id===renamingId?`<input class="rn" value="${esc(p.title).replace(/"/g,'&quot;')}" placeholder="Folder name" maxlength="60">`:`<span class="t">${esc(p.title||(isF?'Untitled folder':'Untitled'))}</span>`}${isF&&k.length?'<span class="cnt">'+k.length+'</span>':''}${due?'<span class="rvd" title="Due for revision"></span>':''}${p.share?'<span class="shb" title="Shared">'+ic('users',12)+'</span>':''}<span class="ac">${isF?`<button data-s="${p.id}" title="New page in this folder">${ic('plus',13)}</button><button data-nf="${p.id}" title="New subfolder">${ic('folderPlus',13)}</button>`:`<button data-sh="${p.id}" class="${p.share?'on':''}" title="${p.share?'Stop sharing this page':'Share this page with your friend'}">${ic('users',13)}</button><button data-f="${p.id}" class="${p.fav?'on':''}" title="Favorite">${ic('star',13)}</button><button data-s="${p.id}" title="Add subpage">${ic('plus',13)}</button>`}<button data-d="${p.id}" title="Delete">${ic('trash',13)}</button></span></div>`+(p.open||filt?k.map(c=>row(c,d+1)).join(''):'')};
  const shr=S.pages.filter(p=>p.share&&match(p)),fav=S.pages.filter(p=>p.fav&&match(p));
  const dueL=S.pages.filter(p=>!p.folder&&p.rev&&p.rev.due<=Date.now()&&match(p));
  if(dueL.length)h+='<div class="sec">Due to revise</div>'+dueL.map(p=>row(p,0).split('</div>')[0]+'</div>').join('');
  if(shr.length)h+='<div class="sec">Shared</div>'+shr.map(p=>row(p,0).split('</div>')[0]+'</div>').join('');
  if(fav.length)h+='<div class="sec">Favorites</div>'+fav.map(p=>row(p,0).split('</div>')[0]+'</div>').join('');
- h+='<div class="sec">Pages</div>';
+ h+='<div class="sec secl" title="Open the library to organise every page">Pages<span>'+ic('expand',13)+'</span></div>';
  h+=filt?S.pages.filter(match).map(p=>row(p,0).split('</div>')[0]+'</div>').join(''):S.pages.filter(p=>!p.parent).map(p=>row(p,0)).join('');
- const t=$('#tree');t.innerHTML=h+trashHtml();pgExtras(t);
+ const t=$('#tree');t.innerHTML=h+trashHtml();pgExtras(t);t.querySelectorAll('.secl').forEach(e=>e.onclick=()=>openLibrary());wireRename(t);reviewBadge();
  t.querySelectorAll('.pg').forEach(e=>e.onclick=ev=>{const b=ev.target.closest('button'),a=ev.target.closest('[data-a]'),id=e.dataset.id;
   if(b){ev.stopPropagation();if(b.dataset.f){P(id).fav=!P(id).fav;save();renderSide()}else if(b.dataset.s)newPage(id);else if(b.dataset.d)delPage(id);else if(b.dataset.sh)toggleShare(id);else if(b.dataset.nf)newFolder(id);return}
   if(a){P(id).open=!P(id).open;save();renderSide();return}homeOn=false;cur=id;if(P(id).folder)P(id).open=true;render()})}
 function newPage(parent){snap();const p={id:uid(),title:'',parent:parent||null,tags:[],fav:false,open:true,blocks:[{id:uid(),t:'p',h:''}]};
  if(parent)P(parent).open=true;S.pages.push(p);cur=p.id;save();render();$('#ti').focus()}
-function delPage(id){const p=P(id);if(!confirm(p.folder?`Move the folder "${p.title||'Untitled'}" and everything inside it to Trash?`:`Move "${p.title||'Untitled'}" and its subpages to Trash?`))return;
+function delPage(id,quiet){const p=P(id);if(!quiet&&!confirm(p.folder?`Move the folder "${p.title||'Untitled'}" and everything inside it to Trash?`:`Move "${p.title||'Untitled'}" and its subpages to Trash?`))return;
  const rm=new Set([id]);let ch=1;while(ch){ch=0;S.pages.forEach(x=>{if(rm.has(x.parent)&&!rm.has(x.id)){rm.add(x.id);ch=1}})}
  snap();(S.trash=S.trash||[]).push({id:uid(),root:id,at:Date.now(),pages:S.pages.filter(x=>rm.has(x.id))});S.pages=S.pages.filter(x=>!rm.has(x.id));if(!S.pages.length){S.pages=[{id:uid(),title:'',parent:null,tags:[],fav:false,open:true,blocks:[{id:uid(),t:'p',h:''}]}]}
  if(rm.has(cur))cur=S.pages[0].id;save(1);render()}
@@ -853,9 +965,9 @@ function hl(s,lang){const L=LANGS[lang]||LANGS.python;
  const re=new RegExp('('+(L.c||'(?!)')+')|('+STRRE+')|\\b(\\d+\\.?\\d*)\\b|\\b([A-Za-z_]\\w*)\\b','gm');
  return esc(s).replace(re,(m,c,st,n,w)=>c?`<span class="c">${m}</span>`:st?`<span class="s">${m}</span>`:n?`<span class="n">${m}</span>`:w?(L.kw.includes(L.ci?w.toUpperCase():w)?`<span class="k">${m}</span>`:L.bi.includes(L.ci?w.toUpperCase():w)?`<span class="f">${m}</span>`:m):m)+'\n'}
 /* editor */
-const TYPES=[['p','Text'],['h1','Heading 1'],['h2','Heading 2'],['h3','Heading 3'],['ul','Bullet list'],['todo','To-do'],['toggle','Toggle'],['callout','Callout'],['quote','Quote'],['code','Python code'],['prompt','Paste prompt'],['hint','Hint'],['pitfall','Pitfall / mistake'],['idea','Key idea'],['complexity','Complexity'],['leetcode','LeetCode template'],['array','Array visual'],['image','Image'],['ol','Numbered list'],['table','Table'],['cols','2 columns'],['math','Math (LaTeX)'],['hr','Divider']];
+const TYPES=[['p','Text'],['h1','Heading 1'],['h2','Heading 2'],['h3','Heading 3'],['ul','Bullet list'],['todo','To-do'],['toggle','Toggle'],['callout','Callout'],['quote','Quote'],['code','Python code'],['prompt','Paste prompt'],['qa','Flashcard'],['hint','Hint'],['pitfall','Pitfall / mistake'],['idea','Key idea'],['complexity','Complexity'],['leetcode','LeetCode template'],['array','Array visual'],['image','Image'],['ol','Numbered list'],['table','Table'],['cols','2 columns'],['math','Math (LaTeX)'],['hr','Divider']];
 let lastRenderedPage=null,prevBlockIds=new Set();
-function render(){if(homeOn&&cur!==homeCur)homeOn=false;document.body.classList.toggle('home',homeOn);renderSide();if(homeOn){drawHome();return}const p=page(),ed=$('#ed');document.body.classList.toggle('home',!!p.folder);if(p.folder){drawFolder(p);return}
+function render(){if(homeOn&&cur!==homeCur)homeOn=false;document.body.classList.toggle('solo',homeOn);document.body.classList.toggle('libv',homeOn&&homeMode==='lib');{const lb=document.getElementById('libsel');if(lb&&!(homeOn&&homeMode==='lib'))lb.classList.remove('show')}renderSide();if(homeOn){drawHome();return}const p=page(),ed=$('#ed');document.body.classList.toggle('solo',!!p.folder);document.body.classList.toggle('libv',false);if(p.folder){drawFolder(p);return}
  const pageChanged=p.id!==lastRenderedPage;
  if(pageChanged){ed.style.animation='none';ed.offsetHeight;ed.style.animation='ntFadeIn .18s ease';prevBlockIds=new Set()}
  const mainScroll=$('#main').scrollTop;
@@ -889,6 +1001,7 @@ function deleteBlockLight(b,focusPrev){const p=page();if(b.rg){snap();const k=p.
   setTimeout(()=>{el.remove();if(focusPrev)focusB(Math.max(0,idx-1),1)},160);
  }else{render();if(focusPrev)focusB(Math.max(0,idx-1),1)}}
 function setType(b,t){snap();const CP={hint:[0,'Hint'],pitfall:[1,'Pitfall'],idea:[5,'Key idea'],complexity:[4,'Complexity']};
+ if(t==='qa'){b.t='qa';b.h='';b.a='';save();render();focusB(page().blocks.indexOf(b));return}
  if(CP[t]){b.t='callout';b.ci=CP[t][0];b.lbl=CP[t][1];b.h='';save();render();focusB(page().blocks.indexOf(b));return}
  if(t==='leetcode'){const pg=page(),i=pg.blocks.indexOf(b),bl=TPL.leetcode.make();pg.blocks.splice(i,1,...bl);if(!pg.tags.includes('leetcode'))pg.tags.push('leetcode');save();render();return}
  if(t==='array'){const v=prompt('Array values, separated by commas','2,3,1,2,3'),vals=v?v.split(',').map(x=>x.trim()).filter(Boolean):[];if(!vals.length){H.pop();return}b.t='doc';b.h=arrHtml(vals)+'<p><br></p>';save();render();return}b.t=t;b.h='';if(t==='table')b.rows=[['','',''],['','','']];if(t==='image'){pickImg(b)}save();render();if(t!=='hr'&&t!=='image')focusB(page().blocks.indexOf(b))}
@@ -921,6 +1034,7 @@ function blockEl(b,i,isNew){const p=page(),w=document.createElement('div');w.cla
    const al=bd.querySelector('[data-x="file"]');al.onclick=e=>{e.preventDefault();pickImg(b)};
    const ac=bd.querySelector('[data-x="clip"]');ac.onclick=e=>{e.preventDefault();pasteImageFromClipboard(b)}}}
  else if(b.t==='prompt')bd.append(promptEl(b));
+ else if(b.t==='qa')bd.append(qaEl(b));
  else if(b.t==='code')bd.append(codeEl(b));
  else if(b.t==='ol'){let n=1;for(let j=i-1;j>=0&&p.blocks[j].t==='ol'&&(p.blocks[j].lvl||0)===(b.lvl||0);j--)n++;const r=document.createElement('div');r.className='row';r.style.marginLeft=((b.lvl||0)*24)+'px';r.innerHTML='<span class="mk" style="width:26px">'+n+'.</span>';const d=ce('','List');d.style.flex=1;r.append(d);bd.append(r)}
  else if(b.t==='table'){const tb=document.createElement('table');tb.className='tbl';b.rows.forEach((r,y)=>{const tr=document.createElement('tr');r.forEach((v,x)=>{const td=document.createElement('td');td.contentEditable=true;td.textContent=v;if(!y)td.className='th';td.oninput=()=>{b.rows[y][x]=td.textContent;save()};td.onkeydown=ev=>{if(ev.key==='Enter')ev.preventDefault()};tr.append(td)});tb.append(tr)});bd.append(tb);const ct=document.createElement('div');ct.className='tc';[['+ Row',()=>b.rows.push(b.rows[0].map(()=>''))],['+ Col',()=>b.rows.forEach(r=>r.push(''))],['- Row',()=>b.rows.length>1&&b.rows.pop()],['- Col',()=>b.rows[0].length>1&&b.rows.forEach(r=>r.pop())]].forEach(([l,f])=>{const x=document.createElement('button');x.className='b';x.textContent=l;x.title=l+' in this table';x.onclick=()=>{snap();f();save();render()};ct.append(x)});bd.append(ct)}
@@ -1176,7 +1290,7 @@ function hideSl(){$('#sl').style.display='none'}
 function slPick(){const t=slL[slI][0],i=page().blocks.indexOf(slB);hideSl();setType(slB,t);if(t==='hr')addBlock(i,'p')}
 /* code */
 function codeEl(b){const c=document.createElement('div');c.className='code';
- c.innerHTML=`<div class="ch"><span class="chl"><select class="lsel" title="Language">${Object.entries(LANGS).map(([k,v])=>`<option value="${k}"${(b.lang||'python')===k?' selected':''}>${v.n}</option>`).join('')}</select><input class="clab" placeholder="Label: Brute force, Optimal, Fix..." value="${esc(b.label||'').replace(/"/g,'&quot;')}" maxlength="40"></span><span><button class="b" data-x="copy" title="Copy this code to your clipboard">${ic('copy')}<span class="lbl">Copy</span></button> <button class="b run" data-x="run" title="Run this code with your real local Python (Ctrl/Cmd+Enter or Shift+Enter)">${ic('play')}<span class="lbl">Run</span></button></span></div><div class="cw"><div class="ig"></div><pre></pre><textarea class="cd" spellcheck="false" placeholder="# write Python, Ctrl/Cmd+Enter or Shift+Enter to run"></textarea></div>`+(b.out?`<div class="out ${b.er?'er':''}"></div>`:'');
+ c.innerHTML=`<div class="ch"><span class="chl"><select class="lsel" title="Language">${Object.entries(LANGS).map(([k,v])=>`<option value="${k}"${(b.lang||'python')===k?' selected':''}>${v.n}</option>`).join('')}</select><input class="clab" placeholder="Label: Brute force, Optimal, Fix..." value="${esc(b.label||'').replace(/"/g,'&quot;')}" maxlength="40"></span><span><span class="rms"></span><button class="b" data-x="input" title="Custom input for input() and stdin, like LeetCode's testcase box">Input</button><button class="b" data-x="copy" title="Copy this code to your clipboard">${ic('copy')}<span class="lbl">Copy</span></button> <button class="b run" data-x="run" title="Run this code with your real local Python (Ctrl/Cmd+Enter or Shift+Enter)">${ic('play')}<span class="lbl">Run</span></button></span></div><div class="cw"><div class="ig"></div><pre></pre><textarea class="cd" spellcheck="false" placeholder="# write Python, Ctrl/Cmd+Enter or Shift+Enter to run"></textarea></div><div class="stdw${b.stdin?' open':''}"><div class="stdl">Input (one value per line, read by input())</div><textarea class="stdin" spellcheck="false" placeholder="e.g. 5"></textarea></div>`+(b.out?`<div class="out ${b.er?'er':''}"></div>`:'');
  const ta=c.querySelector('textarea'),pre=c.querySelector('pre');ta.value=b.h||'';
  const ig=c.querySelector('.ig');let runs=[];
  const sync=()=>{pre.innerHTML=hl(ta.value,b.lang||'python');ta.style.height='auto';const h=Math.max(60,ta.scrollHeight);ta.style.height=h+'px';pre.style.height=h+'px';ig.style.height=h+'px';runs=(b.lang||'python')==='text'?[]:guideRuns(ta.value);ig.innerHTML=runs.map(r=>`<i style="--c:${(r.L-1)*4};--t:${r.from};--n:${r.to-r.from+1}"></i>`).join('');lit()};
@@ -1204,15 +1318,16 @@ function codeEl(b){const c=document.createElement('div');c.className='code';
    if(s===en&&after!==undefined&&PAIRS[before]===after){const ins='\n'+ind+'    ',outer='\n'+ind;ta.setRangeText(ins+outer,s,en,'end');ta.selectionStart=ta.selectionEnd=s+ins.length}
    else{const opens=/[:{\[(]\s*$/.test(line),extra=opens?'    ':'',ind2=(b.lang||'python')==='python'&&!opens&&/^\s*(return|pass|break|continue|raise)\b/.test(line)&&ind.length>=4?ind.slice(4):ind;ta.setRangeText('\n'+ind2+extra,s,en,'end')}
    ta.oninput()}};
+ const sdt=c.querySelector('.stdin');sdt.value=b.stdin||'';sdt.oninput=()=>{b.stdin=sdt.value;save()};if(b.ms!=null)c.querySelector('.rms').textContent=b.ms+' ms';
  c.dataset.lang=b.lang||'python';const lsel=c.querySelector('.lsel');lsel.onchange=()=>{b.lang=lsel.value;c.dataset.lang=b.lang;sync();save()};c.querySelector('.clab').oninput=e=>{b.label=e.target.value;save()};
  const o=c.querySelector('.out');if(o)o.textContent=b.out;
- c.onclick=e=>{const btn=e.target.closest('button');const x=btn&&btn.dataset.x;if(x==='copy'){navigator.clipboard?.writeText(ta.value);toast('Code copied')}else if(x==='run')run(b,c)};
+ c.onclick=e=>{const btn=e.target.closest('button');const x=btn&&btn.dataset.x;if(x==='input'){c.querySelector('.stdw').classList.toggle('open');}else if(x==='copy'){navigator.clipboard?.writeText(ta.value);toast('Code copied')}else if(x==='run')run(b,c)};
  setTimeout(sync,0);return c}
 async function run(b,c){let o=c.querySelector('.out');if(!o){o=document.createElement('div');o.className='out';c.append(o)}
  o.className='out running';o.textContent='Running...';c.classList.add('busy');
- try{const r=await fetch('/api/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:b.h})});const j=await r.json();b.out=j.output;b.er=!j.ok}
+ try{const r=await fetch('/api/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:b.h,stdin:b.stdin||''})});const j=await r.json();b.out=j.output;b.er=!j.ok;b.ms=j.ms}
  catch(e){b.out='Could not reach the local server. Is app.py still running?';b.er=true}
- c.classList.remove('busy');o.textContent=b.out;o.className='out '+(b.er?'er':'')+' ntpopin';save()}
+ c.classList.remove('busy');o.textContent=b.out;const rm=c.querySelector('.rms');if(rm&&b.ms!=null)rm.textContent=b.ms+' ms';o.className='out '+(b.er?'er':'')+' ntpopin';save()}
 async function runAll(){const cs=[...document.querySelectorAll('#bl .code')],bs=page().blocks.filter(b=>b.t==='code');if(!bs.length)return toast('No code blocks');for(let i=0;i<bs.length;i++){await run(bs[i],cs[i]);if(bs[i].er)break}toast('Run finished')}
 function saveMd(){const p=page(),tx=h=>(h||'').replace(/<a [^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/g,'[$2]($1)').replace(/<b>|<\/b>|<strong>|<\/strong>/g,'**').replace(/<i>|<\/i>|<em>|<\/em>/g,'*').replace(/<br>/g,'\n').replace(/<[^>]*>/g,'').replace(/&nbsp;/g,' ').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
  const m={h1:'# ',h2:'## ',h3:'### ',ul:'- ',ol:'1. ',todo:'',quote:'> ',callout:'> '};
@@ -1243,7 +1358,7 @@ async function masterSave(){if(masterSaving)return;masterSaving=true;const b=$('
  lbl.textContent=old;masterSaving=false}
 $('#ms').onclick=masterSave;
 $('#fi').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.pages))throw 0;let n=0;d.pages.forEach(p=>{if(!P(p.id)){S.pages.push(p);n++}});save(1);render();toast(n+' pages imported')}catch(_){alert('Not a valid backup file.')}};
-$('#np').onclick=()=>newPage(null);
+$('#np').onclick=e=>startNewPage(e);
 $('#q').oninput=e=>{q=e.target.value.trim().toLowerCase();renderSide()};
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();masterSave()}});
 document.addEventListener('mousedown',e=>{if(!e.target.closest('#sl'))hideSl()});
@@ -1598,7 +1713,7 @@ function qsDraw(){const l=$('#qsl');const ico={p:'doc',h:'doc',b:'doc',new:'plus
  l.querySelectorAll('.qi').forEach(e=>{e.onmousemove=()=>{if(qsSel!==+e.dataset.i){qsSel=+e.dataset.i;l.querySelectorAll('.qi').forEach((x,k)=>x.classList.toggle('on',k===qsSel))}};e.onclick=()=>qsGo(qsItems[+e.dataset.i])});
  const on=l.querySelector('.on');if(on)on.scrollIntoView({block:'nearest'})}
 function qsGo(it){if(!it)return;closeQS();homeOn=false;
- if(it.k==='new'){newPage(null);const pg=page();pg.title=it.q;save();render();focusB(0);return}
+ if(it.k==='new'){startNewPage(null,pid=>{newPage(pid);const pg=page();pg.title=it.q;save();render();focusB(0)});return}
  cur=it.p.id;render();
  if(it.k==='h'){const i=page().blocks.findIndex(b=>b.id===it.id);if(i>=0){revealIndex(i);const el=blkEls()[i];if(el){el.scrollIntoView({block:'start'});flash(el.querySelector('.ce')||el)}}}}
 function openQS(){let o=$('#qs');if(!o){o=document.createElement('div');o.id='qs';o.innerHTML='<div class="qbox"><input id="qsi" placeholder="Jump to a page or heading, or search your notes" autocomplete="off" spellcheck="false"><div id="qsl"></div><div class="qh"><span>↑↓ move</span><span>Enter open</span><span>Esc close</span></div></div>';document.body.append(o);
@@ -1612,7 +1727,7 @@ document.addEventListener('keydown',e=>{const mod=e.ctrlKey||e.metaKey;
  else if(e.altKey&&!mod&&e.key.toLowerCase()==='o'){e.preventDefault();$('#olb').click()}},true);
 
 /* ---------- sidebar behaviour: resize, peek, menu ---------- */
-let homeOn=false,homeCur=null,ME={id:'',name:'Writer',color:'#2383e2',emoji:''},NET={joined:false,members:[],messages:[],key:null,relay:'',status:'off',identity:null},seenMsgs=null,accSig='',accTimer=0,keyTimer=0;
+let renamingId=null,renamingNew=false,homeMode='home',libSel=new Set(),libClosed=new Set(),libQ='',homeOn=false,homeCur=null,ME={id:'',name:'Writer',color:'#2383e2',emoji:''},NET={joined:false,members:[],messages:[],key:null,relay:'',status:'off',identity:null},seenMsgs=null,accSig='',accTimer=0,keyTimer=0;
 (function(){const sd=document.getElementById('side'),rs=$('#rsz');
  try{const w=+localStorage.getItem('nt.sw');if(w>=224&&w<=440)document.documentElement.style.setProperty('--sw',w+'px')}catch(e){}
  rs.onpointerdown=e=>{e.preventDefault();rs.setPointerCapture(e.pointerId);sd.classList.add('dragging');
@@ -1628,7 +1743,7 @@ let homeOn=false,homeCur=null,ME={id:'',name:'Writer',color:'#2383e2',emoji:''},
  mn.onclick=()=>setTimeout(()=>mn.classList.remove('show'),0);
  document.addEventListener('mousedown',e=>{if(!e.target.closest('#mmenu,#mm'))mn.classList.remove('show');if(!e.target.closest('#acc,#prof'))closeAcc()});
  $('#qsb').onclick=()=>openQS();
- $('#homeb').onclick=()=>{homeOn=true;homeCur=cur;render()};
+ $('#homeb').onclick=()=>{homeOn=true;homeMode='home';homeCur=cur;render()};$('#libb').onclick=()=>openLibrary();$('#revb').onclick=()=>startReview();
  $('#prof').onclick=e=>{e.stopPropagation();$('#acc').classList.contains('show')?closeAcc():openAcc()}})();
 const avHtml=(u,sz)=>'<span class="av" style="--s:'+(sz||28)+'px;background:'+esc(u.color||'#2383e2')+'">'+esc(u.emoji||((u.name||'?').trim()[0]||'?').toUpperCase())+'</span>';
 function renderProfile(){$('#av').outerHTML=avHtml(ME,30).replace('class="av"','id="av" class="av"');$('#pname').textContent=ME.name;$('#pid').textContent=ME.id;
@@ -1674,37 +1789,48 @@ function drawAcc(){const a=$('#acc');if(!a.classList.contains('show'))return;con
 /* ---------- Home ---------- */
 const QUOTES=['Write it down. Future you will say thanks.','One page at a time.','Small notes, big memory.','A clear head makes clean notes.','Today\u2019s scribble is tomorrow\u2019s project.','Capture first, tidy later.'];
 const ago=t=>{if(!t)return'';const m=Math.round((Date.now()-t)/60000);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':Math.round(m/1440)+' d ago'};
-function drawHome(){const ed=$('#ed'),h=new Date().getHours(),g=h<5?'Still up':h<12?'Good morning':h<17?'Good afternoon':h<21?'Good evening':'Good night';
+function drawHome(){if(homeMode==='lib')return drawLibrary();const ed=$('#ed'),h=new Date().getHours(),g=h<5?'Still up':h<12?'Good morning':h<17?'Good afternoon':h<21?'Good evening':'Good night';
  const real=S.pages.filter(p=>!p.folder),pages=[...real].sort((a,b)=>(b.mt||0)-(a.mt||0)),recent=pages.slice(0,6),dueP=real.filter(revDue).sort((a,b)=>a.rev.due-b.rev.due).slice(0,6);
  const words=real.reduce((n,p)=>n+(plain(p).trim().split(/\s+/).filter(Boolean).length),0),shared=real.filter(p=>p.share).length;
  const snip=p=>{const b=p.blocks.find(b=>stripH(b.h||'').length>2);return b?stripH(b.h).slice(0,92):'Empty page'};
  const peers=(NET.members||[]).filter(m=>m.id!==ME.id);
  ed.innerHTML=`<div class="home"><div class="hh"><div class="hq">${esc(QUOTES[new Date().getDate()%QUOTES.length])}</div><h1>${g}, ${esc(ME.name.split(' ')[0])}.</h1><div class="hd">${new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})}</div></div>
- <div class="hcta"><button class="hb c1" id="hnew">${ic('plus',15)} New page</button><button class="hb c2" id="hfind">${ic('search',15)} Quick find <kbd>Ctrl P</kbd></button><button class="hb c3" id="hprompt">${ic('doc',15)} Paste an AI answer</button><button class="hb c4" id="hleet">${ic('code',15)} LeetCode problem</button></div>
+ <div class="hcta"><button class="hb c1" id="hnew">${ic('plus',15)} New page</button><button class="hb c2" id="hfind">${ic('search',15)} Quick find <kbd>Ctrl P</kbd></button><button class="hb c3" id="hprompt">${ic('doc',15)} Paste an AI answer</button><button class="hb c4" id="hleet">${ic('code',15)} LeetCode problem</button><button class="hb c5" id="htoday">${ic('sun',15)} Today</button><button class="hb c6" id="hrev">${ic('rev',15)} Review${reviewCount()?' ('+reviewCount()+')':''}</button></div>
  ${dueP.length?`<div class="hsec">Due for revision</div><div class="hgrid">${dueP.map(p=>`<button class="hc due" data-id="${p.id}" style="--pc:var(--purple)"><span class="hci">${ic('rev',16)}</span><b>${esc(p.title||'Untitled')}</b><span class="hcs">${esc(snip(p))}</span><span class="hct">Due ${ago(p.rev.due)}</span></button>`).join('')}</div><div class="hsec" style="margin-top:26px">Jump back in</div>`:'<div class="hsec">Jump back in</div>'}<div class="hgrid">${recent.map(p=>`<button class="hc" data-id="${p.id}" style="--pc:${pcol(p.id)}"><span class="hci">${p.icon||ic('doc',16)}</span><b>${esc(p.title||'Untitled')}</b><span class="hcs">${esc(snip(p))}</span><span class="hct">${ago(p.mt)||'&nbsp;'}</span></button>`).join('')}</div>
  <div class="hstats"><div><b>${real.length}</b><span>pages</span></div><div><b>${words.toLocaleString()}</b><span>words written</span></div><div><b>${shared}</b><span>shared</span></div></div>
- <button class="hshare" id="hshare">${peers.length?peers.slice(0,1).map(m=>avHtml(m,30)).join('')+'<span><b>Sharing with '+esc(peers.map(m=>m.name).join(', '))+'</b><i>Open your sharing space</i></span>':ic('users',20)+'<span><b>Share notes with a friend</b><i>Create a 6-digit key and link two Notera notebooks</i></span>'}</button></div>`;
+ ${practiceHtml(real)}<button class="hshare" id="hshare">${peers.length?peers.slice(0,1).map(m=>avHtml(m,30)).join('')+'<span><b>Sharing with '+esc(peers.map(m=>m.name).join(', '))+'</b><i>Open your sharing space</i></span>':ic('users',20)+'<span><b>Share notes with a friend</b><i>Create a 6-digit key and link two Notera notebooks</i></span>'}</button></div>`;
  ed.querySelectorAll('.hc').forEach(b=>b.onclick=()=>{homeOn=false;cur=b.dataset.id;render()});
- $('#hnew').onclick=()=>{homeOn=false;newPage(null)};$('#hfind').onclick=()=>openQS();
- $('#hleet')&&($('#hleet').onclick=()=>newFromTemplate('leetcode',null));$('#hprompt').onclick=()=>{homeOn=false;newPage(null);const pg=page();pg.title='AI answer';pg.blocks=[{id:uid(),t:'prompt',h:''}];save();render();focusB(0)};
+ $('#hnew').onclick=e=>startNewPage(e);$('#htoday').onclick=()=>openToday();$('#hrev').onclick=()=>startReview();$('#hfind').onclick=()=>openQS();
+ $('#hleet')&&($('#hleet').onclick=()=>newFromTemplate('leetcode'));$('#hprompt').onclick=e=>startNewPage(e,pid=>{newPage(pid);const pg=page();pg.title='AI answer';pg.blocks=[{id:uid(),t:'prompt',h:''}];save();render();focusB(0)});
  $('#hshare').onclick=e=>{e.stopPropagation();openAcc()}}
 
 /* ---------- folders ---------- */
-function newFolder(parent){snap();const f={id:uid(),title:'New folder',parent:parent||null,folder:true,tags:[],fav:false,open:true,blocks:[{id:uid(),t:'p',h:''}]};
- if(parent)P(parent).open=true;S.pages.push(f);homeOn=false;cur=f.id;save();render();const t=$('#fti');if(t){t.focus();t.select()}}
+function newFolder(parent){snap();const f={id:uid(),title:'',parent:parent||null,folder:true,tags:[],fav:false,open:true,blocks:[{id:uid(),t:'p',h:''}]};
+ if(parent)P(parent).open=true;S.pages.push(f);renamingId=f.id;renamingNew=true;save();renderSide();if(homeOn&&homeMode==='lib')render()}
+function wireRename(root){const rn=(root||document).querySelector('.rn');if(!rn)return;
+ rn.onclick=e=>e.stopPropagation();rn.onmousedown=e=>e.stopPropagation();
+ rn.onkeydown=e=>{e.stopPropagation();if(e.key==='Enter'){e.preventDefault();rn.blur()}else if(e.key==='Escape'){rn.dataset.cancel='1';rn.blur()}};
+ rn.onblur=()=>finishRename(rn);setTimeout(()=>{rn.focus();rn.select();rn.scrollIntoView({block:'nearest'})},0)}
+function finishRename(rn){const id=renamingId,isNew=renamingNew;if(!id)return;renamingId=null;renamingNew=false;const f=P(id);if(!f)return;
+ const v=rn.value.trim();
+ if(rn.dataset.cancel&&isNew){S.pages=S.pages.filter(x=>x.id!==id);save();renderSide();if(homeOn&&homeMode==='lib')render();return}
+ if(v||isNew||f.title){f.title=v||f.title||'New folder';f.mt=Date.now()}
+ save();renderSide();if(homeOn||(page()&&page().folder))render()}
+document.addEventListener('dblclick',e=>{const t=e.target.closest&&e.target.closest('#tree .pg.fl .t');if(!t)return;const id=t.closest('.pg').dataset.id;renamingId=id;renamingNew=false;renderSide()});
 function crumbs(p){const t=[];let x=P(p.parent),g=0;while(x&&g++<8){t.unshift(x);x=P(x.parent)}return t}
 function crumbHtml(p){const c=crumbs(p);return c.length?'<nav class="crumbs">'+c.map(x=>`<a data-id="${x.id}">${x.folder?ic('folder',13):''}${esc(x.title||'Untitled')}</a>`).join('<i>/</i>')+'</nav>':''}
 function wireCrumbs(ed){ed.querySelectorAll('.crumbs a').forEach(a=>a.onclick=()=>{homeOn=false;cur=a.dataset.id;render()})}
 function pageMeta(p){const w=plain(p).trim().split(/\s+/).filter(Boolean).length,cb=p.blocks.filter(b=>b.t==='code').length;return[p.mt?'Edited '+ago(p.mt):'New page',w.toLocaleString()+' words',Math.max(1,Math.round(w/200))+' min read'].concat(cb?[cb+' code block'+(cb>1?'s':'')]:[]).join('<i>·</i>')}
 function drawFolder(p){const ed=$('#ed'),ch=kids(p.id).sort((a,b)=>(!!b.folder-!!a.folder)||(a.title||'').localeCompare(b.title||''));
  const sub=c=>c.folder?kids(c.id).length+' item'+(kids(c.id).length===1?'':'s'):(()=>{const b=c.blocks.find(b=>stripH(b.h||'').length>2);return b?stripH(b.h).slice(0,88):'Empty page'})();
- ed.innerHTML=`${crumbHtml(p)}<div class="fh"><span class="fic" style="--pc:${pcol(p.id)}">${ic(ch.length?'folderOpen':'folder',30)}</span><input id="fti" value="${esc(p.title).replace(/"/g,'&quot;')}" placeholder="Folder name"></div><div class="fm">${ch.length} item${ch.length===1?'':'s'} in this folder</div>
- <div class="hcta"><button class="hb c1" id="fnp">${ic('plus',15)} New page</button><button class="hb c2" id="fnf">${ic('folderPlus',15)} New subfolder</button><button class="hb c3" id="fnl">${ic('code',15)} LeetCode problem</button></div>
- ${ch.length?`<div class="hgrid">${ch.map(c=>`<button class="hc${c.folder?' isf':''}" data-id="${c.id}" style="--pc:${pcol(c.id)}"><span class="hci">${c.folder?ic('folder',17):(c.icon||ic('doc',16))}</span><b>${esc(c.title||'Untitled')}</b><span class="hcs">${esc(sub(c))}</span><span class="hct">${c.folder?'Folder':ago(c.mt)||'&nbsp;'}</span></button>`).join('')}</div>`:'<div class="fempty"><b>Nothing here yet</b><span>Add a page, or a subfolder to organise further. You can also drag pages from the sidebar onto this folder.</span></div>'}`;
+ ed.innerHTML=`<div class="fv">${crumbHtml(p)}<div class="fh"><span class="fic" style="--pc:${pcol(p.id)}">${ic(ch.length?'folderOpen':'folder',28)}</span><input id="fti" value="${esc(p.title).replace(/"/g,'&quot;')}" placeholder="Folder name"></div><div class="fm">${ch.length} item${ch.length===1?'':'s'} in this folder</div>
+ <div class="hcta"><button class="hb c1" id="fnp">${ic('plus',15)} New page</button><button class="hb c2" id="fnf">${ic('folderPlus',15)} New subfolder</button><button class="hb c4" id="fnl">${ic('code',15)} LeetCode problem</button><button class="hb c3" id="fnm" title="Move this folder somewhere else">${ic('move',15)} Move</button></div>
+ ${ch.length?`<div class="hgrid">${ch.map(c=>`<button class="hc${c.folder?' isf':''}" data-id="${c.id}" style="--pc:${pcol(c.id)}"><span class="hci">${c.folder?ic('folder',17):(c.icon||ic('doc',16))}</span><b>${esc(c.title||'Untitled')}</b><span class="hcs">${esc(sub(c))}</span><span class="hct">${c.folder?'Folder':ago(c.mt)||'&nbsp;'}</span></button>`).join('')}</div>`:'<div class="fempty"><b>Nothing here yet</b><span>Add a page or a subfolder. You can also drag pages onto this folder in the sidebar, or use the Library for a full-screen view.</span></div>'}</div>`;
  wireCrumbs(ed);
  ed.querySelectorAll('.hc').forEach(b=>b.onclick=()=>{cur=b.dataset.id;if(P(cur).folder)P(cur).open=true;render()});
  $('#fti').oninput=e=>{p.title=e.target.value;save();const t=document.querySelector('#tree .pg.on .t');if(t)t.textContent=p.title||'Untitled folder'};
- $('#fnp').onclick=()=>newPage(p.id);$('#fnf').onclick=()=>newFolder(p.id);$('#fnl').onclick=()=>newFromTemplate('leetcode',p.id)}
+ $('#fnp').onclick=()=>newPage(p.id);$('#fnf').onclick=()=>newFolder(p.id);$('#fnl').onclick=()=>newFromTemplate('leetcode',p.id);
+ $('#fnm').onclick=()=>{const ex=new Set([p.id]);let g=1;while(g){g=0;S.pages.forEach(x=>{if(x.parent&&ex.has(x.parent)&&!ex.has(x.id)){ex.add(x.id);g=1}})}pickFolder({title:'Move this folder to...',exclude:ex,onPick:to=>{movePg(p.id,to);render()}})}}
 /* ---------- templates ---------- */
 const mkB=(t,h,x)=>({id:uid(),t,h:h||'',...x});
 const TPL={
@@ -1721,14 +1847,122 @@ const TPL={
   mkB('h2','What it is'),mkB('p',''),mkB('h2','How it works'),mkB('p',''),mkB('h2','Example'),mkB('code','',{lang:'python'}),mkB('h2','When to use it'),mkB('ul',''),mkB('callout','',{ci:5,lbl:'Key idea'})]},
  bugfix:{label:'Bug and fix log',desc:'Symptom, cause, fix, how to avoid it',icon:'warning',color:'var(--red)',tags:['bug'],make:()=>[
   mkB('callout','',{ci:1,lbl:'Symptom'}),mkB('h2','Cause'),mkB('p',''),mkB('h2','Fix'),mkB('code','',{lang:'python',label:'Fixed'}),mkB('callout','',{ci:2,lbl:'How to avoid it'})]}};
-function newFromTemplate(key,parent){const t=TPL[key];if(!t)return;snap();const pg={id:uid(),title:'',parent:parent||null,tags:[...t.tags],fav:false,open:true,blocks:t.make()};
+function newFromTemplate(key,parent){const t=TPL[key];if(!t)return;if(parent===undefined)return startNewPage(null,pid=>newFromTemplate(key,pid));snap();const pg={id:uid(),title:'',parent:parent||null,tags:[...t.tags],fav:false,open:true,blocks:t.make()};
  if(parent)P(parent).open=true;S.pages.push(pg);homeOn=false;cur=pg.id;save();render();const ti=$('#ti');if(ti)ti.focus()}
 function openTpl(){const m=$('#tpl'),b=$('#tplb').getBoundingClientRect();m.style.left=Math.min(b.left,innerWidth-310)+'px';m.style.top=Math.min(b.bottom+6,innerHeight-260)+'px';
  m.innerHTML='<div class="tph">Start from a template</div>'+Object.entries(TPL).map(([k,t])=>`<button class="tpi" data-k="${k}"><span class="tpc" style="--pc:${t.color}">${ic(t.icon,16)}</span><span><b>${t.label}</b><i>${t.desc}</i></span></button>`).join('');
- m.querySelectorAll('.tpi').forEach(x=>x.onclick=()=>{m.classList.remove('show');const pg=page();newFromTemplate(x.dataset.k,pg&&pg.folder&&!homeOn?pg.id:null)});m.classList.add('show')}
+ m.querySelectorAll('.tpi').forEach(x=>x.onclick=()=>{m.classList.remove('show');const pg=page();newFromTemplate(x.dataset.k,pg&&pg.folder&&!homeOn?pg.id:undefined)});m.classList.add('show')}
 document.addEventListener('mousedown',e=>{if(!e.target.closest('#tpl,#tplb'))$('#tpl').classList.remove('show');if(!e.target.closest('#rvm,.revb'))$('#rvm').classList.remove('show')});
 $('#tplb').onclick=e=>{e.stopPropagation();$('#tpl').classList.contains('show')?$('#tpl').classList.remove('show'):openTpl()};
 $('#nfb').onclick=()=>{const pg=page();newFolder(pg&&pg.folder&&!homeOn?pg.id:null)};
+
+/* ---------- folder picker: always ask where a new page goes ---------- */
+const byTitle=(a,b)=>(a.title||'').localeCompare(b.title||'');
+function folderTree(excl){const out=[];const walk=(pid,d,path)=>{S.pages.filter(p=>p.folder&&(p.parent||null)===pid&&!(excl&&excl.has(p.id))).sort(byTitle).forEach(f=>{const pth=path?path+' / '+(f.title||'Untitled folder'):(f.title||'Untitled folder');out.push({id:f.id,t:f.title||'Untitled folder',d,path:pth});walk(f.id,d+1,pth)})};walk(null,0,'');return out}
+function defaultFolder(){const pg=page();if(!pg||homeOn)return null;return pg.folder?pg.id:(pg.parent&&P(pg.parent)?pg.parent:null)}
+function startNewPage(e,fn){const go=fn||(pid=>newPage(pid));
+ if(!S.pages.some(p=>p.folder)||(e&&e.shiftKey))return go(defaultFolder());
+ pickFolder({title:'Which folder should this page go in?',onPick:go,top:true})}
+function pickFolder(o){const w=$('#pkr'),tree=folderTree(o.exclude);let q='',sel=0,items=[];
+ let last='';try{last=localStorage.getItem('nt.lastFolder')||''}catch(x){}
+ const startId=defaultFolder()||last||null;
+ const build=(first)=>{const ql=q.trim().toLowerCase();items=[];
+  if(o.top!==false&&(!ql||'top level no folder'.includes(ql)))items.push({id:null,t:'Top level',sub:'Not inside any folder',d:0,top:true});
+  tree.filter(f=>!ql||f.path.toLowerCase().includes(ql)).forEach(f=>items.push({...f,d:ql?0:f.d,sub:ql?f.path:''}));
+  if(q.trim())items.push({create:q.trim(),t:'Create folder "'+q.trim()+'"',sub:'New folder at the top level',d:0});
+  if(first){const k=items.findIndex(i=>i.id===startId&&!i.create&&!(i.top&&startId));sel=k>=0?k:0}else sel=Math.min(sel,Math.max(0,items.length-1))};
+ const draw=()=>{const l=w.querySelector('.pkl');l.innerHTML=items.map((it,i)=>`<div class="pki${i===sel?' on':''}${it.create?' cr':''}" data-i="${i}" style="padding-left:${12+(it.d||0)*18}px"><span class="pkic">${it.create?ic('folderPlus',16):it.top?ic('home',16):ic('folder',16)}</span><span class="pkt">${esc(it.t)}</span><span class="pks">${esc(it.sub||'')}</span></div>`).join('')||'<div class="pke">No folders yet. Type a name to create one.</div>';
+  l.querySelectorAll('.pki').forEach(e=>{e.onmousemove=()=>{if(sel!==+e.dataset.i){sel=+e.dataset.i;l.querySelectorAll('.pki').forEach((x,k)=>x.classList.toggle('on',k===sel))}};e.onclick=()=>choose(items[+e.dataset.i])});
+  const on=l.querySelector('.on');if(on)on.scrollIntoView({block:'nearest'})};
+ const close=()=>{w.classList.remove('show');setTimeout(()=>{if(!w.classList.contains('show'))w.innerHTML=''},250)};
+ const choose=it=>{if(!it)return;close();let id=it.id;if(it.create){const f={id:uid(),title:it.create,parent:null,folder:true,tags:[],fav:false,open:true,blocks:[{id:uid(),t:'p',h:''}]};S.pages.push(f);save();id=f.id}
+  try{localStorage.setItem('nt.lastFolder',id||'')}catch(x){}o.onPick(id||null)};
+ w.innerHTML=`<div class="pkbox"><div class="pkh">${esc(o.title||'Choose a folder')}</div><input class="pkq" placeholder="Search folders, or type a new folder name" spellcheck="false" autocomplete="off"><div class="pkl"></div><div class="pkf"><span>Up and down to move</span><span>Enter to choose</span><span>Esc to cancel</span><span>Shift-click New page to skip this</span></div></div>`;
+ const qi=w.querySelector('.pkq');build(true);draw();w.classList.add('show');setTimeout(()=>qi.focus(),30);
+ qi.oninput=()=>{q=qi.value;build(false);draw()};
+ qi.onkeydown=e=>{if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();sel=(sel+(e.key==='ArrowDown'?1:-1)+items.length)%Math.max(1,items.length);draw()}else if(e.key==='Enter'){e.preventDefault();choose(items[sel])}else if(e.key==='Escape'){e.preventDefault();close()}};
+ w.onmousedown=e=>{if(e.target===w)close()}}
+/* ---------- library: every page and folder, full screen ---------- */
+function openLibrary(){homeOn=true;homeMode='lib';homeCur=cur;render()}
+function descendants(id){const ex=new Set([id]);let g=1;while(g){g=0;S.pages.forEach(x=>{if(x.parent&&ex.has(x.parent)&&!ex.has(x.id)){ex.add(x.id);g=1}})}return ex}
+function moveMany(ids,to){const list=ids.filter(id=>P(id)&&id!==to);if(!list.length)return;snap();let n=0;
+ list.forEach(id=>{if(to&&descendants(id).has(to))return;const pg=P(id);pg.parent=to||null;pg.mt=Date.now();n++});
+ if(to&&P(to))P(to).open=true;libSel.clear();save();renderSide();render();toast(n?'Moved '+n+' item'+(n>1?'s':'')+(to?' to '+(P(to).title||'folder'):' to the top level'):'Nothing moved')}
+function drawLibrary(){const ed=$('#ed'),ql=libQ.trim().toLowerCase();
+ const mt=p=>(p.title||'').toLowerCase().includes(ql)||(p.folder&&kids(p.id).some(mt));
+ const roots=S.pages.filter(p=>!p.parent),folders=roots.filter(p=>p.folder).sort(byTitle),loose=roots.filter(p=>!p.folder).sort((a,b)=>(b.mt||0)-(a.mt||0));
+ const row=(p,d)=>{const k=kids(p.id).filter(c=>!ql||mt(c)).sort((a,b)=>(!!b.folder-!!a.folder)||byTitle(a,b));if(ql&&!mt(p))return'';const isF=!!p.folder,closed=libClosed.has(p.id)&&!ql;
+  return`<div class="lr${isF?' lf':''}${libSel.has(p.id)?' sel':''}" draggable="true" data-id="${p.id}" style="--d:${d}"><input type="checkbox" class="lck" ${libSel.has(p.id)?'checked':''} title="Select"><span class="ar${isF&&!closed?' open':''}" data-tg="${p.id}">${isF&&kids(p.id).length?ic('chev',12):''}</span><span class="pi" style="--pc:${pcol(p.id)}">${isF?ic(closed?'folder':'folderOpen',14):(p.icon||ic('doc',13))}</span>${p.id===renamingId?`<input class="rn" value="${esc(p.title).replace(/"/g,'&quot;')}" placeholder="Folder name">`:`<span class="lt" data-open="${p.id}">${esc(p.title||(isF?'Untitled folder':'Untitled'))}</span>`}${isF?'<span class="cnt">'+kids(p.id).length+'</span>':''}<span class="lm">${isF?'':esc(ago(p.mt))}</span><button class="lmv" data-mv="${p.id}" title="Move to a folder">${ic('move',13)}<span>Move</span></button></div>`+(isF&&!closed?k.map(c=>row(c,d+1)).join(''):'')};
+ const card=f=>{const k=kids(f.id).filter(c=>!ql||mt(c)).sort((a,b)=>(!!b.folder-!!a.folder)||byTitle(a,b));
+  return`<section class="lcard" data-drop="${f.id}"><header><span class="fic sm" style="--pc:${pcol(f.id)}">${ic(k.length?'folderOpen':'folder',16)}</span>${f.id===renamingId?`<input class="rn" value="${esc(f.title).replace(/"/g,'&quot;')}" placeholder="Folder name">`:`<b class="lct" data-rn="${f.id}" title="Double-click to rename">${esc(f.title||'Untitled folder')}</b>`}<span class="cnt">${kids(f.id).length}</span><span class="lca"><button data-np="${f.id}" title="New page in this folder">${ic('plus',14)}</button><button data-nf="${f.id}" title="New subfolder">${ic('folderPlus',14)}</button><button data-of="${f.id}" title="Open folder">${ic('expand',14)}</button><button data-dl="${f.id}" title="Delete folder">${ic('trash',14)}</button></span></header><div class="lbody">${k.length?k.map(c=>row(c,0)).join(''):'<div class="ldrop">Drop pages here</div>'}</div></section>`};
+ const ldrop=loose.filter(p=>!ql||mt(p));
+ ed.innerHTML=`<div class="lib"><div class="lbh"><div><h1>Library</h1><div class="lbs">${S.pages.filter(p=>!p.folder).length} pages in ${S.pages.filter(p=>p.folder).length} folders. Drag pages onto a folder, or tick several and press Move.</div></div><div class="lbt"><input id="libq" placeholder="Filter" value="${esc(libQ).replace(/"/g,'&quot;')}"><button class="hb c2" id="libnf">${ic('folderPlus',15)} New folder</button><button class="hb c1" id="libnp">${ic('plus',15)} New page</button></div></div>
+ <div class="lgrid"><section class="lcard unf" data-drop=""><header><span class="fic sm" style="--pc:var(--mut)">${ic('doc',16)}</span><b class="lct">Unfiled</b><span class="cnt">${loose.length}</span></header><div class="lbody">${ldrop.length?ldrop.map(p=>row(p,0)).join(''):'<div class="ldrop">Nothing loose. Everything is in a folder.</div>'}</div></section>${folders.filter(f=>!ql||mt(f)).map(card).join('')}</div></div>`;
+ const bar=document.getElementById('libsel')||Object.assign(document.createElement('div'),{id:'libsel'});if(!bar.parentNode)document.body.append(bar);
+ const upd=()=>{bar.classList.toggle('show',libSel.size>0&&homeOn&&homeMode==='lib');bar.innerHTML=`<b>${libSel.size} selected</b><button id="lsm">${ic('move',14)} Move to...</button><button id="lsd" class="dg">${ic('trash',14)} Delete</button><button id="lsx">Clear</button>`;
+  bar.querySelector('#lsm').onclick=()=>{const ex=new Set();libSel.forEach(i=>descendants(i).forEach(x=>ex.add(x)));pickFolder({title:'Move '+libSel.size+' item'+(libSel.size>1?'s':'')+' to...',exclude:ex,onPick:to=>moveMany([...libSel],to)})};
+  bar.querySelector('#lsd').onclick=()=>{if(!confirm('Move '+libSel.size+' selected item(s) and everything inside to Trash?'))return;[...libSel].forEach(i=>{if(P(i))delPage(i,true)});libSel.clear();render()};
+  bar.querySelector('#lsx').onclick=()=>{libSel.clear();render()}};upd();
+ $('#libq').oninput=e=>{libQ=e.target.value;const pos=e.target.selectionStart;render();const q=$('#libq');q.focus();q.setSelectionRange(pos,pos)};
+ $('#libnf').onclick=()=>newFolder(null);$('#libnp').onclick=e=>startNewPage(e);
+ ed.querySelectorAll('.lck').forEach(c=>c.onchange=()=>{const id=c.closest('.lr').dataset.id;c.checked?libSel.add(id):libSel.delete(id);c.closest('.lr').classList.toggle('sel',c.checked);upd()});
+ ed.querySelectorAll('[data-tg]').forEach(a=>a.onclick=e=>{e.stopPropagation();const id=a.dataset.tg;libClosed.has(id)?libClosed.delete(id):libClosed.add(id);render()});
+ ed.querySelectorAll('[data-open]').forEach(a=>a.onclick=()=>{const id=a.dataset.open;if(P(id).folder){libClosed.has(id)?libClosed.delete(id):libClosed.add(id);render();return}homeOn=false;cur=id;render()});
+ ed.querySelectorAll('[data-mv]').forEach(b=>b.onclick=e=>{e.stopPropagation();const id=b.dataset.mv,ex=descendants(id);pickFolder({title:'Move "'+(P(id).title||'Untitled')+'" to...',exclude:ex,onPick:to=>moveMany([id],to)})});
+ ed.querySelectorAll('[data-np]').forEach(b=>b.onclick=()=>{homeOn=false;newPage(b.dataset.np)});
+ ed.querySelectorAll('[data-nf]').forEach(b=>b.onclick=()=>newFolder(b.dataset.nf));
+ ed.querySelectorAll('[data-of]').forEach(b=>b.onclick=()=>{homeOn=false;cur=b.dataset.of;P(cur).open=true;render()});
+ ed.querySelectorAll('[data-dl]').forEach(b=>b.onclick=()=>{delPage(b.dataset.dl);render()});
+ ed.querySelectorAll('[data-rn]').forEach(b=>b.ondblclick=()=>{renamingId=b.dataset.rn;renamingNew=false;render()});
+ /* drag and drop onto cards and folder rows */
+ const idsFor=id=>libSel.has(id)?[...libSel]:[id];
+ ed.querySelectorAll('.lr').forEach(r=>{r.ondragstart=e=>{e.dataTransfer.setData('text/pg',r.dataset.id);e.dataTransfer.effectAllowed='move';r.classList.add('dragging')};r.ondragend=()=>r.classList.remove('dragging')});
+ const isPg=e=>[...e.dataTransfer.types].includes('text/pg');
+ ed.querySelectorAll('.lcard,.lr.lf').forEach(t=>{const to=()=>t.classList.contains('lcard')?(t.dataset.drop||null):t.dataset.id;
+  t.ondragover=e=>{if(isPg(e)){e.preventDefault();e.stopPropagation();ed.querySelectorAll('.dz').forEach(x=>x.classList.remove('dz'));t.classList.add('dz')}};
+  t.ondragleave=e=>{if(!t.contains(e.relatedTarget))t.classList.remove('dz')};
+  t.ondrop=e=>{e.preventDefault();e.stopPropagation();t.classList.remove('dz');const id=e.dataTransfer.getData('text/pg');if(id)moveMany(idsFor(id),to())}});
+ wireRename(ed)}
+/* ---------- flashcards and review ---------- */
+const DAYMS=864e5;
+const dueCards=()=>{const n=Date.now(),o=[];S.pages.forEach(p=>p.blocks.forEach(b=>{if(b.t==='qa'&&stripH(b.h||'').length&&(!b.due||b.due<=n))o.push({p,b})}));return o};
+const reviewCount=()=>dueCards().length+S.pages.filter(p=>!p.folder&&revDue(p)).length;
+function reviewBadge(){const k=$('#revn'),n=reviewCount();if(k){k.textContent=n||'';k.style.display=n?'':'none'}}
+function rateQA(b,q){const now=Date.now();if(q==='again'){b.n=0;b.due=now+10*60e3}else{b.n=(b.n||0)+1;const base=[1,3,7,14,30,60,120][Math.min(b.n-1,6)],m={hard:.6,good:1,easy:1.7}[q];b.due=now+Math.max(1,Math.round(base*m))*DAYMS}return b.due}
+const qaWhen=b=>!b.due?'New':b.due<=Date.now()?'Due now':'Next review in '+(b.due-Date.now()<DAYMS?'a few minutes':Math.round((b.due-Date.now())/DAYMS)+' days');
+function qaEl(b){const w=document.createElement('div');w.className='qa';
+ w.innerHTML='<div class="qah"><span class="qal">'+ic('card',13)+'Flashcard</span><span class="qas"></span></div><div class="qaq ce" contenteditable="true" data-ph="Question: what do you want to remember?"></div><div class="qaw"><div class="qaa ce" contenteditable="true" data-ph="Answer"></div><button type="button" class="qar">Show answer</button></div><div class="qab"><button type="button" data-r="again">Again</button><button type="button" data-r="hard">Hard</button><button type="button" data-r="good">Good</button><button type="button" data-r="easy">Easy</button></div>';
+ const q=w.querySelector('.qaq'),a=w.querySelector('.qaa'),st=w.querySelector('.qas');q.innerHTML=b.h||'';a.innerHTML=b.a||'';
+ const upd=()=>{st.textContent=qaWhen(b);st.classList.toggle('due',!b.due||b.due<=Date.now())};upd();
+ const plainPaste=e=>{e.preventDefault();document.execCommand('insertText',false,e.clipboardData.getData('text/plain'))};q.onpaste=a.onpaste=plainPaste;
+ q.oninput=()=>{b.h=q.innerHTML;save();reviewBadge()};a.oninput=()=>{b.a=a.innerHTML;save()};
+ w.querySelector('.qar').onclick=()=>{w.classList.add('open');a.focus()};
+ w.querySelector('.qab').onclick=e=>{const r=e.target.closest('button')?.dataset.r;if(!r)return;rateQA(b,r);w.classList.remove('open');upd();save();reviewBadge();toast(qaWhen(b))};
+ return w}
+function startReview(){const w=$('#rvw'),q=dueCards(),dues=S.pages.filter(p=>!p.folder&&revDue(p));let i=0,shown=false;
+ const close=()=>{w.classList.remove('show');document.removeEventListener('keydown',key,true);setTimeout(()=>{if(!w.classList.contains('show'))w.innerHTML=''},250);render();reviewBadge()};
+ const key=e=>{if(!w.classList.contains('show'))return;if(e.key==='Escape'){e.preventDefault();close();return}
+  if(i>=q.length)return;if(!shown&&(e.key===' '||e.key==='Enter')){e.preventDefault();shown=true;draw()}
+  else if(shown){const r={1:'again',2:'hard',3:'good',4:'easy'}[e.key];if(r){e.preventDefault();rate(r)}}};
+ const rate=r=>{rateQA(q[i].b,r);save();if(r==='again'){q.push(q[i])}i++;shown=false;draw()};
+ const draw=()=>{if(i>=q.length){const n=q.length;w.innerHTML=`<div class="rbox"><h2>${n?'All caught up':'No cards due'}</h2><p>${n?'You went through '+n+' card'+(n>1?'s':'')+'. See you tomorrow.':'Add one with /flashcard on any page. Put the question on top, the answer underneath.'}</p>${dues.length?`<div class="rdue"><b>Pages due for revision</b>${dues.map(p=>`<a data-id="${p.id}">${esc(p.title||'Untitled')}</a>`).join('')}</div>`:''}<button class="abtn pri" id="rclose">Done</button></div>`;
+   w.querySelector('#rclose').onclick=close;w.querySelectorAll('.rdue a').forEach(a=>a.onclick=()=>{close();homeOn=false;cur=a.dataset.id;render()});return}
+  const{b,p}=q[i];w.innerHTML=`<div class="rbox"><div class="rtop"><span>${i+1} of ${q.length}</span><span class="rpg">${esc(p.title||'Untitled')}</span><button id="rx" title="Close (Esc)">${ic('close',16)}</button></div><div class="rq">${b.h}</div>${shown?`<div class="rans">${b.a||'<i>No answer written yet</i>'}</div><div class="rbtns"><button data-r="again"><b>Again</b><i>1</i></button><button data-r="hard"><b>Hard</b><i>2</i></button><button data-r="good"><b>Good</b><i>3</i></button><button data-r="easy"><b>Easy</b><i>4</i></button></div>`:`<button class="abtn pri rshow" id="rshow">Show answer <kbd>Space</kbd></button>`}</div>`;
+  w.querySelector('#rx').onclick=close;const sh=w.querySelector('#rshow');if(sh)sh.onclick=()=>{shown=true;draw()};w.querySelectorAll('.rbtns button').forEach(x=>x.onclick=()=>rate(x.dataset.r))};
+ document.addEventListener('keydown',key,true);w.classList.add('show');w.onmousedown=e=>{if(e.target===w)close()};draw()}
+/* ---------- practice tracker, today note, shortcuts ---------- */
+function streakDays(){const days=new Set(S.pages.map(p=>p.mt).filter(Boolean).map(t=>new Date(t).toDateString()));let n=0;const d=new Date();if(!days.has(d.toDateString()))d.setDate(d.getDate()-1);while(days.has(d.toDateString())){n++;d.setDate(d.getDate()-1)}return n}
+function practiceHtml(real){const c=t=>real.filter(p=>p.tags.includes(t)).length,e=c('easy'),m=c('medium'),h=c('hard'),lc=real.filter(p=>p.tags.includes('leetcode')).length,sol=c('solved'),tot=Math.max(1,e+m+h),st=streakDays(),cards=S.pages.reduce((n,p)=>n+p.blocks.filter(b=>b.t==='qa').length,0);
+ return`<div class="hsec" style="margin-top:26px">Practice</div><div class="hprac"><div class="hp1"><div class="hpb"><i style="flex:${e};background:var(--green)"></i><i style="flex:${m};background:var(--orange)"></i><i style="flex:${h};background:var(--red)"></i>${e+m+h?'':'<i style="flex:1;background:var(--veil2)"></i>'}</div><div class="hpl"><span><i style="background:var(--green)"></i>Easy <b>${e}</b></span><span><i style="background:var(--orange)"></i>Medium <b>${m}</b></span><span><i style="background:var(--red)"></i>Hard <b>${h}</b></span></div><div class="hpn">${lc} LeetCode page${lc===1?'':'s'}${sol?' · '+sol+' solved':''}. Tag pages easy, medium, hard or solved to fill this in.</div></div><div class="hp2"><div><b>${st}</b><span>day streak</span></div><div><b>${cards}</b><span>flashcards</span></div></div></div>`}
+function openToday(){snap();let f=S.pages.find(p=>p.folder&&!p.parent&&p.title==='Daily');if(!f){f={id:uid(),title:'Daily',parent:null,folder:true,tags:[],fav:false,open:true,blocks:[{id:uid(),t:'p',h:''}]};S.pages.push(f)}
+ const title=new Date().toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'});let pg=S.pages.find(p=>p.parent===f.id&&p.title===title);
+ if(!pg){pg={id:uid(),title,parent:f.id,tags:['daily'],fav:false,open:true,blocks:[mkB('h2','Plan'),mkB('todo',''),mkB('h2','What I learned'),mkB('p',''),mkB('h2','Problems solved'),mkB('ul',''),mkB('callout','',{ci:1,lbl:'Stuck on'})]};S.pages.push(pg)}
+ f.open=true;homeOn=false;cur=pg.id;save();render()}
+const SHORTCUTS=[['Ctrl P','Quick find: jump to any page or heading'],['Ctrl K','Turn selected text into a link'],['Ctrl B / I','Bold / italic'],['Ctrl Enter','Run the Python block you are typing in'],['Ctrl \\','Hide or show the sidebar'],['Alt O','Page outline'],['Ctrl S','Master save'],['Alt Z','Undo'],['/','Block menu: code, hint, flashcard, LeetCode template...'],['## + space','Heading'],['- + space','Bullet list'],['[] + space','To-do'],['Tab / Shift Tab','Indent or outdent code'],['Backspace','In code: remove one full indent step'],['Shift click New page','Skip the folder question'],['?','This sheet']];
+function toggleShortcuts(force){const w=$('#shc');const show=force!==undefined?force:!w.classList.contains('show');if(show){w.innerHTML='<div class="shbox"><div class="pkh">Keyboard shortcuts</div><div class="shg">'+SHORTCUTS.map(([k,d])=>`<div><kbd>${esc(k)}</kbd><span>${esc(d)}</span></div>`).join('')+'</div></div>';w.onmousedown=e=>{if(e.target===w)toggleShortcuts(false)}}w.classList.toggle('show',show)}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#shc').classList.contains('show')){toggleShortcuts(false);return}
+ if(e.key==='?'&&!e.ctrlKey&&!e.metaKey&&!e.altKey){const a=document.activeElement;if(a&&(a.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)))return;e.preventDefault();toggleShortcuts()}});
+$('#shb').onclick=()=>toggleShortcuts(true);$('#prb').onclick=()=>setTimeout(()=>window.print(),150);
 /* ---------- revision ---------- */
 const DAY=864e5,revDue=p=>!!(p.rev&&p.rev.due<=Date.now());
 function revLabel(p){if(!p.rev)return'Revise';if(revDue(p))return'Due now';const d=Math.ceil((p.rev.due-Date.now())/DAY);return'Revise in '+d+'d'}

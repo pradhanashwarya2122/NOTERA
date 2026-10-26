@@ -718,23 +718,27 @@ def restore_backup(name):
 def run_code():
     body = request.get_json(force=True)
     code = body.get("code", "")
+    stdin = str(body.get("stdin", ""))
 
     with tempfile.TemporaryDirectory() as td:
         script_path = Path(td) / "snippet.py"
         script_path.write_text(code, encoding="utf-8")
         try:
+            t0 = time.perf_counter()
             proc = subprocess.run(
                 [sys.executable, "-I", str(script_path)],
                 cwd=td,
                 capture_output=True,
                 text=True,
+                input=stdin,  # custom test input, like LeetCode's "Testcase" box; empty closes stdin so input() fails fast
                 timeout=15,
             )
+            ms = int((time.perf_counter() - t0) * 1000)
             out = proc.stdout
             err = proc.stderr
             ok = proc.returncode == 0
             combined = out if ok else (out + err if out else err)
-            return jsonify({"ok": ok, "output": combined.strip() or "(no output)"})
+            return jsonify({"ok": ok, "output": combined.strip() or "(no output)", "ms": ms})
         except subprocess.TimeoutExpired:
             return jsonify({"ok": False, "output": "Timed out after 15 seconds."})
 

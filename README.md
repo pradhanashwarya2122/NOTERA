@@ -20,6 +20,11 @@ The first run sets itself up in a private `.venv` folder and opens http://127.0.
 - **Share my notes** by creating a 6-digit key for a friend.
 
 ## Made for coding notes
+- **Columns and layouts**: drag any block by its handle and drop it on another block's left or right edge to put them side by side
+  (up to four columns). Drag the divider to resize; it snaps to 1/4, 1/3, 1/2, 2/3 and 3/4 with a live percentage. *Layout* on a row
+  offers presets, and columns stack on narrow windows. Image beside text just works.
+- **Python editor**: indent guides that follow each block to its last line, Backspace removes a full indent step, `else:` snaps to its
+  `if`, and Enter after `return` or `pass` steps back out.
 - **Folders and subfolders** in the sidebar (New folder, or the folder icon on any folder). Drag pages onto a folder.
 - **Templates** (From template): *LeetCode problem* (problem, hint, approach, solution, complexity, edge cases,
   mistakes, key idea), *Concept notes* and *Bug and fix log*. In any page type `/leetcode`.

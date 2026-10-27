@@ -8,3 +8,4 @@ net.json
 relay_data.json
 sync_config.json
 .venv/
+ai_config.json

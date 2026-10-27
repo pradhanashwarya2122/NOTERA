@@ -34,6 +34,8 @@ Use the **Paste prompt** block (`/prompt`) to keep a whole answer together in on
 
 Every page can switch between **Document** and **Canvas** (toggle next to the tags).
 
+**Flow** (on by default): blocks never overlap and gaps close by themselves. Move or resize a block and the others rearrange around it; type in a text box and the blocks below make room. Turn Flow off in the canvas toolbar for fully free placement. **Tidy** lays everything into 1, 2 or 3 columns, and the width button in a block's top bar snaps it to a quarter, third, half, two thirds or full width. Grab a block by its top bar, by its image, or Alt+drag anywhere.
+
 Canvas: drag blocks by their top handle, resize from any corner or edge, rotate images and diagrams, multi-select with
 Shift or a marquee, group (`Ctrl G`), duplicate (`Ctrl D`), lock (`L`), bring forward or back (`]`, `[`), nudge with the arrows
 (Shift for 10 px), align and distribute, snap to other blocks and an optional grid, zoom (`Ctrl` + wheel), pan (`Space` + drag),

@@ -968,6 +968,10 @@ body.aion #main{padding-right:380px}body.aion #outl{display:none}
 .blk[data-ai]::before{content:'AI';position:absolute;left:-30px;top:8px;font:700 10px var(--ui);letter-spacing:.5px;color:var(--y);background:color-mix(in srgb,var(--y) 12%,transparent);padding:1px 6px;border-radius:5px}
 @media(max-width:900px){#aip{width:100%}body.aion #main{padding-right:0}}
 @media print{#aip,#aib2,#aibusy{display:none!important}}
+
+.cvb.sel>.cvh,.cvb:hover>.cvh{opacity:1}
+.cvb img,.cvb .ifh,.cvb .cmh,.cvb .qah,.cvb .lch,.cvb .ch{cursor:grab}
+.cvw.dragging .cvb{transition:none}.cvb{transition:top .18s var(--ease)}.cvw.dragging .cvb:not(.sel){transition:top .14s var(--ease)}
 </style>
 </head><body>
 <div id="side"><div class="sin">
@@ -1060,7 +1064,8 @@ async function poll(){if(saving||dirty)return;
   const st=await (await fetch('/api/state')).json();if(dirty||saving)return;
   const curBefore=page()?pj(page()):'',nxt=st.pages.find(p=>p.id===cur);
   if(typing&&nxt&&pj(nxt)!==curBefore)return;
-  adopt(st);if(!nxt||pj(nxt)!==curBefore)render();else renderSide();
+  const same=nxt&&pj(nxt)===curBefore,keep=same?page():null;if(same){st.pages[st.pages.indexOf(nxt)]=keep}/* keep the open page's own objects so what you type next is still what gets saved */
+  adopt(st);if(!nxt||!same)render();else renderSide();
   if(nxt&&pj(nxt)!==curBefore)toast('Updated from your other laptop')}catch(e){}}
 document.addEventListener('input',e=>{lastInput=Date.now();if(e.target.closest&&e.target.closest('.ce.h1,.ce.h2,.ce.h3')){clearTimeout(buildOutline.t);buildOutline.t=setTimeout(buildOutline,350)}},true);
 let rev=null,snapMap={},dirty=false,saving=false,lastInput=0,syncInfo={status:'off'};
@@ -1844,13 +1849,14 @@ function guideRuns(text){const lines=text.split('\n'),ind=lines.map(l=>l.trim()?
 /* ================= Freeform canvas mode ================= */
 let cvSel=new Set(),cvLayersOn=false,cvSpace=false;
 const CVW={stepper:560,tabs:480,code:580,image:340,svg:400,table:540,html:540,mermaid:520,stepper:520,quiz:460,tabs:480,qa:440,callout:420,math:420,prompt:620,doc:560};
-const cvState=p=>p.cvs||(p.cvs={z:1,x:40,y:40,grid:false,snap:true,bg:'dots'});
+const cvState=p=>p.cvs||(p.cvs={z:1,x:40,y:40,grid:false,snap:true,bg:'dots',flow:true,pw:1000});
+const CVGAP=14;
 const cvBlock=id=>page().blocks.find(b=>b.id===id);
 const cvEl=id=>document.querySelector('#bl .cvb[data-id="'+id+'"]');
 const cvRect=b=>{const el=cvEl(b.id);return{x:b.cv.x,y:b.cv.y,w:b.cv.w,h:el?el.offsetHeight:(b.cv.h||80)}};
 function setMode(m){const p=page();if(!p||p.mode===m||(m==='doc'&&!p.mode))return;snap();
  if(m==='canvas'){
-  if(p.blocks.some(b=>!b.cv)){const br=$('#bl').getBoundingClientRect(),els=blkEls();els.forEach((el,i)=>{const b=p.blocks[i];if(b&&!b.cv){const r=el.getBoundingClientRect();const im=el.querySelector('.imgf'),wv=im?im.getBoundingClientRect().width:r.width;b.cv={x:Math.round(r.left-br.left)+40,y:Math.round(r.top-br.top)+40,w:Math.max(120,Math.round(wv)),h:null,z:i+1}}})}
+  if(p.blocks.some(b=>!b.cv)){const br=$('#bl').getBoundingClientRect(),els=blkEls();els.forEach((el,i)=>{const b=p.blocks[i];if(b&&!b.cv){const r=el.getBoundingClientRect();const im=el.querySelector('.imgf'),wv=im?im.getBoundingClientRect().width:r.width;b.cv={x:Math.round(r.left-br.left)+40,y:Math.round(r.top-br.top)+40,w:Math.max(120,Math.min(Math.round(wv),640)),h:null,z:i+1}}})}
   p.mode='canvas';toast('Canvas mode. Your layout is kept when you switch back.')}
  else{
   if(p.cvDirty){const keep=p.blocks.map((b,i)=>[b,i]);keep.sort((a,b)=>{const ay=a[0].cv?a[0].cv.y:a[1]*1e3,by=b[0].cv?b[0].cv.y:b[1]*1e3;return Math.abs(ay-by)<24?((a[0].cv?a[0].cv.x:0)-(b[0].cv?b[0].cv.x:0)):ay-by});p.blocks=keep.map(k=>k[0]);p.blocks.forEach(b=>{delete b.rg;delete b.rw});p.cvDirty=false;toast('Back to document mode. Blocks follow your canvas order; the canvas layout is saved.')}
@@ -1868,12 +1874,32 @@ function buildCanvas(p,bl,newIds){
  bl.className='cv';bl.tabIndex=0;bl.innerHTML='';cvEnsure(p,bl);const st=cvState(p);
  const world=document.createElement('div');world.className='cvw';bl.append(world);
  p.blocks.forEach((b,i)=>{const el=blockEl(b,i,false);newIds.add(b.id);el.classList.add('cvb');el.dataset.t=b.t;cvGeom(el,b);
-  const hb=document.createElement('div');hb.className='cvh';hb.innerHTML=`<span class="cvgr" title="Drag to move">${ic('grip',13)}</span><span class="cvty">${esc(cvLabel(b))}</span><span class="cvac"><button data-k="lock" title="Lock position">${ic('lock',13)}</button><button data-k="dup" title="Duplicate (Ctrl D)">${ic('copy',13)}</button><button data-k="fwd" title="Bring forward">${ic('up',13)}</button><button data-k="back" title="Send backward">${ic('down',13)}</button><button data-k="del" title="Delete">${ic('trash',13)}</button></span>`;el.prepend(hb);
+  const hb=document.createElement('div');hb.className='cvh';hb.innerHTML=`<span class="cvgr" title="Drag to move">${ic('grip',13)}</span><span class="cvty">${esc(cvLabel(b))}</span><span class="cvac"><button data-k="lock" title="Lock position">${ic('lock',13)}</button><button data-k="dup" title="Duplicate (Ctrl D)">${ic('copy',13)}</button><button data-k="wid" title="Width: quarter, third, half, two thirds, full">${ic('cols',13)}</button><button data-k="fwd" title="Bring forward">${ic('up',13)}</button><button data-k="back" title="Send backward">${ic('down',13)}</button><button data-k="del" title="Delete">${ic('trash',13)}</button></span>`;el.prepend(hb);
   'nw n ne e se s sw w'.split(' ').forEach(d=>{const h=document.createElement('i');h.className='rh rh-'+d;h.dataset.d=d;el.append(h)});
   if(['image','svg','html','mermaid'].includes(b.t)){const r=document.createElement('i');r.className='rot';r.title='Rotate (Shift snaps to 15 degrees)';el.append(r)}
   world.append(el)});
- bl.insertAdjacentHTML('beforeend',`<div class="cvt"><button data-k="zo" title="Zoom out">&minus;</button><span class="cvz"></span><button data-k="zi" title="Zoom in">+</button><button data-k="fit" title="Fit everything (Ctrl 0)">Fit</button><button data-k="z1" title="Reset zoom to 100%">100%</button><i></i><button data-k="grid" title="Show grid" class="${st.grid?'on':''}">Grid</button><button data-k="snap" title="Snap to grid and to other blocks" class="${st.snap?'on':''}">Snap</button><button data-k="bg" title="Background style">Bg</button><button data-k="lyr" title="Layers panel" class="${cvLayersOn?'on':''}">Layers</button><i></i><button data-k="add" class="pri">+ Add</button></div><div class="cva" hidden></div><div class="cvl${cvLayersOn?' show':''}"></div><div class="cvaddm" hidden></div>`);
- cvApplyView(bl,p);cvSyncSel(p);cvWire(bl,world,p);cvLayers(bl,p)}
+ bl.insertAdjacentHTML('beforeend',`<div class="cvt"><button data-k="zo" title="Zoom out">&minus;</button><span class="cvz"></span><button data-k="zi" title="Zoom in">+</button><button data-k="fit" title="Fit everything (Ctrl 0)">Fit</button><button data-k="z1" title="Reset zoom to 100%">100%</button><i></i><button data-k="flow" title="Flow: blocks rearrange automatically around the one you move or resize" class="${st.flow!==false?'on':''}">Flow</button><button data-k="tidy" title="Arrange everything into columns">Tidy</button><button data-k="grid" title="Show grid" class="${st.grid?'on':''}">Grid</button><button data-k="snap" title="Snap to grid and to other blocks" class="${st.snap?'on':''}">Snap</button><button data-k="bg" title="Background style">Bg</button><button data-k="lyr" title="Layers panel" class="${cvLayersOn?'on':''}">Layers</button><i></i><button data-k="add" class="pri">+ Add</button></div><div class="cva" hidden></div><div class="cvl${cvLayersOn?' show':''}"></div><div class="cvaddm" hidden></div>`);
+ cvApplyView(bl,p);cvSyncSel(p);cvWire(bl,world,p);
+ if(cvState(p).flow!==false){cvSkipRO=true;cvCompact(p,new Set());setTimeout(()=>{cvSkipRO=false;cvSchedule(p,new Set())},260);setTimeout(()=>cvSchedule(p,new Set()),1500)}/* images and fonts settle after the first layout, so check again */cvLayers(bl,p);
+ if(window.cvRO)window.cvRO.disconnect();window.cvRO=new ResizeObserver(()=>{if(!cvSkipRO)cvSchedule(p,new Set())});world.querySelectorAll('.cvb').forEach(e=>window.cvRO.observe(e));
+ if(!cvHinted){cvHinted=true;setTimeout(()=>toast('Canvas tips: drag a block by its top bar or its image. Alt+drag works anywhere. Flow keeps blocks from overlapping.'),600)}}
+let cvHinted=false;
+
+/* Flow: blocks never overlap and close gaps. Move or resize one and the others rearrange around it; type in a text box and the ones below make room. */
+let cvRaf=0,cvSkipRO=false;
+function cvCompact(p,fixed){const st=cvState(p);if(st.flow===false)return false;const GAP=CVGAP,TOP=20;
+ const its=p.blocks.filter(b=>b.cv).map(b=>{const el=cvEl(b.id);return{b,x:b.cv.x,y:b.cv.y,w:b.cv.w,h:el?el.offsetHeight:(b.cv.h||80),fx:fixed.has(b.id)||!!b.cv.lock}});
+ const placed=its.filter(i=>i.fx),rest=its.filter(i=>!i.fx).sort((a,c)=>(a.y-c.y)||(a.x-c.x)||((a.b.cv.z||0)-(c.b.cv.z||0)));let changed=false;
+ for(const it of rest){let y=TOP,hit;do{hit=placed.find(o=>it.x<o.x+o.w-1&&it.x+it.w>o.x+1&&y<o.y+o.h+GAP&&y+it.h+GAP>o.y);if(hit)y=hit.y+hit.h+GAP}while(hit);
+  if(Math.round(it.y)!==y){it.b.cv.y=y;const el=cvEl(it.b.id);if(el)el.style.top=y+'px';changed=true}it.y=y;placed.push(it)}
+ return changed}
+function cvSchedule(p,fixed){if(cvRaf)return;cvRaf=requestAnimationFrame(()=>{cvRaf=0;if(page()&&page().id===p.id&&p.mode==='canvas'){cvSkipRO=true;cvCompact(p,fixed||new Set());requestAnimationFrame(()=>{cvSkipRO=false})}})}
+function cvTidy(bl,p,n){const st=cvState(p),W=st.pw||1000,gap=CVGAP*1.5,cw=Math.round((W-gap*(n-1))/n);snap();
+ const order=[...p.blocks].sort((a,c)=>(a.cv.y-c.cv.y)||(a.cv.x-c.cv.x));order.forEach(b=>{b.cv.w=cw;b.cv.h=null;cvGeom(cvEl(b.id),b)});
+ const tops=Array(n).fill(40);order.forEach(b=>{const el=cvEl(b.id),col=tops.indexOf(Math.min(...tops)),h=el.offsetHeight;b.cv.x=40+col*(cw+gap);b.cv.y=tops[col];tops[col]+=h+gap;cvGeom(el,b)});
+ p.cvDirty=true;save();cvFit(bl,p);toast(n===1?'One column':n+' columns. Drag any block by its top bar or its image to rearrange.')}
+const CVW_PRESETS=[[.25,'Quarter'],[1/3,'Third'],[.5,'Half'],[2/3,'Two thirds'],[1,'Full width']];
+function cvWidthMenu(btn,b){const p=page(),st=cvState(p),W=st.pw||1000;aiPop(btn,CVW_PRESETS.map(([f,l],i)=>[i,l]),i=>{const f=CVW_PRESETS[i][0];snap();cvIds(p,b.id).forEach(id=>{const x=cvBlock(id);x.cv.w=Math.round(W*f-(f<1?CVGAP:0));const el=cvEl(id);cvGeom(el,x)});cvTouch(p);cvCompact(p,new Set());save();cvLayers($('#bl'),p)})}
 function cvLabel(b){return{p:'Text',h1:'Heading',h2:'Heading',h3:'Heading',ul:'List',ol:'List',todo:'To-do',quote:'Quote',callout:(b.lbl||'Callout'),code:'Code'+(b.lang&&b.lang!=='python'?' '+b.lang:''),image:'Image',svg:'Diagram',table:'Table',math:'Math',qa:'Flashcard',prompt:'AI answer',doc:'Text',html:'Interactive',mermaid:'Diagram',stepper:'Stepper',quiz:'Quiz',tabs:'Tabs',lc:'Problem',hr:'Divider',toggle:'Toggle',cols:'Columns'}[b.t]||b.t}
 function cvSyncSel(p){document.querySelectorAll('#bl .cvb').forEach(el=>{const on=cvSel.has(el.dataset.id);el.classList.toggle('sel',on);el.classList.toggle('only',on&&cvSel.size===1)});const bl=$('#bl');if(!bl)return;const al=bl.querySelector('.cva');if(al){al.hidden=cvSel.size<2;if(cvSel.size>=2)al.innerHTML=`<button data-a="l" title="Align left">${ic('alignL',14)}</button><button data-a="ch" title="Center horizontally">${ic('alignC',14)}</button><button data-a="r" title="Align right">${ic('alignR',14)}</button><i></i><button data-a="t" title="Align top">Top</button><button data-a="cv" title="Center vertically">Mid</button><button data-a="b" title="Align bottom">Bottom</button><i></i><button data-a="dh" title="Distribute horizontally">Space H</button><button data-a="dv" title="Distribute vertically">Space V</button><i></i><button data-a="grp" title="Group (Ctrl G)">Group</button><button data-a="ungrp" title="Ungroup (Ctrl Shift G)">Ungroup</button>`}
  const li=bl.querySelectorAll('.cvli');li.forEach(x=>x.classList.toggle('sel',cvSel.has(x.dataset.id)))}
@@ -1899,7 +1925,8 @@ function cvWire(bl,world,p){const st=cvState(p);let guides=[];
    const up=()=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);box.remove();if(!moved&&!add){cvSel=new Set();cvSyncSel(p)}bl.focus({preventScroll:true})};window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up);return}
   const id=el.dataset.id,b=p.blocks.find(x=>x.id===id);
   if(rh||rot||hb){if(e.target.closest('.cvac button'))return;if(!cvSel.has(id)||(!e.shiftKey&&!cvSel.has(id)))cvSelect(p,id,e.shiftKey);else if(e.shiftKey){cvSelect(p,id,true);return}}
-  else{cvSelect(p,id,e.shiftKey);return} /* click in content: select, never start a drag */
+  else{const grab=(e.altKey||e.target.closest('img,.ifh,.cmh,.qah,.lch,.ch,.pbh,.imgempty'))&&!e.target.closest('button,select,input,textarea,a,[contenteditable="true"],.rh,.rot');
+   if(!grab||e.shiftKey){cvSelect(p,id,e.shiftKey);return}cvSelect(p,id,false)} /* text is never hijacked: only images, headers and Alt+drag move a block from its body */
   e.preventDefault();
   if(b.cv.lock&&!rot&&!(hb&&false)){if(rh||rot)return toast('This block is locked')}
   if(rot){startRotate(e,b,el);return}
@@ -1915,16 +1942,16 @@ function cvWire(bl,world,p){const st=cvState(p);let guides=[];
     ex.forEach(v=>sp.xs.forEach(t=>{const d=t-v;if(Math.abs(d)<th&&(ax===null||Math.abs(d)<Math.abs(ax))){ax=d;gx=t}}));ey.forEach(v=>sp.ys.forEach(t=>{const d=t-v;if(Math.abs(d)<th&&(ay===null||Math.abs(d)<Math.abs(ay))){ay=d;gy=t}}));
     if(ax===null&&st.grid){ax=Math.round((bx0+dx)/20)*20-(bx0+dx)}if(ay===null&&st.grid){ay=Math.round((by0+dy)/20)*20-(by0+dy)}
     if(ax!==null)dx+=ax;if(ay!==null)dy+=ay;if(gx!==null)guide(true,gx,Math.min(by0+dy,0)-2000,by1+dy+2000);if(gy!==null)guide(false,gy,Math.min(bx0+dx,0)-2000,bx1+dx+2000)}
-   o.forEach(q=>{q.b.cv.x=Math.round(q.x+dx);q.b.cv.y=Math.round(q.y+dy);const el=cvEl(q.b.id);el.style.left=q.b.cv.x+'px';el.style.top=q.b.cv.y+'px'})};
-  const up=()=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);clearGuides();world.classList.remove('dragging');cvTouch(p);save();cvLayers(bl,p)};window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up)}
+   o.forEach(q=>{q.b.cv.x=Math.round(q.x+dx);q.b.cv.y=Math.round(q.y+dy);const el=cvEl(q.b.id);el.style.left=q.b.cv.x+'px';el.style.top=q.b.cv.y+'px'});cvSchedule(p,new Set(ids))};
+  const up=()=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);clearGuides();world.classList.remove('dragging');cvSkipRO=true;cvCompact(p,new Set());setTimeout(()=>{cvSkipRO=false},60);cvTouch(p);save();cvLayers(bl,p)};window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up)}
  function startResize(e,dir,b,el){snap();world.classList.add('dragging');const sx=e.clientX,sy=e.clientY,c=b.cv,o={x:c.x,y:c.y,w:c.w,h:el.offsetHeight},vis=['image','svg'].includes(b.t),sp=snapPoints(new Set([b.id])),th=7/st.z;
   const lockA=vis&&!c.free;
   const mv=ev=>{let dx=(ev.clientX-sx)/st.z,dy=(ev.clientY-sy)/st.z;if(lockA&&!ev.shiftKey){ /* width drives height */ const sgn=dir.includes('w')?-1:1,d=(dir==='n'||dir==='s')?0:dx*sgn;dx=d*sgn;dy=0}
    let x=o.x,y=o.y,w=o.w,h=o.h;if(dir.includes('e'))w=o.w+dx;if(dir.includes('w')){w=o.w-dx;x=o.x+dx}if(dir.includes('s'))h=o.h+dy;if(dir.includes('n')){h=o.h-dy;y=o.y+dy}
    clearGuides();if(st.snap&&!ev.altKey){const r=x+w,bt=y+h;if(dir.includes('e'))sp.xs.forEach(t=>{if(Math.abs(t-r)<th){w=t-x;guide(true,t,y-1500,bt+1500)}});if(dir.includes('w'))sp.xs.forEach(t=>{if(Math.abs(t-x)<th){w=w+(x-t);x=t;guide(true,t,y-1500,bt+1500)}});if(dir.includes('s'))sp.ys.forEach(t=>{if(Math.abs(t-bt)<th){h=t-y;guide(false,t,x-1500,r+1500)}})}
    w=Math.max(90,w);c.w=Math.round(w);c.x=Math.round(x);if(dir.length===1&&(dir==='n'||dir==='s')||dir.length===2||ev.shiftKey||c.free||!vis){if(dir.includes('n')||dir.includes('s')){if(!lockA||ev.shiftKey||c.free){h=Math.max(44,h);c.h=Math.round(h);c.y=Math.round(y)}}}
-   cvGeom(el,b)};
-  const up=()=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);clearGuides();world.classList.remove('dragging');cvTouch(p);save();cvLayers(bl,p)};window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up)}
+   cvGeom(el,b);cvSchedule(p,new Set([b.id]))};
+  const up=()=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);clearGuides();world.classList.remove('dragging');cvSkipRO=true;cvCompact(p,new Set());setTimeout(()=>{cvSkipRO=false},60);cvTouch(p);save();cvLayers(bl,p)};window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up)}
  function startRotate(e,b,el){snap();const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
   const mv=ev=>{let a=Math.atan2(ev.clientY-cy,ev.clientX-cx)*180/Math.PI+90;if(ev.shiftKey)a=Math.round(a/15)*15;b.cv.r=Math.round(a);cvGeom(el,b)};
   const up=()=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);save()};window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up)}
@@ -1934,6 +1961,8 @@ function cvWire(bl,world,p){const st=cvState(p);let guides=[];
  /* toolbar, align bar, add menu */
  bl.addEventListener('click',e=>{const t=e.target.closest('.cvt button,.cva button,.cvaddm button');if(!t)return;const k=t.dataset.k||t.dataset.a||t.dataset.t;
   if(t.closest('.cvt')){if(k==='zo')cvZoomAt(bl,p,bl.getBoundingClientRect().left+bl.clientWidth/2,bl.getBoundingClientRect().top+bl.clientHeight/2,1/1.2);else if(k==='zi')cvZoomAt(bl,p,bl.getBoundingClientRect().left+bl.clientWidth/2,bl.getBoundingClientRect().top+bl.clientHeight/2,1.2);else if(k==='fit')cvFit(bl,p);else if(k==='z1'){st.z=1;cvApplyView(bl,p);save()}
+   else if(k==='flow'){st.flow=st.flow===false;t.classList.toggle('on',st.flow!==false);if(st.flow!==false){snap();cvCompact(p,new Set());cvTouch(p)}save();toast(st.flow!==false?'Flow on. Blocks make room for each other.':'Flow off. Blocks stay exactly where you put them.')}
+   else if(k==='tidy'){const g=[['1','One column'],['2','Two columns'],['3','Three columns']];aiPop(t,g,n=>cvTidy(bl,p,+n))}
    else if(k==='grid'){st.grid=!st.grid;t.classList.toggle('on',st.grid);cvApplyView(bl,p);save()}else if(k==='snap'){st.snap=!st.snap;t.classList.toggle('on',st.snap);save()}
    else if(k==='bg'){const o=['dots','plain','grid'];st.bg=o[(o.indexOf(st.bg)+1)%3];st.grid=false;cvApplyView(bl,p);save();toast('Background: '+st.bg)}
    else if(k==='lyr'){cvLayersOn=!cvLayersOn;bl.querySelector('.cvl').classList.toggle('show',cvLayersOn);t.classList.toggle('on',cvLayersOn);cvLayers(bl,p)}
@@ -1942,7 +1971,7 @@ function cvWire(bl,world,p){const st=cvState(p);let guides=[];
   else if(t.closest('.cvaddm')){t.closest('.cvaddm').hidden=true;cvAdd(k)}});
  bl.addEventListener('wheel',e=>{const sc=e.target.closest('.bd,.cw,.pbody,.cvl');if(!(e.ctrlKey||e.metaKey)&&sc&&sc.scrollHeight>sc.clientHeight+2&&getComputedStyle(sc).overflowY!=='visible')return;e.preventDefault();
   if(e.ctrlKey||e.metaKey)cvZoomAt(bl,p,e.clientX,e.clientY,Math.exp(-e.deltaY*.0025));else{st.x-=e.deltaX;st.y-=e.deltaY;cvApplyView(bl,p)}},{passive:false});
- world.addEventListener('input',()=>{p.cvDirty=true;const ti=cvSelOne(p);},true)}
+ world.addEventListener('input',()=>{p.cvDirty=true},true)}
 function cvSelOne(p){return null}
 function cvAddMenu(bl,btn){const m=bl.querySelector('.cvaddm');if(!m.hidden){m.hidden=true;return}
  const items=[['p','Text box'],['h2','Heading'],['code','Code'],['callout','Callout'],['table','Table'],['math','Equation'],['image','Image'],['html','Interactive component'],['stepper','Algorithm stepper'],['quiz','Quiz'],['qa','Flashcard'],['prompt','Paste an AI answer']];
@@ -1955,6 +1984,7 @@ function cvAdd(t){const p=page();snap();const b={id:uid(),t,h:'',out:'',done:fal
 function cvAct(k,b){const p=page();if(!b)return;
  if(k==='lock'){snap();const ids=cvIds(p,b.id),v=!b.cv.lock;ids.forEach(i=>cvBlock(i).cv.lock=v||undefined);cvTouch(p);save();render()}
  else if(k==='dup')cvDup(new Set(cvSel.has(b.id)?cvSel:[b.id]));
+ else if(k==='wid'){cvWidthMenu(document.querySelector('.cvb[data-id="'+b.id+'"] .cvac [data-k="wid"]'),b)}
  else if(k==='fwd'||k==='back'){snap();const bs=[...p.blocks].sort((a,c)=>a.cv.z-c.cv.z),i=bs.indexOf(b),j=k==='fwd'?i+1:i-1;if(j<0||j>=bs.length)return;[bs[i].cv.z,bs[j].cv.z]=[bs[j].cv.z,bs[i].cv.z];if(bs[i].cv.z===bs[j].cv.z)bs[j].cv.z+=k==='fwd'?-1:1;cvTouch(p);save();render()}
  else if(k==='del')cvDelete(new Set(cvSel.has(b.id)?cvSel:[b.id]))}
 function cvDelete(ids){const p=page();const live=[...ids].filter(i=>{const b=cvBlock(i);return b&&!b.cv.lock});if(!live.length)return toast('Locked blocks cannot be deleted');snap();p.blocks=p.blocks.filter(b=>!live.includes(b.id));if(!p.blocks.length)p.blocks.push({id:uid(),t:'p',h:'',cv:{x:60,y:60,w:420,h:null,z:1}});cvSel.clear();cvTouch(p);save();render()}

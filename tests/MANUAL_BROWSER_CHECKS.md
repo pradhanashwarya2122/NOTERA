@@ -39,3 +39,10 @@ simulated clipboard, pointer and keyboard events, and the sandbox button was cli
 - AI (mock provider): setup dialog opens without a key; explain, flashcards, quiz, diagram and explain-code all inserted new
   blocks and left the original untouched; chat inserted a code-fenced answer as a real code block; suggestions applied only
   after a click.
+
+## Flow layout (canvas)
+- Dragging a text box beside a diagram placed it level with the diagram, closed the gap below, and left zero overlaps.
+- Growing a diagram pushed blocks below it down. Typing 12 lines into a text box pushed the block beneath it from y=179 to y=454.
+- Dragging an image moved its block; dragging inside text did not. Tidy made two non-overlapping columns. Flow off left a block at y=2000 untouched.
+- A 247-block real page showed 16 overlaps right after load (images still loading) and 0 after the settle pass.
+- A background sync poll that swaps in an unchanged copy no longer detaches the open page: edits after it still reach the saved data.

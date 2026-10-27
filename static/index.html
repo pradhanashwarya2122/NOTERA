@@ -2219,7 +2219,16 @@ function tabsEl(b){const w=document.createElement('div');w.className='cmp tbs';l
 const LMAP={py:'python',python3:'python',js:'javascript',node:'javascript',jsx:'javascript',ts:'typescript',tsx:'typescript',sh:'bash',shell:'bash',zsh:'bash',console:'bash',terminal:'bash','c++':'cpp',cc:'cpp',cxx:'cpp','c#':'csharp',cs:'csharp',golang:'go',yml:'yaml',md:'markdown',htm:'html',xml:'html',svg:'html',jsonc:'json',postgres:'sql',postgresql:'sql',mysql:'sql',sqlite:'sql',plaintext:'text',txt:'text',rs:'rust'};
 const normLang=l=>{l=(l||'').toLowerCase().replace(/^language-|^lang-/,'');return LMAP[l]||l};
 function guessLang(c){if(/^\s*(def |import |from \w+ import |print\(|class \w+\s*[:(])/m.test(c))return'python';if(/#include\s*</.test(c))return'cpp';if(/\bpublic\s+(static\s+)?(class|void|int)/.test(c))return'java';if(/\b(function|const|let|var)\b[^\n]*(=>|=|\()|console\.log/.test(c))return'javascript';if(/^\s*(SELECT|INSERT|UPDATE|DELETE|CREATE|WITH)\b/im.test(c))return'sql';if(/^\s*<[a-z!]/i.test(c))return'html';if(/^\s*[\[{]/.test(c)&&/"\s*:/.test(c))return'json';return'text'}
-function preHtml(code,lang){let l=normLang(lang)||guessLang(code);if(!LANGS[l]&&l!=='mermaid')l='text';return'<pre data-lang="'+escA(l)+'"><code>'+(l!=='text'&&LANGS[l]?hl(code,l).replace(/\n$/,''):esc(code))+'</code></pre>'}
+/* copies from chat pages sometimes lose line breaks inside code, or add them inside quotes; mend only what can not be valid code */
+function repairCode(code){if(/[\u2500-\u257f]/.test(code))return code;let c=String(code);
+ const L=c.split('\n'),out=[];for(let i=0;i<L.length;i++){let line=L[i];
+  while(i+1<L.length&&/["']$/.test(line)&&!/("""|\'\'\')$/.test(line)&&((line.match(new RegExp(line.slice(-1),'g'))||[]).length%2===1)&&L[i+1].trim()&&!/^\s*(#|\/\/)/.test(L[i+1])){line+=L[i+1].replace(/^\s+/,'');i++}
+  out.push(line)}
+ c=out.join('\n');
+ c=c.replace(/(\d)(?=(?:if|for|while|elif|else|return|def|class|break|continue)\b)/g,'$1\n');
+ c=c.replace(/(\d|\])(?=[A-Za-z_]\w*(?:\[[^\]\n]*\])?\s*(?:[-+*\/%]|\/\/)?=(?!=))/g,'$1\n');
+ return c}
+function preHtml(code,lang){code=repairCode(code);let l=normLang(lang)||guessLang(code);if(!LANGS[l]&&l!=='mermaid')l='text';return'<pre data-lang="'+escA(l)+'"><code>'+(l!=='text'&&LANGS[l]?hl(code,l).replace(/\n$/,''):esc(code))+'</code></pre>'}
 const mathSpan=(tex,display)=>'<span class="mx'+(display?' mxd':'')+'" data-tex="'+escA(tex)+'" contenteditable="false">'+esc(tex)+'</span>';
 function cleanDoc(el){if(!el.querySelector('.mx[data-r]'))return el.innerHTML;const c=el.cloneNode(true);c.querySelectorAll('.mx').forEach(x=>{x.removeAttribute('data-r');x.textContent=x.dataset.tex||''});return c.innerHTML}
 function loadKatex(cb){if(loadKatex.q){loadKatex.q.push(cb);return}loadKatex.q=[cb];const l=document.createElement('link');l.rel='stylesheet';l.href='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';document.head.append(l);const sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';sc.onload=()=>loadKatex.q.forEach(f=>f());sc.onerror=()=>{loadKatex.q=null};document.head.append(sc)}

@@ -55,3 +55,6 @@ simulated clipboard, pointer and keyboard events, and the sandbox button was cli
 ## Template settings and library preview
 - Customize templates (New menu or the ⋯ menu): unticking a template hides it from the New menu; unticking a section (e.g. Edge cases) removes it from new pages of that template; Reset restores everything. Existing pages are untouched.
 - Hovering a page row in the Library for ~0.3 s shows a preview card (title, tags, headings, text, code, first image); folders list their contents. Esc, scrolling, clicking or dragging hides it.
+
+## Start and refresh
+- New browser session opens Home (greeting, quote, progress, library tile). Refreshing keeps the same page, the Library, or Home. Closing the tab and launching again opens Home.

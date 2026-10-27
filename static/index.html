@@ -1143,7 +1143,7 @@ function hl(s,lang){const L=LANGS[lang]||LANGS.python;
  const re=new RegExp('('+(L.c||'(?!)')+')|('+STRRE+')|\\b(\\d+\\.?\\d*)\\b|\\b([A-Za-z_]\\w*)\\b','gm');
  return esc(s).replace(re,(m,c,st,n,w)=>c?`<span class="c">${m}</span>`:st?`<span class="s">${m}</span>`:n?`<span class="n">${m}</span>`:w?(L.kw.includes(L.ci?w.toUpperCase():w)?`<span class="k">${m}</span>`:L.bi.includes(L.ci?w.toUpperCase():w)?`<span class="f">${m}</span>`:m):m)+'\n'}
 /* editor */
-const TYPES=[['p','Text'],['h1','Heading 1'],['h2','Heading 2'],['h3','Heading 3'],['ul','Bullet list'],['todo','To-do'],['toggle','Toggle'],['callout','Callout'],['quote','Quote'],['code','Python code'],['prompt','Paste prompt'],['qa','Flashcard'],['ai','Ask AI about this note'],['lc','LeetCode problem tracker'],['solution','Solution block'],['interview','Interview question'],['link','Link to a note'],['snippet','Saved snippet'],['component','Interactive component (HTML or SVG)'],['mermaid','Mermaid diagram'],['stepper','Algorithm stepper'],['quiz','Quiz'],['tabs','Tabs comparison'],['import','Import a file'],['hint','Hint'],['pitfall','Pitfall / mistake'],['idea','Key idea'],['complexity','Complexity'],['leetcode','LeetCode template'],['array','Array visual'],['image','Image'],['ol','Numbered list'],['table','Table'],['cols','2 columns'],['math','Math (LaTeX)'],['hr','Divider']];
+const TYPES=[['p','Text'],['h1','Heading 1'],['h2','Heading 2'],['h3','Heading 3'],['ul','Bullet list'],['todo','To-do'],['toggle','Toggle'],['callout','Callout'],['quote','Quote'],['code','Python code'],['prompt','Paste prompt'],['qa','Flashcard'],['ai','Ask AI about this note'],['lc','LeetCode problem tracker'],['solution','Solution block'],['interview','Interview question'],['link','Link to a note'],['snippet','Saved snippet'],['component','Interactive component (HTML or SVG)'],['mermaid','Mermaid diagram'],['stepper','Algorithm stepper'],['quiz','Quiz'],['tabs','Tabs comparison'],['import','Import a file'],['hint','Hint'],['pitfall','Pitfall / mistake'],['idea','Key idea'],['complexity','Complexity'],['leetcode','LeetCode template (insert here)'],['array','Array visual'],['image','Image'],['ol','Numbered list'],['table','Table'],['cols','2 columns'],['math','Math (LaTeX)'],['hr','Divider']];
 let lastRenderedPage=null,prevBlockIds=new Set();
 function render(){if(homeOn&&cur!==homeCur)homeOn=false;document.body.classList.toggle('solo',homeOn);document.body.classList.toggle('libv',homeOn&&homeMode==='lib');{const lb=document.getElementById('libsel');if(lb&&!(homeOn&&homeMode==='lib'))lb.classList.remove('show')}renderSide();if(homeOn){drawHome();return}const p=page(),ed=$('#ed');document.body.classList.toggle('solo',!!p.folder);document.body.classList.toggle('libv',false);if(p.folder){drawFolder(p);return}
  const pageChanged=p.id!==lastRenderedPage;
@@ -1192,7 +1192,7 @@ function setType(b,t){snap();const CP={hint:[0,'Hint'],pitfall:[1,'Pitfall'],ide
  if(t==='interview'){const pg=page(),i=pg.blocks.indexOf(b);pg.blocks.splice(i,1,...TPL.interview.make());if(!pg.tags.includes('interview'))pg.tags.push('interview');save();render();return}
  if(t==='link'){b.t='p';b.h='';save();render();const el=blkEls()[page().blocks.indexOf(b)];return pickPage(pg=>{const ce=el&&el.querySelector('.ce');if(ce){ce.focus();document.execCommand('insertHTML',false,pageLinkHtml(pg));ce.dispatchEvent(new Event('input',{bubbles:true}))}})}
  if(t==='snippet'){b.t='p';b.h='';save();render();return pickSnippet(sn=>{const pg=page(),i=pg.blocks.indexOf(b);pg.blocks.splice(i,1,{id:uid(),t:'code',h:sn.code,lang:sn.lang,label:sn.title});save();render()})}
- if(t==='leetcode'){const pg=page(),i=pg.blocks.indexOf(b),bl=TPL.leetcode.make();pg.blocks.splice(i,1,...bl);if(!pg.tags.includes('leetcode'))pg.tags.push('leetcode');save();render();return}
+ if(t==='leetcode'){const pg=page(),i=pg.blocks.indexOf(b),bl=TPL.leetcode.make();const empty=!(b.h||'').replace(/<[^>]*>|\/|&nbsp;/g,'').trim();pg.blocks.splice(i,empty?1:0,...bl);if(!pg.tags.includes('leetcode'))pg.tags.push('leetcode');save();render();return}
  if(t==='array'){const v=prompt('Array values, separated by commas','2,3,1,2,3'),vals=v?v.split(',').map(x=>x.trim()).filter(Boolean):[];if(!vals.length){H.pop();return}b.t='doc';b.h=arrHtml(vals)+'<p><br></p>';save();render();return}b.t=t;b.h='';if(t==='table')b.rows=[['','',''],['','','']];if(t==='image'){pickImg(b)}save();render();if(t!=='hr'&&t!=='image')focusB(page().blocks.indexOf(b))}
 function blockEl(b,i,isNew){const p=page(),w=document.createElement('div');w.className='blk';w.dataset.id=b.id;w.dataset.t=b.t;if(b.ai)w.dataset.ai='1';if(isNew){w.style.animation=`ntFadeUp .22s ease backwards`;w.style.animationDelay=Math.min(i*15,150)+'ms'}
  const tl=document.createElement('div');tl.className='tl';
@@ -2212,14 +2212,26 @@ function lcEl(b){const w=document.createElement('div');w.className='lc';const p=
  <label class="wide">Problem link<span class="lcu"><input data-f="url" value="${esc(b.url||'').replace(/"/g,'&quot;')}" placeholder="https://leetcode.com/problems/..." spellcheck="false"><a class="lco" target="_blank" rel="noopener noreferrer">Open</a></span></label>
  <label>Attempts<span class="lcn"><button type="button" data-n="-1">-</button><b>${b.attempts||0}</b><button type="button" data-n="1">+</button></span></label><label>First attempted<input type="date" data-f="first" value="${esc(b.first||'')}"></label><label>Solved<input type="date" data-f="solved" value="${esc(b.solved||'')}"></label><label>Last reviewed<input type="date" data-f="last" value="${esc(b.last||'')}"></label>
  <label class="wide">Related problems<input data-f="rel" value="${esc(b.rel||'').replace(/"/g,'&quot;')}" placeholder="e.g. Two Sum II, 3Sum, Container With Most Water"></label></div>
- <div class="lcf"><span class="lcdue"></span><button type="button" data-x="log">Log a review</button></div>`;
+ <div class="lcf"><span class="lcdue"></span><button type="button" data-x="fetch" title="Fill number, difficulty, topics and the statement from the link">Fetch from link</button><button type="button" data-x="analyse" title="AI explains the pattern, brute force and optimal approach">Analyse</button><button type="button" data-x="log">Log a review</button></div>`;
  const due=w.querySelector('.lcdue'),a=w.querySelector('.lco'),st=w.querySelector('.lcst');
  const paint=()=>{st.style.setProperty('--sc',LC_COL[b.status||'Not started']);a.hidden=!/^https?:\/\//i.test(b.url||'');a.href=/^https?:\/\//i.test(b.url||'')?b.url:'#';const rv=p.rev;due.textContent=rv?(rv.due<=Date.now()?'Review due now':'Next review in '+Math.ceil((rv.due-Date.now())/DAYMS)+' day(s)')+' · reviewed '+rv.n+' time(s)':'No review scheduled yet'};paint();
  w.addEventListener('change',e=>{const f=e.target.dataset.f;if(!f)return;snap();b[f]=e.target.value;if(f==='status'||f==='diff'||f==='plat'){lcSync(p,b);save();render();return}paint();save()});
  w.addEventListener('input',e=>{const f=e.target.dataset.f;if(f&&e.target.tagName==='INPUT'&&e.target.type!=='date'){b[f]=e.target.value;if(f==='url')paint();save()}});
  w.addEventListener('click',e=>{const s=e.target.closest('.lcstars button');if(s){const n=+s.dataset.s;b.conf=b.conf===n?0:n;save();render();return}const nb=e.target.closest('.lcn button');if(nb){b.attempts=Math.max(0,(b.attempts||0)+(+nb.dataset.n));save();render();return}
-  if(e.target.closest('[data-x="log"]'))revMenu(e.target,p)});
+  if(e.target.closest('[data-x="log"]'))revMenu(e.target,p);if(e.target.closest('[data-x="fetch"]'))lcFetch(b,p);if(e.target.closest('[data-x="analyse"]'))lcAnalyse(b,p)});
  return w}
+
+function lcText(html){const d=new DOMParser().parseFromString(html||'','text/html');return d.body.textContent.replace(/\n{3,}/g,'\n\n').trim()}
+async function lcFetch(b,p){if(!/^https?:\/\//i.test(b.url||''))return toast('Paste the problem link first');toast('Fetching from LeetCode...');
+ const r=await netPost('/api/lc/fetch',{url:b.url});if(!r.ok||!r.d.ok)return alert((r.d&&r.d.error)||'Could not fetch the problem.');const d=r.d;snap();
+ b.plat='LeetCode';b.num=d.num;b.diff=d.diff;b.title=d.title;if(d.similar.length)b.rel=d.similar.join(', ');if(!p.title)p.title=d.num+'. '+d.title;
+ [d.diff.toLowerCase(),'leetcode',...d.topics.map(t=>t.toLowerCase().replace(/\s+/g,'-'))].forEach(t=>{if(!p.tags.includes(t))p.tags.push(t)});
+ const i=p.blocks.indexOf(b);if(!p.blocks.some(x=>x.lcs===b.id)){const hs=d.hints.length?'<details><summary>Hints</summary><ol>'+d.hints.map(x=>'<li>'+x+'</li>').join('')+'</ol></details>':'';const st={id:uid(),t:'doc',h:cleanHtmlStored('<details open><summary>Problem statement</summary>'+d.html+'</details>'+hs),lcs:b.id};p.blocks.splice(i+1,0,st)}
+ save();render();toast('Fetched: '+d.title)}
+async function lcAnalyse(b,p){const st=p.blocks.find(x=>x.lcs===b.id&&x.t==='doc'&&/Problem statement/.test(x.h));if(!st)return toast('Fetch from link first so there is a statement to analyse');
+ const txt=b.title+' ('+b.diff+')\n'+lcText(st.h);aiBusy(true);toast('Analysing...');
+ try{const r=await netPost('/api/ai',{task:'lc_analyze',text:txt});if(!r.ok||!r.d.ok){if(r.d&&r.d.setup)openAiSetup(r.d.error);else alert((r.d&&r.d.error)||'The AI did not answer.');return}
+  snap();const i=p.blocks.indexOf(st);p.blocks.splice(i+1,0,{id:uid(),t:'doc',h:mdToDocHtml(r.d.text),lcs:b.id});save();render()}finally{aiBusy(false)}}
 const REV_OUT=[['indep','I solved it on my own'],['hint','I needed a hint'],['explain','I could explain it but not write it'],['forgot','I forgot the approach'],['again','I need another review soon']];
 function logReview(p,o){snap();const INT=getInts(),lv=Math.min((p.rev&&p.rev.lv)||0,INT.length-1);let nl=lv,days;
  if(o==='indep'){nl=Math.min(INT.length-1,lv+1);days=INT[nl]}else if(o==='hint'){days=INT[lv]}else if(o==='explain'){days=Math.min(INT[lv],3)}else if(o==='forgot'){nl=0;days=INT[0]}else{days=INT[0]}
@@ -2910,20 +2922,19 @@ const mkB=(t,h,x)=>({id:uid(),t,h:h||'',...x});
 const TPL={
  leetcode:{label:'LeetCode problem',desc:'Problem tracker plus the full solution notebook',icon:'code',color:'var(--orange)',tags:['leetcode'],make:()=>[
   mkB('lc','',{plat:'LeetCode',diff:'Medium',status:'Not started',attempts:0,conf:0,url:'',num:'',rel:''}),
-  mkB('h2','Problem summary'),mkB('p',''),
-  mkB('h2','Core pattern'),mkB('p',''),
-  mkB('h2','Intuition'),mkB('p',''),
-  mkB('h2','Brute-force approach'),mkB('p',''),
-  mkB('h2','Optimized approach'),mkB('p',''),
+  
+  
+  
+  
+  
   mkB('h2','Python implementation'),mkB('code','class Solution:\n    def solve(self, nums):\n        pass\n',{lang:'python',label:'Optimal'}),
   mkB('h2','Line-by-line explanation'),mkB('ol',''),
   mkB('h2','Time complexity'),mkB('callout','O(  )',{ci:4,lbl:'Time'}),mkB('h2','Space complexity'),mkB('callout','O(  )',{ci:4,lbl:'Space'}),
-  mkB('h2','Dry run'),mkB('p',''),
+  
   mkB('h2','Edge cases'),mkB('ul',''),
   mkB('h2','Common mistakes'),mkB('callout','',{ci:1,lbl:'Pitfall'}),
   mkB('h2','What I learned'),mkB('callout','',{ci:5,lbl:'Key idea'}),
-  mkB('h2','When to use this pattern'),mkB('ul',''),
-  mkB('h2','Related problems'),mkB('ul','')]},
+  mkB('h2','When to use this pattern'),mkB('ul','')]},
  interview:{label:'Interview question',desc:'Quick answer, deep answer, follow-ups, flashcard',icon:'sparkle',color:'var(--blue)',tags:['interview'],make:()=>[
   mkB('h2','Question'),mkB('p',''),
   mkB('callout','',{ci:4,lbl:'Quick revision'}),

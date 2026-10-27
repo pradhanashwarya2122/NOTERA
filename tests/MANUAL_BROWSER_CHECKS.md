@@ -51,3 +51,7 @@ simulated clipboard, pointer and keyboard events, and the sandbox button was cli
 - Pointer drag from the grip: floating ghost, live drop line labelled Above / Below / Side by side, auto-scroll near the edges, Esc cancels, blocks glide to their new place. Alt+Up / Alt+Down moves the focused block.
 - Rendered every page of a copy of the real notes with no errors.
 - Not verified here: a real hotspot with two physical devices, feel of the drag with a real mouse.
+
+## Template settings and library preview
+- Customize templates (New menu or the ⋯ menu): unticking a template hides it from the New menu; unticking a section (e.g. Edge cases) removes it from new pages of that template; Reset restores everything. Existing pages are untouched.
+- Hovering a page row in the Library for ~0.3 s shows a preview card (title, tags, headings, text, code, first image); folders list their contents. Esc, scrolling, clicking or dragging hides it.

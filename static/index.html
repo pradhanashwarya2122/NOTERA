@@ -996,6 +996,22 @@ body.bdrag{cursor:grabbing!important;user-select:none;-webkit-user-select:none}b
 @media(max-width:760px){#main{margin-left:0!important}#side{z-index:40;box-shadow:12px 0 40px -16px rgba(0,0,0,.4)}body.side-over #scrim{opacity:1;visibility:visible}#sctoggle{top:10px;left:10px}#ed{padding-top:56px}#lay,#olb,#aib2{display:none}.cvt{flex-wrap:wrap;max-width:calc(100% - 24px)}}
 #acc .alanr{display:flex;align-items:center;gap:8px;margin:5px 0}#acc .ahostbox small{display:block;margin-top:8px;font-size:12px;opacity:.85}
 #acc .arl button{margin-left:4px}
+
+/* template settings and library preview */
+#tset{position:fixed;inset:0;z-index:78;display:flex;justify-content:center;align-items:flex-start;padding-top:8vh;background:rgba(10,10,10,.36);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:opacity .16s,visibility .16s}#tset.show{opacity:1;visibility:visible}
+.tsl{max-height:68vh;overflow:auto;gap:6px}.tsr{border:1px solid var(--ln);border-radius:12px;padding:8px 10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;transition:opacity .15s}.tsr.off{opacity:.55}
+.tsh{display:flex;align-items:center;gap:10px;flex:1;min-width:0;cursor:pointer}.tsh b{display:block;font:600 14.5px var(--ui);color:var(--tx)}.tsh i{display:block;font:12.5px var(--ui);color:var(--mut);font-style:normal}
+.tsh input,.tss input{width:16px;height:16px;accent-color:var(--y);flex-shrink:0}
+.tsx{display:inline-flex;align-items:center;gap:6px;font:600 12.5px var(--ui);color:var(--mut);padding:5px 10px;border-radius:8px;border:1px solid var(--ln)}.tsx:hover{background:var(--veil1);color:var(--tx)}
+.tss{flex-basis:100%;display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;padding:8px 4px 4px;border-top:1px solid var(--ln)}.tss label{display:flex;align-items:center;gap:8px;font:13.5px var(--ui);color:var(--tx);cursor:pointer}
+#tset .aiact{display:flex;justify-content:space-between;margin-top:6px}#tset .aiact button{padding:8px 16px;border-radius:9px;font:600 13.5px var(--ui);border:1px solid var(--ln);color:var(--tx)}#tset .aiact .pri{background:var(--tx);color:var(--bg);border-color:transparent}
+#lpv{position:fixed;z-index:70;background:var(--panel);border:1px solid var(--ln);border-radius:14px;box-shadow:0 24px 60px -18px rgba(0,0,0,.45);padding:14px 16px;max-height:min(420px,70vh);overflow:hidden;pointer-events:none;opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .14s,transform .14s,visibility .14s}
+#lpv.show{opacity:1;visibility:visible;transform:none}#lpv::after{content:'';position:absolute;left:0;right:0;bottom:0;height:34px;background:linear-gradient(transparent,var(--panel))}
+#lpv .pvt{font:600 19px/1.25 var(--serif);color:var(--tx)}#lpv .pvm{font:12.5px var(--ui);color:var(--mut);margin:3px 0 8px}
+#lpv .pvh{font:650 14px var(--ui);color:var(--tx);margin:9px 0 3px}#lpv .pvh.h1{font-size:16px}#lpv .pvp,#lpv .pvl{font:13px/1.45 var(--ui);color:var(--tx);opacity:.85;margin:2px 0}
+#lpv .pvc{font:12px/1.5 var(--mono);background:var(--veil1);border-radius:8px;padding:8px 10px;margin:6px 0;white-space:pre;overflow:hidden;color:var(--tx)}
+#lpv .pvi{max-width:100%;max-height:130px;border-radius:8px;margin:6px 0;display:block}#lpv .pvb{display:flex;align-items:center;gap:6px;font:600 12.5px var(--ui);color:var(--orange);margin:6px 0}
+#lpv .pvk{display:flex;align-items:center;gap:8px;font:13px var(--ui);padding:3px 0;color:var(--tx)}
 </style>
 </head><body>
 <div id="side"><div class="sin">
@@ -1015,12 +1031,13 @@ body.bdrag{cursor:grabbing!important;user-select:none;-webkit-user-select:none}b
 <button class="b mi" id="aib" title="Connect an AI provider key for explain, flashcards and chat" data-ic="sparkle"><span class="lbl">AI settings</span></button>
 <button class="b mi" id="exmd" title="Every page as a Markdown file in folders, with images and diagrams as files" data-ic="download"><span class="lbl">Export all as Markdown (zip)</span></button>
 <button class="b mi" id="excsv" title="Your LeetCode problems as a spreadsheet" data-ic="download"><span class="lbl">Export problems (CSV)</span></button>
+<button class="b mi" id="tsb" title="Choose which templates appear and which sections they contain" data-ic="template"><span class="lbl">Customize templates</span></button>
 <button class="b mi" id="shb" title="See every keyboard shortcut (press ?)" data-ic="clip"><span class="lbl">Keyboard shortcuts</span></button>
 <button class="b mi" id="prb" title="Print this page or save it as a PDF" data-ic="download"><span class="lbl">Print or save as PDF</span></button>
 <button class="b mi" id="ms" title="Save everything now and write a full backup of the NOTERA folder (Ctrl/Cmd+S)" data-ic="save"><span class="lbl">Master save</span></button>
 </div>
 <div class="rsz" id="rsz" title="Drag to resize"></div>
-</div></div><div id="edge"></div><div id="acc"></div><div id="tpl"></div><div id="wel"></div><div id="rvm"></div><div id="scrim"></div><div id="aiset"></div><div id="aim"></div><aside id="aip"></aside><div id="pkr"></div><div id="rvw"></div><div id="shc"></div>
+</div></div><div id="edge"></div><div id="acc"></div><div id="tpl"></div><div id="wel"></div><div id="rvm"></div><div id="scrim"></div><div id="aiset"></div><div id="tset"></div><div id="lpv"></div><div id="aim"></div><aside id="aip"></aside><div id="pkr"></div><div id="rvw"></div><div id="shc"></div>
 <button id="sctoggle" title="Show sidebar (Ctrl+\)"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
 <div id="main"><div id="ed"></div></div>
 <button id="lay"></button>
@@ -2991,11 +3008,61 @@ const TPL={
   mkB('h2','What it is'),mkB('p',''),mkB('h2','How it works'),mkB('p',''),mkB('h2','Example'),mkB('code','',{lang:'python'}),mkB('h2','When to use it'),mkB('ul',''),mkB('callout','',{ci:5,lbl:'Key idea'})]},
  bugfix:{label:'Bug and fix log',desc:'Symptom, cause, fix, how to avoid it',icon:'warning',color:'var(--red)',tags:['bug'],make:()=>[
   mkB('callout','',{ci:1,lbl:'Symptom'}),mkB('h2','Cause'),mkB('p',''),mkB('h2','Fix'),mkB('code','',{lang:'python',label:'Fixed'}),mkB('callout','',{ci:2,lbl:'How to avoid it'})]}};
+
+/* ---------- template customisation: which templates show, and which sections each contains ---------- */
+const TPL_FULL={};Object.keys(TPL).forEach(k=>{TPL_FULL[k]=TPL[k].make});
+const tplCfg=()=>{S.settings=S.settings||{};return S.settings.tpl=S.settings.tpl||{hidden:[],skip:{}}};
+const tplSections=k=>{const o=[];TPL_FULL[k]().forEach(b=>{if(b.t==='h2'&&!o.includes(b.h))o.push(b.h)});return o};
+Object.keys(TPL).forEach(k=>{TPL[k].make=()=>{const skip=new Set((tplCfg().skip||{})[k]||[]);if(!skip.size)return TPL_FULL[k]();let drop=false;return TPL_FULL[k]().filter(b=>{if(b.t==='h2')drop=skip.has(b.h);return !drop})}});
+const tplVisible=()=>Object.entries(TPL).filter(([k])=>!(tplCfg().hidden||[]).includes(k));
+function openTplSettings(){const w=$('#tset');const open=new Set();
+ const draw=()=>{const c=tplCfg();w.innerHTML=`<div class="icbox"><div class="ich"><b>Customize templates</b><button id="tsx">${ic('close',16)}</button></div><div class="icb tsl"><p>Tick the templates you want in the New menu. Open a template to choose which sections a new page gets. Pages you already made are never changed.</p>
+  ${Object.entries(TPL).map(([k,t])=>{const secs=tplSections(k),sk=(c.skip||{})[k]||[],on=!(c.hidden||[]).includes(k);return`<div class="tsr${on?'':' off'}"><label class="tsh"><input type="checkbox" data-k="${k}" ${on?'checked':''}><span class="tpc" style="--pc:${t.color}">${ic(t.icon,15)}</span><span><b>${esc(t.label)}</b><i>${esc(t.desc)}</i></span></label>${secs.length?`<button class="tsx" data-o="${k}" title="Choose sections">${secs.length-sk.length}/${secs.length} sections ${ic('chev',11)}</button>`:''}
+  ${open.has(k)?`<div class="tss">${secs.map(s=>`<label><input type="checkbox" data-k="${k}" data-s="${esc(s).replace(/"/g,'&quot;')}" ${sk.includes(s)?'':'checked'}>${esc(s)}</label>`).join('')}</div>`:''}</div>`}).join('')}
+  <div class="aiact"><button id="tsr">Reset to defaults</button><button class="pri" id="tsd">Done</button></div></div></div>`;
+  w.querySelector('#tsx').onclick=w.querySelector('#tsd').onclick=close;
+  w.querySelector('#tsr').onclick=()=>{S.settings.tpl={hidden:[],skip:{}};save();draw()};
+  w.querySelectorAll('.tsx').forEach(b=>b.onclick=()=>{open.has(b.dataset.o)?open.delete(b.dataset.o):open.add(b.dataset.o);draw()});
+  w.querySelectorAll('input[type=checkbox]').forEach(i=>i.onchange=()=>{const c=tplCfg(),k=i.dataset.k;c.skip=c.skip||{};c.hidden=c.hidden||[];
+   if(i.dataset.s!==undefined){const a=c.skip[k]=c.skip[k]||[];const s=i.dataset.s;if(i.checked){c.skip[k]=a.filter(x=>x!==s)}else if(!a.includes(s))a.push(s)}
+   else{i.checked?c.hidden=c.hidden.filter(x=>x!==k):c.hidden.includes(k)||c.hidden.push(k)}
+   save();draw()})};
+ const close=()=>w.classList.remove('show');w.onmousedown=e=>{if(e.target===w)close()};draw();w.classList.add('show')}
+$('#tsb').onclick=()=>{$('#mmenu').classList.remove('show');openTplSettings()};
+
+/* ---------- hover preview in the library ---------- */
+const pvTxt=(h,n)=>{const t=stripH(h);return esc(t.length>n?t.slice(0,n)+'...':t)};
+function pagePreview(p){if(p.folder){const k=kids(p.id).sort((a,b)=>(!!b.folder-!!a.folder)||byTitle(a,b));return`<div class="pvt">${esc(p.title||'Untitled folder')}</div><div class="pvm">${k.length} item${k.length===1?'':'s'}</div>${k.slice(0,12).map(c=>`<div class="pvk">${c.folder?ic('folder',13):ic('doc',13)}<span>${esc(c.title||'Untitled')}</span></div>`).join('')||'<div class="pvm">Empty folder</div>'}${k.length>12?`<div class="pvm">and ${k.length-12} more</div>`:''}`}
+ let out='',shown=0;for(const b of p.blocks){if(shown>=14)break;const t=b.t;let x='';
+  if(t==='h1'||t==='h2'||t==='h3')x=`<div class="pvh ${t}">${pvTxt(b.h,90)}</div>`;
+  else if(t==='ul'||t==='ol'||t==='todo')x=stripH(b.h)?`<div class="pvl">${t==='todo'?(b.done?'\u2611 ':'\u2610 '):'\u2022 '}${pvTxt(b.h,110)}</div>`:'';
+  else if(t==='code'){const c=(b.h||'').split('\n').slice(0,6).join('\n');x=c.trim()?`<pre class="pvc">${esc(c)}</pre>`:''}
+  else if(t==='image'&&/^(data:image|https?:)/i.test(b.src||''))x=`<img class="pvi" src="${esc(b.src).replace(/"/g,'&quot;')}" alt="">`;
+  else if(t==='svg')x='<div class="pvm">Diagram</div>';
+  else if(t==='lc')x=`<div class="pvb">${ic('code',13)}${esc((b.num?b.num+'. ':'')+(b.title||p.title||'Problem'))} \u00b7 ${esc(b.diff||'')} \u00b7 ${esc(b.status||'')}</div>`;
+  else if(t==='qa')x=stripH(b.h)?`<div class="pvl"><b>Q</b> ${pvTxt(b.h,90)}</div>`:'';
+  else if(t==='table'&&b.rows&&b.rows[0])x=`<div class="pvm">Table: ${esc(b.rows[0].map(c=>stripH(c)).join(' | ').slice(0,80))}</div>`;
+  else if(t==='html'||t==='component')x='<div class="pvm">Interactive component</div>';
+  else if(t==='hr'||t==='cols')x='';
+  else x=stripH(b.h)||stripH(b.body)?`<div class="pvp">${pvTxt(b.h||b.body,t==='doc'?420:200)}</div>`:'';
+  if(x){out+=x;shown++}}
+ return`<div class="pvt">${esc(p.title||'Untitled')}</div><div class="pvm">${p.mode==='canvas'?'Canvas \u00b7 ':''}${p.blocks.length} blocks${p.tags&&p.tags.length?' \u00b7 '+p.tags.slice(0,4).map(esc).join(', '):''}</div>${out||'<div class="pvm">This page is empty.</div>'}`}
+let pvTimer=0,pvFor='';
+function hidePv(){clearTimeout(pvTimer);pvFor='';$('#lpv').classList.remove('show')}
+function wireLibPreview(root){root.querySelectorAll('.lr').forEach(r=>{
+ r.addEventListener('mouseenter',()=>{clearTimeout(pvTimer);const id=r.dataset.id;pvTimer=setTimeout(()=>{const pg=P(id);if(!pg||r.classList.contains('dragging')||document.body.classList.contains('bdrag'))return;const v=$('#lpv');v.innerHTML=pagePreview(pg);pvFor=id;
+  const b=r.getBoundingClientRect(),vw=Math.min(360,innerWidth-24);v.style.width=vw+'px';v.classList.add('show');const vh=v.offsetHeight;
+  let x=b.right+12,y=b.top-8;if(x+vw>innerWidth-12){x=b.left-vw-12;if(x<12){x=Math.max(12,Math.min(b.left+40,innerWidth-vw-12));y=b.bottom+6;if(y+vh>innerHeight-12)y=b.top-vh-6}}
+  y=Math.max(12,Math.min(y,innerHeight-vh-12));v.style.left=x+'px';v.style.top=y+'px'},320)});
+ r.addEventListener('mouseleave',hidePv);r.addEventListener('mousedown',hidePv);r.addEventListener('dragstart',hidePv)});
+ const sc=root.closest('#main')||root;sc.addEventListener('scroll',hidePv,{passive:true})}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hidePv()});
 function newFromTemplate(key,parent){const t=TPL[key];if(!t)return;if(parent===undefined)return startNewPage(null,pid=>newFromTemplate(key,pid));snap();const pg={id:uid(),title:'',parent:parent||null,tags:[...t.tags],fav:false,open:true,blocks:t.make()};
  if(parent)P(parent).open=true;S.pages.push(pg);homeOn=false;cur=pg.id;save();render();const ti=$('#ti');if(ti)ti.focus()}
 function openTpl(){const m=$('#tpl'),b=$('#tplb').getBoundingClientRect();m.style.left=Math.min(b.left,innerWidth-310)+'px';m.style.top=Math.min(b.bottom+6,innerHeight-260)+'px';
- m.innerHTML='<div class="tph">Start from a template</div>'+Object.entries(TPL).map(([k,t])=>`<button class="tpi" data-k="${k}"><span class="tpc" style="--pc:${t.color}">${ic(t.icon,16)}</span><span><b>${t.label}</b><i>${t.desc}</i></span></button>`).join('');
- m.querySelectorAll('.tpi').forEach(x=>x.onclick=()=>{m.classList.remove('show');const pg=page();newFromTemplate(x.dataset.k,pg&&pg.folder&&!homeOn?pg.id:undefined)});m.classList.add('show')}
+ m.innerHTML='<div class="tph">Start from a template</div>'+tplVisible().map(([k,t])=>`<button class="tpi" data-k="${k}"><span class="tpc" style="--pc:${t.color}">${ic(t.icon,16)}</span><span><b>${t.label}</b><i>${t.desc}</i></span></button>`).join('')+'<button class="tpi tpcz" id="tpcz"><span class="tpc" style="--pc:var(--mut)">'+ic('template',16)+'</span><span><b>Customize templates</b><i>Choose what shows and which sections</i></span></button>';
+ m.querySelector('#tpcz').onclick=()=>{m.classList.remove('show');openTplSettings()};
+ m.querySelectorAll('.tpi[data-k]').forEach(x=>x.onclick=()=>{m.classList.remove('show');const pg=page();newFromTemplate(x.dataset.k,pg&&pg.folder&&!homeOn?pg.id:undefined)});m.classList.add('show')}
 document.addEventListener('mousedown',e=>{if(!e.target.closest('#tpl,#tplb'))$('#tpl').classList.remove('show');if(!e.target.closest('#rvm,.revb'))$('#rvm').classList.remove('show')});
 $('#tplb').onclick=e=>{e.stopPropagation();$('#tpl').classList.contains('show')?$('#tpl').classList.remove('show'):openTpl()};
 $('#nfb').onclick=()=>{const pg=page();newFolder(pg&&pg.folder&&!homeOn?pg.id:null)};
@@ -3066,7 +3133,7 @@ function drawLibrary(){const ed=$('#ed'),ql=libQ.trim().toLowerCase();
   t.ondragover=e=>{if(isPg(e)){e.preventDefault();e.stopPropagation();ed.querySelectorAll('.dz').forEach(x=>x.classList.remove('dz'));t.classList.add('dz')}};
   t.ondragleave=e=>{if(!t.contains(e.relatedTarget))t.classList.remove('dz')};
   t.ondrop=e=>{e.preventDefault();e.stopPropagation();t.classList.remove('dz');const id=e.dataTransfer.getData('text/pg');if(id)moveMany(idsFor(id),to())}});
- wireRename(ed)}
+ wireRename(ed);wireLibPreview(ed)}
 /* ---------- flashcards and review ---------- */
 const DAYMS=864e5;
 const dueCards=()=>{const n=Date.now(),o=[];S.pages.forEach(p=>p.blocks.forEach(b=>{if(b.t==='qa'&&stripH(b.h||'').length&&(!b.due||b.due<=n))o.push({p,b})}));return o};

@@ -972,6 +972,21 @@ body.aion #main{padding-right:380px}body.aion #outl{display:none}
 .cvb.sel>.cvh,.cvb:hover>.cvh{opacity:1}
 .cvb img,.cvb .ifh,.cvb .cmh,.cvb .qah,.cvb .lch,.cvb .ch{cursor:grab}
 .cvw.dragging .cvb{transition:none}.cvb{transition:top .18s var(--ease)}.cvw.dragging .cvb:not(.sel){transition:top .14s var(--ease)}
+
+/* ===== smooth block dragging ===== */
+.dgh{position:fixed!important;z-index:95;margin:0!important;pointer-events:none;opacity:.94;background:var(--bg);border-radius:12px;box-shadow:0 24px 56px -14px rgba(0,0,0,.5),0 0 0 1px color-mix(in srgb,var(--y) 40%,transparent);transform:rotate(.7deg) scale(1.015);max-height:260px;overflow:hidden}
+.dgh>.dh,.dgh>.tl,.dgh>.addcol{display:none!important}
+body.bdrag{cursor:grabbing!important;user-select:none;-webkit-user-select:none}body.bdrag *{cursor:grabbing!important}
+.blk.dragging{opacity:.3;filter:saturate(.6)}
+#dind{position:fixed;z-index:94;background:var(--y);border-radius:3px;pointer-events:none;opacity:0;box-shadow:0 0 0 4px color-mix(in srgb,var(--y) 22%,transparent);transition:left .1s var(--ease),top .1s var(--ease),width .1s var(--ease),height .1s var(--ease),opacity .12s}
+#dind.on{opacity:1}
+#dind::after{content:attr(data-l);position:absolute;left:8px;top:-26px;white-space:nowrap;font:600 11.5px var(--ui);color:#fff;background:var(--y);padding:2px 8px;border-radius:6px}
+.dh{touch-action:none}
+/* narrow screens: the sidebar slides over the page instead of squeezing it */
+#scrim{position:fixed;inset:0;z-index:35;background:rgba(10,10,10,.38);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
+@media(max-width:760px){#main{margin-left:0!important}#side{z-index:40;box-shadow:12px 0 40px -16px rgba(0,0,0,.4)}body.side-over #scrim{opacity:1;visibility:visible}#sctoggle{top:10px;left:10px}#ed{padding-top:56px}#lay,#olb,#aib2{display:none}.cvt{flex-wrap:wrap;max-width:calc(100% - 24px)}}
+#acc .alanr{display:flex;align-items:center;gap:8px;margin:5px 0}#acc .ahostbox small{display:block;margin-top:8px;font-size:12px;opacity:.85}
+#acc .arl button{margin-left:4px}
 </style>
 </head><body>
 <div id="side"><div class="sin">
@@ -989,12 +1004,14 @@ body.aion #main{padding-right:380px}body.aion #outl{display:none}
 <button class="b mi" id="ex" title="Download your notes as one portable .json file" data-ic="download"><span class="lbl">Export notes</span></button>
 <button class="b mi" id="im" title="Load pages from an exported .json file" data-ic="upload"><span class="lbl">Import notes</span></button>
 <button class="b mi" id="aib" title="Connect an AI provider key for explain, flashcards and chat" data-ic="sparkle"><span class="lbl">AI settings</span></button>
+<button class="b mi" id="exmd" title="Every page as a Markdown file in folders, with images and diagrams as files" data-ic="download"><span class="lbl">Export all as Markdown (zip)</span></button>
+<button class="b mi" id="excsv" title="Your LeetCode problems as a spreadsheet" data-ic="download"><span class="lbl">Export problems (CSV)</span></button>
 <button class="b mi" id="shb" title="See every keyboard shortcut (press ?)" data-ic="clip"><span class="lbl">Keyboard shortcuts</span></button>
 <button class="b mi" id="prb" title="Print this page or save it as a PDF" data-ic="download"><span class="lbl">Print or save as PDF</span></button>
 <button class="b mi" id="ms" title="Save everything now and write a full backup of the NOTERA folder (Ctrl/Cmd+S)" data-ic="save"><span class="lbl">Master save</span></button>
 </div>
 <div class="rsz" id="rsz" title="Drag to resize"></div>
-</div></div><div id="edge"></div><div id="acc"></div><div id="tpl"></div><div id="wel"></div><div id="rvm"></div><div id="aiset"></div><div id="aim"></div><aside id="aip"></aside><div id="pkr"></div><div id="rvw"></div><div id="shc"></div>
+</div></div><div id="edge"></div><div id="acc"></div><div id="tpl"></div><div id="wel"></div><div id="rvm"></div><div id="scrim"></div><div id="aiset"></div><div id="aim"></div><aside id="aip"></aside><div id="pkr"></div><div id="rvw"></div><div id="shc"></div>
 <button id="sctoggle" title="Show sidebar (Ctrl+\)"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
 <div id="main"><div id="ed"></div></div>
 <button id="lay"></button>
@@ -1098,7 +1115,7 @@ function renderSide(){
  const t=$('#tree');t.innerHTML=h+trashHtml();pgExtras(t);t.querySelectorAll('.secl').forEach(e=>e.onclick=()=>openLibrary());wireRename(t);reviewBadge();
  t.querySelectorAll('.pg').forEach(e=>e.onclick=ev=>{const b=ev.target.closest('button'),a=ev.target.closest('[data-a]'),id=e.dataset.id;
   if(b){ev.stopPropagation();if(b.dataset.f){P(id).fav=!P(id).fav;save();renderSide()}else if(b.dataset.s)newPage(id);else if(b.dataset.d)delPage(id);else if(b.dataset.sh)toggleShare(id);else if(b.dataset.nf)newFolder(id);return}
-  if(a){P(id).open=!P(id).open;save();renderSide();return}homeOn=false;cur=id;if(P(id).folder)P(id).open=true;render()})}
+  if(a){P(id).open=!P(id).open;save();renderSide();return}homeOn=false;cur=id;if(P(id).folder)P(id).open=true;render();if(innerWidth<=760)setSidebar(true)})}
 function newPage(parent){snap();const p={id:uid(),title:'',parent:parent||null,tags:[],fav:false,open:true,blocks:[{id:uid(),t:'p',h:''}]};
  if(parent)P(parent).open=true;S.pages.push(p);cur=p.id;save();render();$('#ti').focus()}
 function delPage(id,quiet){const p=P(id);if(!quiet&&!confirm(p.folder?`Move the folder "${p.title||'Untitled'}" and everything inside it to Trash?`:`Move "${p.title||'Untitled'}" and its subpages to Trash?`))return;
@@ -1544,7 +1561,12 @@ async function masterSave(){if(masterSaving)return;masterSaving=true;const b=$('
  catch(e){toast('Could not reach the local server — is app.py still running?')}
  lbl.textContent=old;masterSaving=false}
 $('#ms').onclick=masterSave;
-$('#fi').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.pages))throw 0;let n=0;d.pages.forEach(p=>{if(!P(p.id)){S.pages.push(p);n++}});save(1);render();toast(n+' pages imported')}catch(_){alert('Not a valid backup file.')}};
+$('#fi').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
+ if(f.size>200*1024*1024)return alert('That file is larger than 200 MB.');
+ try{const d=JSON.parse(await f.text());if(!d||!Array.isArray(d.pages))throw new Error('no pages');let n=0,skipped=0;snap();
+  d.pages.slice(0,20000).forEach(p0=>{const p=cleanImportedPage(p0);if(!p){skipped++;return}if(P(p.id)){skipped++;return}S.pages.push(p);n++});
+  if(!n&&skipped)return alert('Nothing was imported: every page was already here or malformed.');
+  save(1);render();toast(n+' page'+(n===1?'':'s')+' imported'+(skipped?', '+skipped+' skipped (already here or malformed)':''))}catch(err){alert('That is not a valid Notera backup file.')}};
 $('#np').onclick=e=>startNewPage(e);
 $('#q').oninput=e=>{q=e.target.value.trim().toLowerCase();renderSide()};
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();masterSave()}});
@@ -1604,21 +1626,50 @@ function openPresets(btn,bs){let m=document.getElementById('lyp');if(!m){m=docum
  const list=PRESETS[bs.length]||[],r=btn.getBoundingClientRect();m.style.left=Math.min(r.left,innerWidth-250)+'px';m.style.top=(r.bottom+6)+'px';
  m.innerHTML='<div class="tph">Snap to a layout</div><div class="lyg">'+list.map((ps,i)=>{const t=ps.reduce((a,b)=>a+b,0);return`<button data-i="${i}" title="${ps.join(' : ')}">${ps.map(v=>`<i style="flex:${v}"></i>`).join('')}</button>`}).join('')+'</div>'+(list.length?'':'<div class="lyn">Add a column to see layouts.</div>');
  m.querySelectorAll('.lyg button').forEach(b=>b.onclick=()=>{const ps=list[+b.dataset.i];snap();bs.forEach((x,i)=>x.rw=ps[i]);save();m.classList.remove('show');render()});m.classList.add('show')}
+/* one place decides what a drop means: beside (l, r), above (t) or below (b) the target */
+function dropBlock(src,b,z){const p=page();if(!src||src===b)return false;
+ if((z==='l'||z==='r')&&rowOf(p,b).length>=4&&src.rg!==b.rg){toast('Four columns is the maximum');return false}
+ snap();p.blocks.splice(p.blocks.indexOf(src),1);const ti=p.blocks.indexOf(b);
+ if(z==='l'||z==='r'){if(!b.rg){b.rg=uid();b.rw=1}const g=rowOf(p,b),avg=g.reduce((n,x)=>n+(x.rw||1),0)/g.length;src.rg=b.rg;src.rw=+avg.toFixed(3);p.blocks.splice(z==='l'?ti:ti+1,0,src)}
+ else{delete src.rg;delete src.rw;const g=rowOf(p,b),first=p.blocks.indexOf(g[0]),last=p.blocks.indexOf(g[g.length-1]);p.blocks.splice(z==='t'?first:last+1,0,src)}
+ normalizeRows(p);return true}
+/* animate every block from where it was to where it is now, so reordering glides instead of jumping */
+function flipAround(fn){const old=new Map();document.querySelectorAll('#bl .blk').forEach(el=>{const r=el.getBoundingClientRect();old.set(el.dataset.id,{x:r.left,y:r.top})});fn();
+ requestAnimationFrame(()=>document.querySelectorAll('#bl .blk').forEach(el=>{const o=old.get(el.dataset.id);if(!o||!el.animate)return;const r=el.getBoundingClientRect(),dx=o.x-r.left,dy=o.y-r.top;if(Math.abs(dx)<2&&Math.abs(dy)<2)return;el.animate([{transform:'translate('+dx+'px,'+dy+'px)'},{transform:'none'}],{duration:280,easing:'cubic-bezier(.32,.72,0,1)'})}))}
+function moveBlockBy(b,d){const p=page(),i=p.blocks.indexOf(b),j=i+d;if(i<0||j<0||j>=p.blocks.length)return;snap();flipAround(()=>{[p.blocks[i],p.blocks[j]]=[p.blocks[j],p.blocks[i]];normalizeRows(p);save();render();const e=blkEls()[p.blocks.indexOf(b)]?.querySelector('.ce,textarea,td');if(e)e.focus()})}
+function startBlockDrag(e,b,w){if(e.button!==0||page().mode==='canvas')return;e.preventDefault();e.stopPropagation();
+ const p=page(),sx=e.clientX,sy=e.clientY;let started=false,ghost,ind,tgt=null,zone=null,px=sx,py=sy,raf=0,off={x:0,y:0};
+ const main=$('#main');
+ const begin=()=>{started=true;const r=w.getBoundingClientRect();off={x:sx-r.left,y:sy-r.top};ghost=w.cloneNode(true);ghost.classList.add('dgh');ghost.removeAttribute('data-id');ghost.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id'));ghost.style.cssText='left:'+r.left+'px;top:'+r.top+'px;width:'+Math.min(r.width,640)+'px';document.body.append(ghost);
+  ind=document.createElement('div');ind.id='dind';document.body.append(ind);w.classList.add('dragging');document.body.classList.add('bdrag');tick()};
+ const zoneOf=(el,x,y)=>{const r=el.getBoundingClientRect(),rx=(x-r.left)/r.width,ry=(y-r.top)/r.height;return rx<.22?'l':rx>.78?'r':ry<.5?'t':'b'};
+ const find=()=>{let el=null;for(const x of document.elementsFromPoint(px,py)){const bl=x.closest&&x.closest('#bl .blk');if(bl&&bl!==w){el=bl;break}}
+  if(!el){let best=1e9;document.querySelectorAll('#bl .blk').forEach(x=>{if(x===w)return;const r=x.getBoundingClientRect();if(px<r.left-60||px>r.right+60)return;const d=Math.min(Math.abs(py-r.top),Math.abs(py-r.bottom));if(d<best&&d<70){best=d;el=x}})}
+  return el};
+ const tick=()=>{if(!started)return;const mr=main.getBoundingClientRect();let sc=0;if(py<mr.top+70)sc=-Math.ceil((70-(py-mr.top))/4);else if(py>mr.bottom-70)sc=Math.ceil((70-(mr.bottom-py))/4);if(sc){main.scrollTop+=sc}
+  ghost.style.left=(px-off.x)+'px';ghost.style.top=(py-off.y)+'px';
+  const el=find();tgt=el?p.blocks.find(x=>x.id===el.dataset.id):null;zone=el?zoneOf(el,px,py):null;
+  if(el&&tgt){const r=el.getBoundingClientRect(),side=zone==='l'||zone==='r',s2=rowOf(p,tgt);let bx=r.left,by=r.top,bw=r.width,bh=r.height;
+   if(!side&&tgt.rg){const g=[...document.querySelectorAll('#bl .blk')].filter(x=>s2.some(y=>y.id===x.dataset.id)),rr=g.map(x=>x.getBoundingClientRect());bx=Math.min(...rr.map(q=>q.left));bw=Math.max(...rr.map(q=>q.right))-bx;by=zone==='t'?Math.min(...rr.map(q=>q.top)):Math.max(...rr.map(q=>q.bottom));bh=0}
+   const css=side?'left:'+(zone==='l'?r.left-8:r.right+4)+'px;top:'+r.top+'px;width:4px;height:'+r.height+'px':'left:'+bx+'px;top:'+((tgt.rg?by:(zone==='t'?r.top-5:r.bottom+1)))+'px;width:'+bw+'px;height:4px';ind.style.cssText=css;ind.dataset.l=side?'Side by side':zone==='t'?'Above':'Below';ind.classList.add('on')}
+  else ind.classList.remove('on');raf=requestAnimationFrame(tick)};
+ const mv=ev=>{px=ev.clientX;py=ev.clientY;if(!started&&Math.hypot(px-sx,py-sy)>4)begin()};
+ const end=ev=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',end);window.removeEventListener('pointercancel',end);window.removeEventListener('keydown',esc,true);cancelAnimationFrame(raf);
+  if(!started)return;const t=tgt,z=zone;ghost.remove();ind.remove();w.classList.remove('dragging');document.body.classList.remove('bdrag');
+  if(ev.type==='pointerup'&&t&&z)flipAround(()=>{if(dropBlock(b,t,z)){save();render()}})};
+ const esc=ev=>{if(ev.key==='Escape'){ev.stopPropagation();tgt=null;end({type:'cancel'})}};
+ window.addEventListener('pointermove',mv);window.addEventListener('pointerup',end);window.addEventListener('pointercancel',end);window.addEventListener('keydown',esc,true)}
 function dragWire(w,tl,b){
  const start=e=>{e.dataTransfer.setData('text/blk',String(page().blocks.indexOf(b)));e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setDragImage(w,24,16)}catch(x){}w.classList.add('dragging')};
  tl.ondragstart=e=>{if(e.target.closest('button')?.dataset.a==='s')start(e)};
- const dh=document.createElement('div');dh.className='dh';dh.draggable=true;dh.title='Drag to move. Drop on a left or right edge to place side by side';dh.innerHTML=ic('grip',14);dh.ondragstart=start;dh.ondragend=()=>w.classList.remove('dragging');w.append(dh);
+ const dh=document.createElement('div');dh.className='dh';dh.title='Drag to move. Drop on a left or right edge to place side by side. Alt+Up or Down moves it with the keyboard.';dh.innerHTML=ic('grip',14);dh.onpointerdown=e=>startBlockDrag(e,b,w);w.append(dh);
  if(!b.rg){const ac=document.createElement('button');ac.type='button';ac.className='addcol';ac.title='Add a column to the right';ac.innerHTML=ic('plus',13);ac.onclick=e=>{e.stopPropagation();addColumn(b)};w.append(ac)}
  const zone=e=>{const r=w.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;return x<.2?'l':x>.8?'r':y<.5?'t':'b'};
  w.ondragover=e=>{if([...e.dataTransfer.types].includes('text/blk')){e.preventDefault();e.stopPropagation();w.dataset.dz=zone(e)}};
  w.ondragleave=e=>{if(!w.contains(e.relatedTarget))delete w.dataset.dz};
  w.ondrop=e=>{const f=e.dataTransfer.getData('text/blk');const z=zone(e);delete w.dataset.dz;if(f==='')return;e.preventDefault();e.stopPropagation();
-  const p=page(),from=+f,src=p.blocks[from];if(!src||src===b)return;
-  if((z==='l'||z==='r')&&rowOf(p,b).length>=4&&src.rg!==b.rg)return toast('Four columns is the maximum');
-  snap();p.blocks.splice(from,1);const ti=p.blocks.indexOf(b);
-  if(z==='l'||z==='r'){if(!b.rg){b.rg=uid();b.rw=1}const g=rowOf(p,b),avg=g.reduce((n,x)=>n+(x.rw||1),0)/g.length;src.rg=b.rg;src.rw=+avg.toFixed(3);p.blocks.splice(z==='l'?ti:ti+1,0,src)}
-  else{delete src.rg;delete src.rw;const g=rowOf(p,b),first=p.blocks.indexOf(g[0]),last=p.blocks.indexOf(g[g.length-1]);p.blocks.splice(z==='t'?first:last+1,0,src)}
-  normalizeRows(p);save();render()}}
+  const p=page(),src=p.blocks[+f];if(dropBlock(src,b,z)){save();render()}}}
+document.addEventListener('keydown',e=>{if(!e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||(e.key!=='ArrowUp'&&e.key!=='ArrowDown'))return;const p=page();if(!p||homeOn||p.folder||p.mode==='canvas')return;const a=document.activeElement,w=a&&a.closest&&a.closest('#bl .blk');if(!w)return;const b=p.blocks.find(x=>x.id===w.dataset.id);if(!b)return;e.preventDefault();moveBlockBy(b,e.key==='ArrowUp'?-1:1)});
 function selBar(){let b=$('#sb');if(!b){b=document.createElement('div');b.id='sb';document.body.append(b)}b.style.display=SEL.size?'flex':'none';
  b.innerHTML=SEL.size+' selected <button class="b" data-s="cp">Copy</button><button class="b" data-s="l">⟸</button><button class="b" data-s="c">⟺</button><button class="b" data-s="r">⟹</button><button class="b" data-s="del">Delete</button><button class="b" data-s="x">Clear</button>';
  b.onclick=e=>{const a=e.target.dataset.s;if(!a)return;if(a==='cp'){copyBlocks(new Set(SEL));return}const p=page();if(a==='x')SEL.clear();else{snap();if(a==='del'){p.blocks=p.blocks.filter(x=>!SEL.has(x.id));if(!p.blocks.length)p.blocks.push({id:uid(),t:'p',h:''});SEL.clear()}else p.blocks.forEach(x=>{if(SEL.has(x.id))x.al=a})}save();render()}}
@@ -1649,7 +1700,7 @@ document.addEventListener('focusin',e=>{if(e.target.matches?.('.ce,textarea.cd,.
 document.addEventListener('focusout',e=>{if(editSnapshot!==null&&e.target.matches?.('.ce,textarea.cd,.mt')){
  const now=JSON.stringify(S);if(now!==editSnapshot){H.push(editSnapshot);if(H.length>40)H.shift();F.length=0}editSnapshot=null}});
 $('#un').onclick=()=>undo();$('#re').onclick=()=>undo(true);
-function setSidebar(collapsed){const sd=document.getElementById('side');sd.classList.toggle('collapsed',collapsed);sd.inert=collapsed;document.body.classList.toggle('sidecol',collapsed);try{localStorage.setItem('nt.sidebar',collapsed?'1':'0')}catch(e){}}
+function setSidebar(collapsed){const sd=document.getElementById('side');document.body.classList.toggle('side-over',!collapsed&&innerWidth<=760);sd.classList.toggle('collapsed',collapsed);sd.inert=collapsed;document.body.classList.toggle('sidecol',collapsed);try{localStorage.setItem('nt.sidebar',collapsed?'1':'0')}catch(e){}}
 const LAY_ICO=w=>'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/>'+(w?'<path d="M7 9h10M7 12h10M7 15h10"/>':'<path d="M9 9h6M9 12h6M9 15h6"/>')+'</svg>';
 function setLayout(wide){document.body.classList.toggle('wide',wide);const b=$('#lay');b.innerHTML=LAY_ICO(wide);b.title=wide?'Full width. Click for centered':'Centered. Click for full width';
  document.querySelectorAll('#lyseg button').forEach(x=>x.classList.toggle('on',(x.dataset.l==='1')===wide));
@@ -1660,7 +1711,7 @@ document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey)document.body.cl
 document.addEventListener('keyup',e=>{if(!e.ctrlKey&&!e.metaKey)document.body.classList.remove('ctrlkey')});
 window.addEventListener('blur',()=>document.body.classList.remove('ctrlkey'));
 $('#sctb').onclick=()=>setSidebar(true);
-$('#sctoggle').onclick=()=>setSidebar(false);
+$('#sctoggle').onclick=()=>setSidebar(false);$('#scrim').onclick=()=>setSidebar(true);
 /* fonts */
 const FONTS={
  ui:[{n:'DM Sans',v:"'DM Sans',system-ui,sans-serif"},{n:'Inter',v:"'Inter',system-ui,sans-serif"},{n:'Plus Jakarta Sans',v:"'Plus Jakarta Sans',system-ui,sans-serif"},{n:'Manrope',v:"'Manrope',system-ui,sans-serif"},{n:'Poppins',v:"'Poppins',system-ui,sans-serif"},{n:'System UI',v:"system-ui,-apple-system,Segoe UI,sans-serif"}],
@@ -1744,6 +1795,7 @@ $('#hib').onclick=e=>{e.stopPropagation();const p=$('#hip');const show=!p.classL
  if(uiF)applyFont('ui',uiF);if(monoF)applyFont('mono',monoF);if(dispF)applyFont('disp',dispF)})();
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='\\'){e.preventDefault();setSidebar(!document.getElementById('side').classList.contains('collapsed'))}});
 try{document.body.classList.add('noanim');setLayout(localStorage.getItem('nt.layout')==='wide');requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.remove('noanim')))}catch(e){setLayout(false)}
+try{if(localStorage.getItem('nt.sidebar')===null&&innerWidth<=760)localStorage.setItem('nt.sidebar','1')}catch(e){}
 try{if(localStorage.getItem('nt.sidebar')==='1'){document.body.classList.add('noanim');setSidebar(true);requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.remove('noanim')))}}catch(e){}
 
 
@@ -2643,6 +2695,31 @@ async function aiSuggest(){const p=page();if(!p||p.folder)return;const ctx='Fold
  const ms=$('#aip .apm');ms.append(box);ms.scrollTop=ms.scrollHeight}
 $('#aib2').onclick=()=>toggleAiPanel();
 document.addEventListener('keydown',e=>{if(e.altKey&&!e.ctrlKey&&!e.metaKey&&e.key.toLowerCase()==='a'){e.preventDefault();toggleAiPanel()}});
+
+/* everything that comes from a file is rebuilt from an allow-list before it can touch the page */
+const OK_TAGS=new Set('a b i u s strong em code pre p br h1 h2 h3 h4 ul ol li blockquote table thead tbody tr td th hr span div details summary input sup sub mark small font figure figcaption'.split(' '));
+const OK_ATTR=new Set(['class','href','target','rel','title','alt','type','checked','start','colspan','rowspan','data-lang','data-tex','data-pg','data-r','contenteditable','open','color']);
+function cleanHtmlStored(html){const d=new DOMParser().parseFromString('<body>'+String(html),'text/html');
+ const walk=el=>{[...el.childNodes].forEach(n=>{if(n.nodeType!==1)return;const t=n.tagName.toLowerCase();if(!OK_TAGS.has(t)){n.remove();return}
+  if(t==='input'&&(n.getAttribute('type')||'').toLowerCase()!=='checkbox'){n.remove();return}
+  [...n.attributes].forEach(a=>{const nm=a.name.toLowerCase();
+   if(nm==='style'){const keep=a.value.split(';').map(x=>x.trim()).filter(x=>/^(color|background-color|font-weight|font-style|text-decoration|text-align)\s*:\s*[#\w\s(),.%-]+$/i.test(x)&&!/url\(|expression|javascript/i.test(x));keep.length?n.setAttribute('style',keep.join(';')):n.removeAttribute('style');return}
+   if(nm==='href'){if(!/^(https?:|mailto:|#)/i.test(a.value.trim()))n.setAttribute('href','#');return}
+   if(nm==='contenteditable'){if(a.value!=='false')n.removeAttribute(a.name);return}
+   if(!OK_ATTR.has(nm))n.removeAttribute(a.name)});walk(n)})};
+ walk(d.body);return d.body.innerHTML}
+function cleanImportedPage(p){if(!p||typeof p!=='object'||typeof p.id!=='string'||!p.id||!Array.isArray(p.blocks))return null;
+ const q={...p,id:p.id.slice(0,40),title:String(p.title||'').slice(0,200),tags:(Array.isArray(p.tags)?p.tags:[]).map(x=>String(x).slice(0,40)).slice(0,40),blocks:[]};delete q.share;delete q.owner;
+ p.blocks.slice(0,5000).forEach(b=>{if(!b||typeof b!=='object'||typeof b.id!=='string'||typeof b.t!=='string')return;const c={...b};
+  ['h','a','cap','body','c1','c2'].forEach(k=>{if(typeof c[k]==='string'&&/[<&]/.test(c[k]))c[k]=cleanHtmlStored(c[k])});
+  if(c.t==='svg')c.svg=(typeof c.svg==='string'&&sanitizeSvgText(c.svg))||'';
+  if(c.t==='html'){c.run=false;c.src=typeof c.src==='string'?c.src.slice(0,2e6):''}
+  if((c.t==='image')&&!/^(data:image\/(png|jpe?g|gif|webp);base64,|https?:)/i.test(String(c.src||'')))c.src='';
+  q.blocks.push(c)});
+ return q.blocks.length?q:null}
+function downloadFrom(url){const a=document.createElement('a');a.href=url;a.download='';document.body.append(a);a.click();a.remove()}
+$('#exmd').onclick=()=>{toast('Preparing your Markdown export...');downloadFrom('/api/export/markdown.zip')};
+$('#excsv').onclick=()=>{downloadFrom('/api/export/problems.csv');toast('Problems exported as CSV')};
 /* ---------- collapsible sections ---------- */
 const headLvl=b=>{const m=/^h([1-3])$/.exec(b.t);return m?+m[1]:0};
 function applyFolds(){const p=page();if(p.mode==='canvas')return;const kids=blkEls();let head=null,hl=0,n=0,headEl=null;
@@ -2757,8 +2834,8 @@ function drawAcc(){const a=$('#acc');if(!a.classList.contains('show'))return;con
  const sig=JSON.stringify([me,NET.relay,joined,NET.key,(NET.members||[]).map(m=>[m.id,m.online,m.name]),(NET.messages||[]).length,NET.status,NET.msg]);if(sig===accSig)return;accSig=sig;
  const keep={},fid=document.activeElement&&a.contains(document.activeElement)?document.activeElement.id:null;a.querySelectorAll('input').forEach(i=>keep[i.id]=i.value);
  let sec='';
- if(!NET.relay)sec=`<div class="as"><div class="ast">Share with a friend</div><p class="ahint">Sharing needs a small relay both of you can reach. Run <code>python relay.py</code> on any computer, or deploy it free (see README), then paste its address here.</p><button class="abtn pri" id="ahost">Host it on this computer</button><p class="ahint">Both of you on the same Wi-Fi? Host it here, then tell your friend the address it shows. Otherwise paste a deployed relay address:</p><input id="arelay" placeholder="https://your-relay.example.com" spellcheck="false"><button class="abtn" id="arelays">Use this relay</button></div>`;
- else if(!joined)sec=`<div class="as"><div class="ast">Share with a friend</div><p class="ahint">Create a 6-digit key and give it to one friend. When they enter it, you two are linked and can share chosen pages.</p><button class="abtn pri" id="acreate">Create a share key</button><div class="aor"><span>or enter a friend's key</span></div><div class="ajoin"><input id="akey" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="off"><button class="abtn" id="ajoin">Join</button></div><div class="aerr" id="aerr"></div><div class="arl">Relay: ${esc(NET.relay)} <button id="arelayx">change</button></div>${NET.hosting?`<div class="ahostbox"><b>You are hosting the relay.</b> Your friend (same network) enters this relay address, then your key: <code id="alan">${esc(NET.lan)}</code> <button id="alanc">Copy</button></div>`:''}</div>`;
+ if(!NET.relay)sec=`<div class="as"><div class="ast">Share with a friend</div><p class="ahint">Sharing needs a small relay both of you can reach. Run <code>python relay.py</code> on any computer, or deploy it free (see README), then paste its address here.</p><button class="abtn pri" id="ahost">Host it on this computer</button><button class="abtn" id="afind">Find a host on this Wi-Fi or hotspot</button><div class="ahint" id="ares"></div><p class="ahint">Both of you on the same Wi-Fi? Host it here, then tell your friend the address it shows. Otherwise paste a deployed relay address:</p><input id="arelay" placeholder="https://your-relay.example.com" spellcheck="false"><button class="abtn" id="arelays">Use this relay</button></div>`;
+ else if(!joined)sec=`<div class="as"><div class="ast">Share with a friend</div><p class="ahint">Create a 6-digit key and give it to one friend. When they enter it, you two are linked and can share chosen pages.</p><button class="abtn pri" id="acreate">Create a share key</button><div class="aor"><span>or enter a friend's key</span></div><div class="ajoin"><input id="akey" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="off"><button class="abtn" id="ajoin">Join</button></div><div class="aerr" id="aerr"></div><div class="arl">Relay: ${esc(NET.relay)} <button id="arelayx">change</button><button id="atest">test connection</button><button id="afind">find nearby</button><div id="ares" class="ahint"></div></div>${NET.hosting?`<div class="ahostbox"><b>You are hosting the relay.</b> Your friend must be on the same Wi-Fi or hotspot. Their app can press <b>find nearby</b>, or they can type one of these addresses (a phone hotspot is usually the one starting 192.168.43, 192.168.137 or 172.20.10):${(NET.lans||[NET.lan]).map(u=>`<div class="alanr"><code>${esc(u)}</code><button data-copy="${esc(u)}">Copy</button></div>`).join('')}<small>If it cannot connect: allow Python through Windows Firewall on private networks, and make sure the hotspot does not isolate devices from each other.</small></div>`:''}</div>`;
  else if(!peers.length)sec=`<div class="as"><div class="ast">Waiting for your friend</div>${NET.key?`<div class="akey">${NET.key.split('').map(d=>'<span>'+d+'</span>').join('')}</div><p class="ahint">Give this key to <b>one</b> person. It works once and expires in <b id="kleft"></b>.</p>`:'<p class="ahint">Your friend left or the key expired. Stop sharing and create a new key to invite someone else.</p>'}<button class="abtn" id="aleave">Cancel sharing</button><div class="aerr" id="aerr"></div></div>`;
  else sec=`<div class="as"><div class="ast">Connected</div>${peers.map(m=>`<div class="apeer">${avHtml(m,30)}<div><b>${esc(m.name)}</b><i>${esc(m.id)}</i></div><span class="adot${m.online?' on':''}">${m.online?'online':'away'}</span></div>`).join('')}<p class="ahint">Use the <b>people icon</b> on any page in the sidebar to share it. Edits sync both ways within seconds.</p><div class="amsgs" id="amsgs">${(NET.messages||[]).slice(-40).map(m=>m.from==='system'?`<div class="am sys">${esc(m.text)}</div>`:`<div class="am${m.from===me.id?' me':''}"><b>${esc(m.name)}</b> ${esc(m.text)}</div>`).join('')}</div><div class="amrow"><input id="amsg" placeholder="Write a message" maxlength="300"><button class="abtn" id="asend">Send</button></div><div class="aacts"><button class="abtn" id="ahello">Say hello 👋</button><button class="abtn danger" id="aleave">Stop sharing</button></div><div class="aerr" id="aerr"></div></div>`;
  a.innerHTML=`<div class="ah"><span>Profile and sharing</span><button id="accx" title="Close">${ic('close',14)}</button></div><div class="ap">${avHtml(me,46)}<div class="apn"><input id="aname" value="${esc(me.name)}" maxlength="40" title="Your display name"><div class="apid"><code>${esc(me.id)}</code><button id="aidc" title="Copy your user id">Copy id</button></div></div></div><div class="acols">${NCOL.map(c=>`<button class="acol${c===me.color?' on':''}" data-c="${c}" style="background:${c}" title="Avatar colour"></button>`).join('')}<input id="aemoji" value="${esc(me.emoji||'')}" placeholder="🙂" maxlength="2" title="Optional emoji for your avatar"></div>${sec}`;
@@ -2770,7 +2847,10 @@ function drawAcc(){const a=$('#acc');if(!a.classList.contains('show'))return;con
  a.querySelectorAll('.acol').forEach(b=>b.onclick=async()=>{const r=await netPost('/api/me',{color:b.dataset.c});if(r.ok){ME=r.d;accSig='';renderProfile();refreshNet()}});
  g('aidc').onclick=()=>{navigator.clipboard.writeText(me.id).then(()=>toast('User id copied'))};
  if(g('ahost'))g('ahost').onclick=async()=>{const r=await netPost('/api/net/host');if(!r.ok)return toast(r.d.error||'Could not host');accSig='';refreshNet()};
- if(g('alanc'))g('alanc').onclick=()=>navigator.clipboard.writeText(NET.lan).then(()=>toast('Relay address copied'));
+ a.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>navigator.clipboard.writeText(b.dataset.copy).then(()=>toast('Relay address copied')));
+ if(g('afind'))g('afind').onclick=async()=>{const r=g('ares');r.textContent='Looking on this network...';const x=await netPost('/api/net/discover');if(!x.ok||!x.d.found.length){r.textContent='Nobody is hosting here. Ask your friend to press Host it on this computer first, and check you are on the same Wi-Fi or hotspot.';return}
+  const f=x.d.found[0];await netPost('/api/net/relay',{relay:f.relay});r.textContent='Found '+(f.name||'a friend')+' at '+f.relay+'. Now enter their 6-digit key.';accSig='';refreshNet()};
+ if(g('atest'))g('atest').onclick=async()=>{const r=g('ares');r.textContent='Testing...';const x=await netPost('/api/net/test',{relay:NET.relay});r.textContent=x.d.ok?'Connected ('+x.d.ms+' ms). You can pair now.':(x.d.error||'Could not connect.')};
  if(g('arelays'))g('arelays').onclick=async()=>{const v=g('arelay').value.trim();if(!v)return;await netPost('/api/net/relay',{relay:v});accSig='';refreshNet()};
  if(g('arelayx'))g('arelayx').onclick=async()=>{const v=prompt('Relay address',NET.relay);if(v!==null){await netPost('/api/net/relay',{relay:v.trim()});accSig='';refreshNet()}};
  if(g('acreate'))g('acreate').onclick=async()=>{err('');g('acreate').disabled=true;const r=await netPost('/api/net/create');if(!r.ok)err(r.d.error);accSig='';refreshNet()};
@@ -2992,7 +3072,9 @@ const SHORTCUTS=[['Alt A','Ask AI about this note'],['Ctrl Z / Ctrl Shift Z','Un
 function toggleShortcuts(force){const w=$('#shc');const show=force!==undefined?force:!w.classList.contains('show');if(show){w.innerHTML='<div class="shbox"><div class="pkh">Keyboard shortcuts</div><div class="shg">'+SHORTCUTS.map(([k,d])=>`<div><kbd>${esc(k)}</kbd><span>${esc(d)}</span></div>`).join('')+'</div></div>';w.onmousedown=e=>{if(e.target===w)toggleShortcuts(false)}}w.classList.toggle('show',show)}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#shc').classList.contains('show')){toggleShortcuts(false);return}
  if(e.key==='?'&&!e.ctrlKey&&!e.metaKey&&!e.altKey){const a=document.activeElement;if(a&&(a.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)))return;e.preventDefault();toggleShortcuts()}});
-$('#shb').onclick=()=>toggleShortcuts(true);$('#prb').onclick=()=>setTimeout(()=>window.print(),150);
+$('#shb').onclick=()=>toggleShortcuts(true);
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;['#icm','#aiset'].forEach(s2=>{const el=$(s2);if(el&&el.classList.contains('show'))el.classList.remove('show')});['#aim','#lyp','#tpl','#rvm','#mmenu'].forEach(s2=>{const el=$(s2);if(el)el.classList.remove('show')});closeAcc&&closeAcc()});
+$('#prb').onclick=()=>setTimeout(()=>window.print(),150);
 /* ---------- revision ---------- */
 const DAY=864e5,revDue=p=>!!(p.rev&&p.rev.due<=Date.now());
 function revLabel(p){if(!p.rev)return'Revise';if(revDue(p))return'Due now';const d=Math.ceil((p.rev.due-Date.now())/DAY);return'Revise in '+d+'d'}

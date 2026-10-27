@@ -110,3 +110,9 @@ provider) and the pattern templates. UI behaviour (rich paste, canvas, sandbox) 
 ## Privacy
 This repo contains only the app. `notes_data/`, `identity.json`, `net.json`, `sync_config.json`, `ai_config.json` and `.venv/`
 are git-ignored.
+
+## Exports, import and hotspot
+- **Export** (`⋯` menu): all pages as a Markdown zip (folders, images and diagrams as files) and your LeetCode problems as CSV.
+- **Import** rebuilds every page from an allow-list: scripts and unsafe attributes are stripped, interactive components come in switched off.
+- **Hotspot / shared Wi-Fi**: one person presses *Host it on this computer*; the other presses *find nearby* (or types one of the listed addresses), tests the connection, then enters the 6-digit key. Sharing works without internet. If it cannot connect, allow Python through Windows Firewall on private networks and check the hotspot does not isolate devices. GitHub sync still needs internet.
+- Document blocks: drag the grip (drop on a left or right edge for columns) or use Alt+Up / Alt+Down.

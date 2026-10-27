@@ -1,5 +1,10 @@
+import csv
 import getpass
 import hashlib
+import html as htmllib
+import base64
+import io
+from html.parser import HTMLParser
 import json
 import socket
 import os
@@ -37,6 +42,7 @@ FULL_BACKUP_DIR.mkdir(exist_ok=True)
 BACKUP_DIR.mkdir(exist_ok=True)
 
 app = Flask(__name__, static_folder=None)
+app.config["MAX_CONTENT_LENGTH"] = 200 * 1024 * 1024
 
 
 def load_state():
@@ -347,13 +353,75 @@ def get_net():
 _relay_srv = None
 
 
-def lan_ip():
+def lan_ips():
+    """Every private IPv4 address of this computer. A phone hotspot is often NOT the default route, so list them all."""
+    found = []
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sk:
             sk.connect(("10.255.255.255", 1))
-            return sk.getsockname()[0]
+            found.append(sk.getsockname()[0])
     except OSError:
-        return "127.0.0.1"
+        pass
+    try:
+        found += socket.gethostbyname_ex(socket.gethostname())[2]
+    except OSError:
+        pass
+    out = []
+    for ip in found:
+        if re.match(r"^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)", ip) and ip not in out:
+            out.append(ip)
+    return out or ["127.0.0.1"]
+
+
+def lan_ip():
+    return lan_ips()[0]
+
+
+DISC_PORT = int(os.environ.get("NOTERA_DISC_PORT", 5253))
+_disc_started = False
+
+
+def _disc_loop():
+    """Answer 'is anyone hosting a Notera relay here?' so a friend does not have to type an IP address."""
+    sk = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sk.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    try:
+        sk.bind(("", DISC_PORT))
+    except OSError:
+        return
+    while True:
+        try:
+            data, addr = sk.recvfrom(256)
+            if data.strip() == b"NOTERA?" and _relay_srv:
+                ips = lan_ips()
+                mine = next((i for i in ips if i.rsplit(".", 1)[0] == addr[0].rsplit(".", 1)[0]), ips[0])
+                sk.sendto(json.dumps({"relay": "http://%s:5252" % mine, "name": get_identity()["name"]}).encode(), addr)
+        except OSError:
+            continue
+
+
+def discover_relays(timeout=1.6, targets=None):
+    """Broadcast on every local network and collect hosting computers that answer."""
+    found, targets = {}, targets or ([("255.255.255.255", DISC_PORT)] + [(ip.rsplit(".", 1)[0] + ".255", DISC_PORT) for ip in lan_ips() if ip != "127.0.0.1"])
+    sk = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sk.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+    sk.settimeout(0.3)
+    for t in targets:
+        try:
+            sk.sendto(b"NOTERA?", t)
+        except OSError:
+            pass
+    end = time.time() + timeout
+    while time.time() < end:
+        try:
+            data, _ = sk.recvfrom(512)
+            d = json.loads(data.decode())
+            if d.get("relay"):
+                found[d["relay"]] = d.get("name", "")
+        except (socket.timeout, OSError, ValueError):
+            continue
+    sk.close()
+    return [{"relay": k, "name": v} for k, v in found.items()]
 
 
 def host_relay():
@@ -364,8 +432,12 @@ def host_relay():
     import relay as relaymod
     from werkzeug.serving import make_server
 
+    global _disc_started
     _relay_srv = make_server("0.0.0.0", 5252, relaymod.app, threaded=True)
     threading.Thread(target=_relay_srv.serve_forever, daemon=True).start()
+    if not _disc_started:
+        _disc_started = True
+        threading.Thread(target=_disc_loop, daemon=True).start()
 
 
 def relay_call(path, body=None):
@@ -468,6 +540,7 @@ def _net_view():
         "keyexp": NETST["keyexp"],
         "hosting": _relay_srv is not None,
         "lan": "http://%s:5252" % lan_ip(),
+        "lans": ["http://%s:5252" % ip for ip in lan_ips()],
     }
 
 
@@ -501,9 +574,32 @@ def get_rev():
     return jsonify({"rev": file_rev(), "sync": SYNC, "net": {"joined": bool(get_net().get("room")), "peers": max(0, len(NETST["members"]) - 1), "status": NETST["status"], "messages": len(NETST["messages"])}})
 
 
+def validate_state(state):
+    """Reject anything that is not a notebook, so a bad request can never overwrite good notes."""
+    if not isinstance(state, dict) or not isinstance(state.get("pages"), list):
+        return "Not a notebook: it needs a pages list."
+    if len(state["pages"]) > 20000:
+        return "Too many pages."
+    seen = set()
+    for pg in state["pages"]:
+        if not isinstance(pg, dict) or not isinstance(pg.get("id"), str) or not pg["id"] or not isinstance(pg.get("blocks"), list):
+            return "A page is missing its id or blocks."
+        if pg["id"] in seen:
+            return "Duplicate page id."
+        seen.add(pg["id"])
+        if any(not isinstance(b, dict) or not isinstance(b.get("id"), str) or not isinstance(b.get("t"), str) for b in pg["blocks"]):
+            return "A block is malformed."
+    if "trash" in state and not isinstance(state["trash"], list):
+        return "Trash must be a list."
+    return None
+
+
 @app.route("/api/state", methods=["POST"])
 def put_state():
-    state = request.get_json(force=True)
+    state = request.get_json(force=True, silent=True)
+    err = validate_state(state)
+    if err:
+        return jsonify({"ok": False, "error": err}), 400
     base = state.pop("_rev", None)
     resp = {"ok": True}
     with _state_lock:
@@ -569,6 +665,28 @@ def net_host_route():
     net["relay"], net["host"] = "http://127.0.0.1:5252", True
     _write_json(NET_FILE, net)
     return jsonify({"ok": True, **_net_view()})
+
+
+@app.route("/api/net/discover", methods=["POST"])
+def net_discover_route():
+    return jsonify({"ok": True, "found": discover_relays()})
+
+
+@app.route("/api/net/test", methods=["POST"])
+def net_test_route():
+    relay = (request.get_json(force=True, silent=True) or {}).get("relay") or get_net().get("relay") or ""
+    relay = relay.strip().rstrip("/")
+    if not relay:
+        return jsonify({"ok": False, "error": "No relay address yet."}), 400
+    t0 = time.time()
+    try:
+        with urllib.request.urlopen(relay + "/relay/ping", timeout=5) as r:
+            ok = json.loads(r.read().decode()).get("service") == "notera-relay"
+        if not ok:
+            return jsonify({"ok": False, "error": "That address answered, but it is not a Notera relay."})
+        return jsonify({"ok": True, "ms": int((time.time() - t0) * 1000)})
+    except Exception as e:
+        return jsonify({"ok": False, "error": "Cannot reach %s. Check you are on the same Wi-Fi or hotspot, that the host has started hosting, and that Windows Firewall allowed Python on private networks. (%s)" % (relay, str(e)[:80])})
 
 
 @app.route("/api/net/create", methods=["POST"])
@@ -798,6 +916,295 @@ def export_notes_download():
     resp = app.response_class(data, mimetype="application/json")
     resp.headers["Content-Disposition"] = f'attachment; filename="notera-notes-{ts}.json"'
     return resp
+
+
+# ---------------------------------------------------------------- exports: CSV of problems, Markdown zip of everything
+class _N:
+    def __init__(self, tag, attrs=None, parent=None):
+        self.tag, self.attrs, self.kids, self.parent = tag, dict(attrs or []), [], parent
+
+
+class _Tree(HTMLParser):
+    VOID = {"br", "hr", "img", "input", "meta", "link"}
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.root = self.cur = _N("root")
+
+    def handle_starttag(self, tag, attrs):
+        n = _N(tag, attrs, self.cur)
+        self.cur.kids.append(n)
+        if tag not in self.VOID:
+            self.cur = n
+
+    def handle_endtag(self, tag):
+        c = self.cur
+        while c is not self.root and c.tag != tag:
+            c = c.parent
+        if c is not self.root:
+            self.cur = c.parent
+
+    def handle_data(self, data):
+        self.cur.kids.append(data)
+
+
+def _text(n):
+    return n if isinstance(n, str) else "".join(_text(k) for k in n.kids)
+
+
+def _inline(n):
+    if isinstance(n, str):
+        return n.replace("\n", " ")
+    t, inner = n.tag, "".join(_inline(k) for k in n.kids)
+    if t in ("script", "style"):
+        return ""
+    if t in ("b", "strong"):
+        return "**" + inner.strip() + "**" if inner.strip() else ""
+    if t in ("i", "em"):
+        return "*" + inner.strip() + "*" if inner.strip() else ""
+    if t in ("s", "del", "strike"):
+        return "~~" + inner + "~~"
+    if t == "code":
+        return "`" + inner + "`"
+    if t == "a":
+        return "[%s](%s)" % (inner, n.attrs.get("href", "")) if n.attrs.get("href") else inner
+    if t == "br":
+        return "  \n"
+    if t == "input":
+        return "[x] " if "checked" in n.attrs else "[ ] "
+    if t == "span" and "data-tex" in n.attrs:
+        return ("$$%s$$" if "mxd" in n.attrs.get("class", "") else "$%s$") % n.attrs["data-tex"]
+    if t == "img":
+        return "![%s](%s)" % (n.attrs.get("alt", ""), "")
+    return inner
+
+
+def _block(n, depth=0, out=None):
+    out = [] if out is None else out
+    if isinstance(n, str):
+        if n.strip():
+            out.append(n.strip())
+        return out
+    t = n.tag
+    if t in ("script", "style"):
+        return out
+    if t in ("h1", "h2", "h3", "h4", "h5", "h6"):
+        out.append("#" * int(t[1]) + " " + _inline(n).strip())
+    elif t == "p":
+        out.append(_inline(n).strip())
+    elif t == "pre":
+        code = n.kids[0] if n.kids and not isinstance(n.kids[0], str) and n.kids[0].tag == "code" else n
+        out.append("```" + n.attrs.get("data-lang", "") + "\n" + _text(code).rstrip("\n") + "\n```")
+    elif t in ("ul", "ol"):
+        lines = []
+        for i, li in enumerate([k for k in n.kids if not isinstance(k, str) and k.tag == "li"], 1):
+            lead = ("%d. " % i) if t == "ol" else "- "
+            head = "".join(_inline(k) for k in li.kids if isinstance(k, str) or k.tag not in ("ul", "ol"))
+            lines.append("  " * depth + lead + head.strip())
+            for k in li.kids:
+                if not isinstance(k, str) and k.tag in ("ul", "ol"):
+                    lines.append("\n".join(_block(k, depth + 1)))
+        out.append("\n".join(lines))
+    elif t == "blockquote":
+        out.append("\n".join("> " + l for l in _inline(n).strip().splitlines() or [""]))
+    elif t == "hr":
+        out.append("---")
+    elif t == "table":
+        rows = [[_inline(c).strip().replace("|", "\\|") for c in tr.kids if not isinstance(c, str)] for tr in _iter(n, "tr")]
+        if rows:
+            w = max(len(r) for r in rows)
+            rows = [r + [""] * (w - len(r)) for r in rows]
+            out.append("\n".join(["| " + " | ".join(rows[0]) + " |", "|" + " --- |" * w] + ["| " + " | ".join(r) + " |" for r in rows[1:]]))
+    elif t == "details":
+        summ = next((k for k in n.kids if not isinstance(k, str) and k.tag == "summary"), None)
+        body = [x for k in n.kids if k is not summ for x in _block(k, depth)]
+        out.append("<details><summary>%s</summary>\n\n%s\n\n</details>" % (_inline(summ).strip() if summ else "Details", "\n\n".join(body)))
+    elif t == "div" and "arrv" in n.attrs.get("class", ""):
+        out.append("`[" + ", ".join(_text(b).strip()[:20] for b in _iter(n, "b")) + "]`")
+    elif t in ("div", "section", "root", "body", "figure", "span") and any((not isinstance(k, str)) and k.tag in ("p", "ul", "ol", "pre", "table", "h1", "h2", "h3", "blockquote", "div", "details", "hr") for k in n.kids):
+        for k in n.kids:
+            _block(k, depth, out)
+    else:
+        txt = _inline(n).strip()
+        if txt:
+            out.append(txt)
+    return out
+
+
+def _iter(n, tag):
+    for k in n.kids:
+        if isinstance(k, str):
+            continue
+        if k.tag == tag:
+            yield k
+        else:
+            yield from _iter(k, tag)
+
+
+def html_to_md(h):
+    tr = _Tree()
+    tr.feed(h or "")
+    return "\n\n".join(x for x in _block(tr.root) if x)
+
+
+def _safe_name(name, used):
+    base = re.sub(r"[^\w\- .()]+", "_", (name or "Untitled").strip())[:80].strip(" .") or "Untitled"
+    cand, i = base, 2
+    while cand.lower() in used:
+        cand = "%s %d" % (base, i)
+        i += 1
+    used.add(cand.lower())
+    return cand
+
+
+def block_md(b, assets):
+    t, h = b.get("t"), b.get("h") or ""
+    inline = lambda x: html_to_md(x).replace("\n\n", "\n")
+    if t in ("h1", "h2", "h3"):
+        return "#" * int(t[1]) + " " + inline(h)
+    if t in ("p", "doc", "prompt"):
+        return html_to_md(h)
+    if t == "ul":
+        return "  " * int(b.get("lvl", 0)) + "- " + inline(h)
+    if t == "ol":
+        return "  " * int(b.get("lvl", 0)) + "1. " + inline(h)
+    if t == "todo":
+        return "- [%s] %s" % ("x" if b.get("done") else " ", inline(h))
+    if t == "quote":
+        return "> " + inline(h)
+    if t == "callout":
+        return "> **%s** %s" % (b.get("lbl") or "Note", inline(h))
+    if t == "toggle":
+        return "<details><summary>%s</summary>\n\n%s\n\n</details>" % (inline(h), html_to_md(b.get("body", "")))
+    if t == "hr":
+        return "---"
+    if t == "code":
+        lab = ("**%s**\n\n" % b["label"]) if b.get("label") else ""
+        return lab + "```" + (b.get("lang") or "python") + "\n" + (b.get("h") or "").rstrip("\n") + "\n```"
+    if t == "math":
+        return "$$\n%s\n$$" % h
+    if t == "table":
+        rows = b.get("rows") or []
+        if not rows:
+            return ""
+        w = max(len(r) for r in rows)
+        rows = [[str(c).replace("|", "\\|") for c in r] + [""] * (w - len(r)) for r in rows]
+        return "\n".join(["| " + " | ".join(rows[0]) + " |", "|" + " --- |" * w] + ["| " + " | ".join(r) + " |" for r in rows[1:]])
+    if t == "image" and b.get("src"):
+        src = b["src"]
+        m = re.match(r"data:image/(\w+);base64,(.*)", src, re.S)
+        if m:
+            name = "image-%d.%s" % (len(assets) + 1, "jpg" if m.group(1) == "jpeg" else m.group(1))
+            try:
+                assets[name] = base64.b64decode(m.group(2))
+                return "![%s](assets/%s)" % (b.get("alt", ""), name)
+            except Exception:
+                return "(image could not be exported)"
+        return "![%s](%s)" % (b.get("alt", ""), src)
+    if t == "svg" and b.get("svg"):
+        name = "diagram-%d.svg" % (len(assets) + 1)
+        assets[name] = b["svg"].encode("utf-8")
+        return "![%s](assets/%s)" % (b.get("alt", "diagram"), name)
+    if t == "html":
+        if b.get("kind") == "mermaid":
+            return "```mermaid\n%s\n```" % (b.get("src") or "")
+        name = "component-%d.html" % (len(assets) + 1)
+        assets[name] = (b.get("src") or "").encode("utf-8")
+        return "[Interactive component: %s](assets/%s) (open in a browser; scripts are not run by Markdown viewers)" % (b.get("title") or name, name)
+    if t == "qa":
+        return "**Q:** %s\n\n**A:** %s" % (inline(h), inline(b.get("a", "")))
+    if t == "lc":
+        bits = [("Platform", b.get("plat")), ("Number", b.get("num")), ("Link", b.get("url")), ("Difficulty", b.get("diff")), ("Status", b.get("status")), ("Attempts", b.get("attempts")), ("Confidence", b.get("conf")), ("Solved", b.get("solved")), ("Related", b.get("rel"))]
+        return "\n".join("- **%s:** %s" % (k, v) for k, v in bits if v not in (None, "", 0))
+    if t == "stepper":
+        return "**%s**\n\nArray: %s\n\n%s" % (b.get("title", "Stepper"), ", ".join(map(str, b.get("arr", []))), "\n".join("%d. %s" % (i + 1, s2.get("note", "")) for i, s2 in enumerate(b.get("steps", []))))
+    if t == "quiz":
+        return "**%s**\n\n%s\n\n%s" % (b.get("q", ""), "\n".join("- [%s] %s" % ("x" if o.get("c") else " ", o.get("t", "")) for o in b.get("opts", [])), b.get("exp", ""))
+    if t == "tabs":
+        return "\n\n".join("### %s\n\n%s" % (x.get("t", ""), x.get("c", "")) for x in b.get("tabs", []))
+    if t == "cols":
+        return html_to_md(b.get("c1", "")) + "\n\n" + html_to_md(b.get("c2", ""))
+    return html_to_md(h) if h else ""
+
+
+def page_md(pg, assets):
+    fm = ["---", "title: %s" % json.dumps(pg.get("title") or "Untitled", ensure_ascii=False)]
+    if pg.get("tags"):
+        fm.append("tags: [%s]" % ", ".join(pg["tags"]))
+    fm.append("---")
+    parts = [x for x in (block_md(b, assets) for b in pg.get("blocks", [])) if x]
+    # consecutive list items stay together, everything else is separated by a blank line
+    body, prev = "", None
+    for b, x in zip([b for b in pg.get("blocks", []) if block_md(b, {})], parts):
+        sep = "\n" if (prev in ("ul", "ol", "todo") and b.get("t") == prev) else "\n\n"
+        body += (sep if body else "") + x
+        prev = b.get("t")
+    return "\n".join(fm) + "\n\n# " + (pg.get("title") or "Untitled") + "\n\n" + body + "\n"
+
+
+def build_markdown_zip(state):
+    pages = {p["id"]: p for p in state.get("pages", [])}
+    kids = {}
+    for p in pages.values():
+        kids.setdefault(p.get("parent") if p.get("parent") in pages else None, []).append(p)
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+        def walk(parent, prefix):
+            used = set()
+            for p in kids.get(parent, []):
+                name = _safe_name(p.get("title"), used)
+                assets = {}
+                children = kids.get(p["id"], [])
+                if p.get("folder"):
+                    walk(p["id"], prefix + name + "/")
+                    continue
+                folder = prefix + (name + "/" if children else "")
+                z.writestr(folder + (name + ".md" if not children else "index.md"), page_md(p, assets))
+                for fn, data in assets.items():
+                    z.writestr((prefix + name + "/" if children else prefix) + "assets/" + p["id"][:6] + "-" + fn, data)
+                if children:
+                    walk(p["id"], prefix + name + "/")
+        walk(None, "")
+        z.writestr("README.txt", "Exported from Notera on %s.\nEach page is a Markdown file. Images and diagrams are in assets folders.\n" % time.strftime("%Y-%m-%d %H:%M"))
+    buf.seek(0)
+    return buf
+
+
+def problems_rows(state):
+    pages = {p["id"]: p for p in state.get("pages", [])}
+    meta = {"leetcode", "easy", "medium", "hard", "solved", "unsolved", "revise", "daily", "pattern", "dsa"}
+    rows = []
+    for p in pages.values():
+        if p.get("folder"):
+            continue
+        lc = next((b for b in p.get("blocks", []) if b.get("t") == "lc"), None)
+        if not lc and "leetcode" not in (p.get("tags") or []):
+            continue
+        lc = lc or {}
+        rv = p.get("rev") or {}
+        rows.append([
+            p.get("title", ""), lc.get("plat", "LeetCode" if not lc else ""), lc.get("num", ""), lc.get("url", ""), lc.get("diff", ""),
+            lc.get("status", "Not tracked"), lc.get("attempts", ""), lc.get("conf", ""), lc.get("first", ""), lc.get("solved", ""), lc.get("last", ""),
+            "; ".join(t for t in (p.get("tags") or []) if t not in meta),
+            time.strftime("%Y-%m-%d", time.localtime(rv["due"] / 1000)) if rv.get("due") else "", len(p.get("hist") or []), lc.get("rel", ""),
+        ])
+    return rows
+
+
+@app.route("/api/export/problems.csv")
+def export_problems_csv():
+    out = io.StringIO()
+    w = csv.writer(out)
+    w.writerow(["Title", "Platform", "Number", "URL", "Difficulty", "Status", "Attempts", "Confidence", "First attempted", "Solved", "Last reviewed", "Topics", "Next review", "Reviews logged", "Related"])
+    w.writerows(problems_rows(load_state()))
+    resp = app.response_class("\ufeff" + out.getvalue(), mimetype="text/csv")
+    resp.headers["Content-Disposition"] = 'attachment; filename="notera-problems-%s.csv"' % time.strftime("%Y%m%d")
+    return resp
+
+
+@app.route("/api/export/markdown.zip")
+def export_markdown_zip():
+    return send_file(build_markdown_zip(load_state()), as_attachment=True, download_name="notera-markdown-%s.zip" % time.strftime("%Y%m%d"), mimetype="application/zip")
 
 
 @app.route("/api/backups", methods=["GET"])

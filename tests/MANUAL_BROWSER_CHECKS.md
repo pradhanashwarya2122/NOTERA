@@ -46,3 +46,8 @@ simulated clipboard, pointer and keyboard events, and the sandbox button was cli
 - Dragging an image moved its block; dragging inside text did not. Tidy made two non-overlapping columns. Flow off left a block at y=2000 untouched.
 - A 247-block real page showed 16 overlaps right after load (images still loading) and 0 after the settle pass.
 - A background sync poll that swaps in an unchanged copy no longer detaches the open page: edits after it still reach the saved data.
+
+## Document-mode drag, exports, import
+- Pointer drag from the grip: floating ghost, live drop line labelled Above / Below / Side by side, auto-scroll near the edges, Esc cancels, blocks glide to their new place. Alt+Up / Alt+Down moves the focused block.
+- Rendered every page of a copy of the real notes with no errors.
+- Not verified here: a real hotspot with two physical devices, feel of the drag with a real mouse.

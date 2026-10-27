@@ -793,33 +793,46 @@ CODE_MODES = {
 }
 
 
+AI_PROVIDERS = {
+    "anthropic": {"name": "Anthropic Claude", "kind": "anthropic", "base": "https://api.anthropic.com", "models": [
+        ("claude-opus-5-5", "Claude Opus 5.5", "best"), ("claude-sonnet-5-5", "Claude Sonnet 5.5", "balanced"), ("claude-haiku-5-5", "Claude Haiku 5.5", "cheapest")]},
+    "openai": {"name": "OpenAI", "kind": "openai", "base": "https://api.openai.com/v1", "models": [
+        ("gpt-5", "GPT-5", "best"), ("gpt-5-mini", "GPT-5 mini", "balanced"), ("gpt-5-nano", "GPT-5 nano", "cheapest")]},
+    "gemini": {"name": "Google Gemini", "kind": "gemini", "base": "https://generativelanguage.googleapis.com/v1beta", "models": [
+        ("gemini-2.5-pro", "Gemini 2.5 Pro", "best"), ("gemini-2.5-flash", "Gemini 2.5 Flash", "balanced"), ("gemini-2.5-flash-lite", "Gemini 2.5 Flash-Lite", "cheapest")]},
+    "openrouter": {"name": "OpenRouter (any model)", "kind": "compat", "base": "https://openrouter.ai/api/v1", "models": [
+        ("anthropic/claude-opus-5-5", "Claude Opus 5.5", "best"), ("openai/gpt-5-mini", "GPT-5 mini", "balanced"), ("google/gemini-2.5-flash-lite", "Gemini 2.5 Flash-Lite", "cheapest")]},
+    "groq": {"name": "Groq (fast, free tier)", "kind": "compat", "base": "https://api.groq.com/openai/v1", "models": [
+        ("llama-3.3-70b-versatile", "Llama 3.3 70B", "best"), ("llama-3.1-8b-instant", "Llama 3.1 8B", "cheapest")]},
+    "custom": {"name": "Other (OpenAI-compatible URL)", "kind": "compat", "base": "", "models": []},
+}
+
+
 def ai_cfg():
     d = _read_json(AI_FILE)
-    return {
-        "key": os.environ.get("ANTHROPIC_API_KEY") or d.get("key", ""),
-        "model": d.get("model") or os.environ.get("NOTERA_AI_MODEL") or "claude-sonnet-5-5",
-        "base": (os.environ.get("NOTERA_AI_BASE") or d.get("base") or "https://api.anthropic.com").rstrip("/"),
-    }
+    prov = d.get("provider") if d.get("provider") in AI_PROVIDERS else "anthropic"
+    keys = dict(d.get("keys") or {})
+    if d.get("key") and "anthropic" not in keys:
+        keys["anthropic"] = d["key"]
+    P = AI_PROVIDERS[prov]
+    key = keys.get(prov, "") or (os.environ.get("ANTHROPIC_API_KEY", "") if prov == "anthropic" else "")
+    model = (d.get("models") or {}).get(prov) or (d.get("model") if prov == "anthropic" else "") or (os.environ.get("NOTERA_AI_MODEL") if prov == "anthropic" else "") or (P["models"][1 if len(P["models"]) > 2 else 0][0] if P["models"] else "")
+    base = P["base"]
+    if prov == "anthropic":
+        base = os.environ.get("NOTERA_AI_BASE") or d.get("base") or base
+    elif prov == "custom":
+        base = (d.get("bases") or {}).get("custom", "")
+    return {"key": key, "model": model, "base": base.rstrip("/"), "provider": prov, "kind": P["kind"], "keys": keys}
 
 
-def ai_call(system, messages, max_tokens=2000):
-    cfg = ai_cfg()
-    if not cfg["key"]:
-        return 400, {"ok": False, "error": "AI is not set up yet. Add your API key in the AI settings.", "setup": True}
-    req = urllib.request.Request(
-        cfg["base"] + "/v1/messages",
-        data=json.dumps({"model": cfg["model"], "max_tokens": max_tokens, "system": system, "messages": messages}).encode(),
-        headers={"x-api-key": cfg["key"], "anthropic-version": "2023-06-01", "content-type": "application/json"},
-        method="POST",
-    )
+def _ai_http(req):
     try:
         with urllib.request.urlopen(req, timeout=90) as r:
-            data = json.loads(r.read().decode())
-        text = "".join(c.get("text", "") for c in data.get("content", []) if c.get("type") == "text")
-        return 200, {"ok": True, "text": text.strip()}
+            return 200, json.loads(r.read().decode())
     except urllib.error.HTTPError as e:
         try:
-            msg = json.loads(e.read().decode()).get("error", {}).get("message", "")
+            err = json.loads(e.read().decode())
+            msg = err.get("error", {}).get("message", "") if isinstance(err.get("error"), dict) else str(err.get("error", ""))
         except Exception:
             msg = ""
         if e.code in (401, 403):
@@ -827,6 +840,42 @@ def ai_call(system, messages, max_tokens=2000):
         return 502, {"ok": False, "error": ("The AI provider returned an error: " + msg)[:300]}
     except Exception as e:
         return 502, {"ok": False, "error": "Could not reach the AI provider: %s" % str(e)[:120]}
+
+
+def ai_call(system, messages, max_tokens=2000):
+    cfg = ai_cfg()
+    if not cfg["key"]:
+        return 400, {"ok": False, "error": "AI is not set up yet. Add your API key in the AI settings.", "setup": True}
+    if not cfg["base"] or not cfg["model"]:
+        return 400, {"ok": False, "error": "Choose a model (and the provider address) in the AI settings.", "setup": True}
+    kind, hdr = cfg["kind"], {"content-type": "application/json"}
+    if kind == "anthropic":
+        url = cfg["base"] + "/v1/messages"
+        hdr.update({"x-api-key": cfg["key"], "anthropic-version": "2023-06-01"})
+        body = {"model": cfg["model"], "max_tokens": max_tokens, "system": system, "messages": messages}
+    elif kind == "gemini":
+        url = "%s/models/%s:generateContent" % (cfg["base"], cfg["model"])
+        hdr["x-goog-api-key"] = cfg["key"]
+        body = {"systemInstruction": {"parts": [{"text": system}]}, "contents": [{"role": "model" if m["role"] == "assistant" else "user", "parts": [{"text": m["content"]}]} for m in messages],
+                "generationConfig": {"maxOutputTokens": max_tokens}}
+    else:
+        url = cfg["base"] + "/chat/completions"
+        hdr["authorization"] = "Bearer " + cfg["key"]
+        body = {"model": cfg["model"], "messages": [{"role": "system", "content": system}] + messages}
+        body["max_completion_tokens" if kind == "openai" else "max_tokens"] = max_tokens
+    code, data = _ai_http(urllib.request.Request(url, data=json.dumps(body).encode(), headers=hdr, method="POST"))
+    if code != 200:
+        return code, data
+    try:
+        if kind == "anthropic":
+            text = "".join(c.get("text", "") for c in data.get("content", []) if c.get("type") == "text")
+        elif kind == "gemini":
+            text = "".join(p.get("text", "") for p in data["candidates"][0]["content"]["parts"])
+        else:
+            text = data["choices"][0]["message"]["content"] or ""
+    except Exception:
+        return 502, {"ok": False, "error": "The AI provider sent an answer Notera could not read."}
+    return 200, {"ok": True, "text": text.strip()}
 
 
 def _extract_json(text):
@@ -847,16 +896,27 @@ def ai_config_route():
     if request.method == "POST":
         body = request.get_json(force=True)
         d = _read_json(AI_FILE)
+        d.setdefault("keys", {})
+        d.setdefault("models", {})
+        d.setdefault("bases", {})
+        if d.get("key"):
+            d["keys"].setdefault("anthropic", d.pop("key"))
+        if body.get("provider") in AI_PROVIDERS:
+            d["provider"] = body["provider"]
+        prov = d.get("provider") if d.get("provider") in AI_PROVIDERS else "anthropic"
         if str(body.get("key", "")).strip():
-            d["key"] = str(body["key"]).strip()
+            d["keys"][prov] = str(body["key"]).strip()
         if str(body.get("model", "")).strip():
-            d["model"] = str(body["model"]).strip()[:80]
+            d["models"][prov] = str(body["model"]).strip()[:100]
+        if prov == "custom" and str(body.get("base", "")).strip():
+            d["bases"]["custom"] = str(body["base"]).strip()[:200]
         if body.get("clear"):
-            d.pop("key", None)
+            d["keys"].pop(prov, None)
         _write_json(AI_FILE, d)
     c = ai_cfg()
-    return jsonify({"configured": bool(c["key"]), "model": c["model"], "provider": "Anthropic"})  # the key itself is never returned
-
+    provs = [{"id": k, "name": v["name"], "keyed": bool(c["keys"].get(k) or (k == "anthropic" and os.environ.get("ANTHROPIC_API_KEY"))),
+              "models": [{"id": m[0], "label": m[1], "tier": m[2]} for m in v["models"]]} for k, v in AI_PROVIDERS.items()]
+    return jsonify({"configured": bool(c["key"]), "model": c["model"], "provider": c["provider"], "providers": provs, "base": c["base"] if c["provider"] == "custom" else ""})  # keys are never returned
 
 
 LC_QUERY = "query q($s:String!){question(titleSlug:$s){questionFrontendId title difficulty content topicTags{name} hints similarQuestions}}"

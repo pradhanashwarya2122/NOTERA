@@ -58,3 +58,4 @@ simulated clipboard, pointer and keyboard events, and the sandbox button was cli
 
 ## Start and refresh
 - New browser session opens Home (greeting, quote, progress, library tile). Refreshing keeps the same page, the Library, or Home. Closing the tab and launching again opens Home.
+- Refresh restores the scroll position (scrolled to 500, reloaded, back at 500). A prompt beside an image is capped at the image's height (210 px) and scrolls inside.

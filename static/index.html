@@ -1177,7 +1177,7 @@ function hl(s,lang){const L=LANGS[lang]||LANGS.python;
 /* editor */
 const TYPES=[['p','Text'],['h1','Heading 1'],['h2','Heading 2'],['h3','Heading 3'],['ul','Bullet list'],['todo','To-do'],['toggle','Toggle'],['callout','Callout'],['quote','Quote'],['code','Python code'],['prompt','Paste prompt'],['qa','Flashcard'],['ai','Ask AI about this note'],['lc','LeetCode problem tracker'],['solution','Solution block'],['interview','Interview question'],['link','Link to a note'],['snippet','Saved snippet'],['component','Interactive component (HTML or SVG)'],['mermaid','Mermaid diagram'],['stepper','Algorithm stepper'],['quiz','Quiz'],['tabs','Tabs comparison'],['import','Import a file'],['hint','Hint'],['pitfall','Pitfall / mistake'],['idea','Key idea'],['complexity','Complexity'],['leetcode','LeetCode template (insert here)'],['array','Array visual'],['image','Image'],['ol','Numbered list'],['table','Table'],['cols','2 columns'],['math','Math (LaTeX)'],['hr','Divider']];
 let lastRenderedPage=null,prevBlockIds=new Set();
-function render(){if(homeOn&&cur!==homeCur)homeOn=false;try{sessionStorage.setItem('nt.view',JSON.stringify({c:cur,h:homeOn,m:homeMode}))}catch(e){}document.body.classList.toggle('solo',homeOn);document.body.classList.toggle('libv',homeOn&&homeMode==='lib');{const lb=document.getElementById('libsel');if(lb&&!(homeOn&&homeMode==='lib'))lb.classList.remove('show')}renderSide();if(homeOn){drawHome();return}const p=page(),ed=$('#ed');document.body.classList.toggle('solo',!!p.folder);document.body.classList.toggle('libv',false);if(p.folder){drawFolder(p);return}
+function render(){if(homeOn&&cur!==homeCur)homeOn=false;try{const o=JSON.parse(sessionStorage.getItem('nt.view')||'{}');sessionStorage.setItem('nt.view',JSON.stringify({c:cur,h:homeOn,m:homeMode,y:(o.c===cur&&o.h===homeOn)?o.y:0}))}catch(e){}document.body.classList.toggle('solo',homeOn);document.body.classList.toggle('libv',homeOn&&homeMode==='lib');{const lb=document.getElementById('libsel');if(lb&&!(homeOn&&homeMode==='lib'))lb.classList.remove('show')}renderSide();if(homeOn){drawHome();return}const p=page(),ed=$('#ed');document.body.classList.toggle('solo',!!p.folder);document.body.classList.toggle('libv',false);if(p.folder){drawFolder(p);return}
  const pageChanged=p.id!==lastRenderedPage;
  if(pageChanged){ed.style.animation='none';ed.offsetHeight;ed.style.animation='ntFadeIn .18s ease';prevBlockIds=new Set()}
  const mainScroll=$('#main').scrollTop;
@@ -1631,7 +1631,14 @@ function addColumn(b){const p=page(),i=p.blocks.indexOf(b);if(rowOf(p,b).length>
  if(!b.rg){b.rg=uid();b.rw=1}const g=rowOf(p,b),last=p.blocks.indexOf(g[g.length-1]);
  p.blocks.splice(last+1,0,{id:uid(),t:'p',h:'',rg:b.rg,rw:b.rw||1});save();render();focusB(last+1)}
 const PRESETS={2:[[1,1],[1,2],[2,1],[1,3],[3,1]],3:[[1,1,1],[1,2,1],[2,1,1],[1,1,2]],4:[[1,1,1,1],[2,1,1,1],[1,1,1,2]]};
-function wireRow(row,p){
+/* beside an image, a text or prompt box is only as tall as the image and scrolls inside */
+function capRow(row){const cols=[...row.querySelectorAll(':scope>.blk')],img=cols.find(c=>c.classList.contains('imgb')&&c.querySelector('.im'));if(!img)return;
+ const im=img.querySelector('.im'),apply=()=>{const hh=Math.round(im.getBoundingClientRect().height);cols.forEach(c=>{if(c===img)return;const bd=c.querySelector(':scope>.bd');if(!bd)return;if(hh>60){bd.style.maxHeight=hh+'px';bd.style.overflowY='auto';bd.classList.add('capd')}})};
+ apply();const pic=im.querySelector('img');if(pic&&!pic.complete)pic.addEventListener('load',apply);if(window.ResizeObserver)new ResizeObserver(apply).observe(im)}
+function restoreScroll(sv){if(!sv||!sv.y)return;const m=$('#main');let stop=false;const off=()=>{stop=true};m.addEventListener('wheel',off,{once:true});m.addEventListener('touchstart',off,{once:true});
+ [0,120,400,900,1800].forEach(t=>setTimeout(()=>{if(!stop)m.scrollTop=sv.y},t))}
+(()=>{let t=0;const m=document.getElementById('main');m.addEventListener('scroll',()=>{clearTimeout(t);t=setTimeout(()=>{try{const o=JSON.parse(sessionStorage.getItem('nt.view')||'{}');o.y=Math.round(m.scrollTop);sessionStorage.setItem('nt.view',JSON.stringify(o))}catch(e){}},150)},{passive:true})})();
+function wireRow(row,p){capRow(row);
  const cols=()=>[...row.querySelectorAll(':scope>.blk')],bOf=el=>p.blocks.find(x=>x.id===el.dataset.id);
  const tb=document.createElement('div');tb.className='rowtb';
  tb.innerHTML=`<button data-x="lay" title="Snap the columns to a preset layout">${ic('cols',13)}<span>Layout</span></button><button data-x="add" title="Add another column">${ic('plus',13)}<span>Column</span></button><button data-x="ev" title="Make every column the same width"><span>Even</span></button><button data-x="un" title="Stack everything back into one column"><span>Unstack</span></button>`;
@@ -3224,7 +3231,7 @@ async function boot(){try{const r=await fetch('/api/state');if(r.ok){adopt(await
  /* a refresh returns to the same page; a fresh launch opens Home */
  let sv=null;try{sv=JSON.parse(sessionStorage.getItem('nt.view')||'null')}catch(e){}
  if(sv&&sv.c&&P(sv.c)){cur=sv.c;if(sv.h){homeOn=true;homeMode=sv.m==='lib'?'lib':'home';homeCur=cur}}else if(!(S.pages.length<=1&&!S.pages[0].title&&S.pages[0].blocks.length<=1)){homeOn=true;homeMode='home';homeCur=cur}
- render();loadMe();poll();setInterval(poll,4000);
+ render();restoreScroll(sv);loadMe();poll();setInterval(poll,4000);
  $('#sv').onclick=async()=>{const e=$('#sv');e.textContent='Syncing…';try{syncInfo=await (await fetch('/api/sync/now',{method:'POST'})).json()}catch(x){}
   if(syncInfo.status==='off'){const u=prompt('Paste your PRIVATE notes repo URL to sync between laptops (https://github.com/you/notera-notes.git)');if(u){try{syncInfo=await (await fetch('/api/sync/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({remote:u})})).json()}catch(x){}}}
   showSync();toast(SYNC_TXT[syncInfo.status]||'Saved');poll()}}

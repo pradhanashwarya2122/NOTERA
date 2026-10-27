@@ -1015,6 +1015,9 @@ body.bdrag{cursor:grabbing!important;user-select:none;-webkit-user-select:none}b
 
 .hb.c7{background:color-mix(in srgb,var(--green) 14%,var(--bg));color:var(--green)}
 .hlibt{display:flex;align-items:center;gap:14px;width:100%;margin:22px 0 4px;padding:14px 18px;border:1px solid var(--ln);border-radius:14px;text-align:left;color:var(--tx);transition:background .15s,transform .15s}.hlibt:hover{background:var(--veil1);transform:translateY(-1px)}.hlibt span{flex:1}.hlibt b{display:block;font:600 15px var(--ui)}.hlibt i{font:13px var(--ui);color:var(--mut);font-style:normal}
+
+.blankh{position:fixed;z-index:20;border:1.5px dashed color-mix(in srgb,var(--y) 45%,transparent);border-radius:12px;display:flex;align-items:center;justify-content:center;font:500 14px var(--ui);color:var(--mut);pointer-events:none;opacity:0;transition:opacity .15s;background:color-mix(in srgb,var(--y) 4%,transparent)}.blankh.on{opacity:1}
+.blk.imgb{position:relative}
 </style>
 </head><body>
 <div id="side"><div class="sin">
@@ -1688,6 +1691,15 @@ function startBlockDrag(e,b,w){if(e.button!==0||page().mode==='canvas')return;e.
   if(ev.type==='pointerup'&&t&&z)flipAround(()=>{if(dropBlock(b,t,z)){save();render()}})};
  const esc=ev=>{if(ev.key==='Escape'){ev.stopPropagation();tgt=null;end({type:'cancel'})}};
  window.addEventListener('pointermove',mv);window.addEventListener('pointerup',end);window.addEventListener('pointercancel',end);window.addEventListener('keydown',esc,true)}
+/* the empty space beside a small image is a place to write: click it to add a text box in the same row */
+const blankSpot=e=>{const bl=document.getElementById('bl'),p=page();if(!bl||!p||homeOn||p.mode==='canvas'||p.folder)return null;if(e.target!==bl&&!e.target.classList.contains('blk')&&!e.target.classList.contains('bd')&&!e.target.classList.contains('imgf'))return null;
+ const br=bl.getBoundingClientRect();if(e.clientX>br.right||e.clientX<br.left)return null;
+ for(const el of bl.querySelectorAll(':scope>.blk.imgb')){const r=el.getBoundingClientRect(),im=el.querySelector('.im');if(!im)continue;const ir=im.getBoundingClientRect();
+  if(e.clientY>=r.top&&e.clientY<=r.bottom&&e.clientX>ir.right+20&&br.right-ir.right>170){const b=p.blocks.find(x=>x.id===el.dataset.id);if(b&&rowOf(p,b).length<4)return{b,r,ir,br}}}
+ return null};
+(()=>{const hint=document.createElement('div');hint.className='blankh';hint.textContent='Click to write beside this image';document.body.append(hint);
+ document.addEventListener('mousemove',e=>{const s=blankSpot(e);if(s){hint.style.cssText='left:'+(s.ir.right+16)+'px;top:'+(s.r.top+4)+'px;width:'+(s.br.right-s.ir.right-16)+'px;height:'+(s.r.height-8)+'px';hint.classList.add('on');document.body.style.cursor='text'}else if(hint.classList.contains('on')){hint.classList.remove('on');document.body.style.cursor=''}});
+ document.addEventListener('click',e=>{const s=blankSpot(e);if(s){hint.classList.remove('on');document.body.style.cursor='';addColumn(s.b)}})})();
 function dragWire(w,tl,b){
  const start=e=>{e.dataTransfer.setData('text/blk',String(page().blocks.indexOf(b)));e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setDragImage(w,24,16)}catch(x){}w.classList.add('dragging')};
  tl.ondragstart=e=>{if(e.target.closest('button')?.dataset.a==='s')start(e)};

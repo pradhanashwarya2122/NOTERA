@@ -127,13 +127,27 @@ def _backup_current(new_state):
 
 
 def _prune_backups():
-    files = sorted(BACKUP_DIR.glob("pages-*.json"), key=lambda p: p.stat().st_mtime)
-    excess = len(files) - MAX_BACKUPS
-    for f in files[:excess]:
-        try:
-            f.unlink()
-        except OSError:
-            pass
+    """Thin out history instead of dropping the oldest: every snapshot for 2 hours, one per hour for 2 days,
+    one per day for 90 days. A suspicious-shrink snapshot is never the only copy of a day."""
+    files = sorted(BACKUP_DIR.glob("pages-*.json"), key=lambda p: p.stat().st_mtime, reverse=True)
+    now, keep, seen = time.time(), set(), set()
+    for f in files:
+        age = now - f.stat().st_mtime
+        if age <= 2 * 3600:
+            keep.add(f)
+            continue
+        bucket = ("h", int(f.stat().st_mtime // 3600)) if age <= 2 * 86400 else ("d", int(f.stat().st_mtime // 86400)) if age <= 90 * 86400 else None
+        if bucket and bucket not in seen:
+            seen.add(bucket)
+            keep.add(f)
+    for f in files:
+        if f not in keep or len(keep) > MAX_BACKUPS * 4:
+            if f in keep and len(keep) > MAX_BACKUPS * 4:
+                keep.discard(f)
+            try:
+                f.unlink()
+            except OSError:
+                pass
 
 
 _state_lock = threading.RLock()
@@ -1295,26 +1309,25 @@ def export_markdown_zip():
     return send_file(build_markdown_zip(load_state()), as_attachment=True, download_name="notera-markdown-%s.zip" % time.strftime("%Y%m%d"), mimetype="application/zip")
 
 
+_backup_meta = {}
+
+
 @app.route("/api/backups", methods=["GET"])
 def list_backups():
     items = []
     for f in sorted(BACKUP_DIR.glob("pages-*.json"), key=lambda p: p.stat().st_mtime, reverse=True):
-        try:
-            state = json.loads(f.read_text(encoding="utf-8"))
-            pages = state.get("pages", [])
-            titles = [p.get("title") or "Untitled" for p in pages][:4]
-            blocks = _count_blocks(state)
-        except (OSError, json.JSONDecodeError):
-            pages, titles, blocks = [], [], 0
-        items.append(
-            {
-                "file": f.name,
-                "mtime": f.stat().st_mtime,
-                "pageCount": len(pages),
-                "blockCount": blocks,
-                "titles": titles,
-            }
-        )
+        st = f.stat()
+        key = (f.name, st.st_mtime, st.st_size)
+        meta = _backup_meta.get(key)
+        if meta is None:
+            try:
+                state = json.loads(f.read_text(encoding="utf-8"))
+                pages = state.get("pages", [])
+                meta = {"pageCount": len(pages), "blockCount": _count_blocks(state), "titles": [p.get("title") or "Untitled" for p in pages][:4]}
+            except (OSError, json.JSONDecodeError):
+                meta = {"pageCount": 0, "blockCount": 0, "titles": []}
+            _backup_meta[key] = meta
+        items.append({"file": f.name, "mtime": st.st_mtime, **meta})
     return jsonify(items)
 
 

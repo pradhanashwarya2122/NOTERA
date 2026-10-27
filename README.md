@@ -116,3 +116,12 @@ are git-ignored.
 - **Import** rebuilds every page from an allow-list: scripts and unsafe attributes are stripped, interactive components come in switched off.
 - **Hotspot / shared Wi-Fi**: one person presses *Host it on this computer*; the other presses *find nearby* (or types one of the listed addresses), tests the connection, then enters the 6-digit key. Sharing works without internet. If it cannot connect, allow Python through Windows Firewall on private networks and check the hotspot does not isolate devices. GitHub sync still needs internet.
 - Document blocks: drag the grip (drop on a left or right edge for columns) or use Alt+Up / Alt+Down.
+
+## Safety and recovery
+- **Recover pages** (`⋯` menu, or click *Trash* in the sidebar): bring back recently deleted pages, or open any automatic snapshot and pick individual pages out of it. Pages that are missing from your notes are pre-ticked.
+- Snapshots are kept every few minutes for the last two hours, hourly for two days and daily for 90 days.
+- **Find and replace** on the open page: Ctrl+H.
+- Home shows your day streak and this week's activity next to the coding dashboard.
+
+## Tests
+`python tests/run_all.py` runs every script. `tests/test_browser.py` drives a real Chromium on a temporary data folder (needs `pip install playwright` and `playwright install chromium`; it skips itself if Playwright is missing).

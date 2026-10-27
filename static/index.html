@@ -77,7 +77,7 @@ body.sidecol #sctoggle{opacity:1;pointer-events:auto;transform:none;transition-d
 #main{flex:1;overflow:auto;min-width:0}
 #ed{width:100%;max-width:780px;margin:0 auto;padding:72px 48px 180px}
 #ted{display:flex;gap:12px;align-items:center;margin-bottom:6px}#ted #ti{flex:1}
-#ti{width:100%;background:none;border:0;outline:0;font:700 36px/1.25 var(--ui);letter-spacing:-.6px;padding:2px 0;color:var(--tx)}
+#ti{resize:none;overflow:hidden;display:block;width:100%;background:none;border:0;outline:0;font:700 36px/1.25 var(--ui);letter-spacing:-.6px;padding:2px 0;color:var(--tx)}
 #ti::placeholder{color:color-mix(in srgb,var(--mut) 55%,transparent)}
 .ico{font-size:26px;width:44px;height:44px;border-radius:var(--rs);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--mut);transition:background-color .15s}.ico:hover{background:var(--veil2)}
 #tr{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px;align-items:center;min-height:26px}
@@ -964,8 +964,8 @@ a.pl{color:var(--y);background:color-mix(in srgb,var(--y) 10%,transparent);borde
 #aiset{position:fixed;inset:0;z-index:78;display:flex;justify-content:center;align-items:flex-start;padding-top:12vh;background:rgba(10,10,10,.36);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:opacity .16s,visibility .16s}#aiset.show{opacity:1;visibility:visible}
 #aiset .icb input{background:var(--bg);border:1px solid var(--ln);border-radius:10px;padding:10px 13px;font:500 15px var(--ui);color:var(--tx);outline:0}#aiset .icb input:focus{border-color:color-mix(in srgb,var(--y) 55%,transparent)}
 .aiact{display:flex;gap:8px}.aiact button{padding:9px 18px;border-radius:10px;border:1px solid var(--ln);font:600 14px var(--ui)}.aiact .pri{background:var(--y);color:#fff;border-color:var(--y)}
-#aip{position:fixed;top:0;right:0;bottom:0;width:380px;z-index:42;background:var(--panel);border-left:1px solid var(--ln);box-shadow:-24px 0 60px -30px rgba(0,0,0,.35);display:flex;flex-direction:column;transform:translateX(105%);transition:transform .34s var(--ease)}
-body.aion #aip{transform:none}
+#aip{position:fixed;top:0;right:0;bottom:0;width:380px;z-index:42;background:var(--panel);border-left:1px solid var(--ln);box-shadow:-24px 0 60px -30px rgba(0,0,0,.35);display:flex;flex-direction:column;transform:translateX(105%);visibility:hidden;box-shadow:none;transition:transform .34s var(--ease),visibility 0s .34s,box-shadow 0s .34s}
+body.aion #aip{transform:none;visibility:visible;box-shadow:-24px 0 60px -30px rgba(0,0,0,.35);transition:transform .34s var(--ease)}
 .aph{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--ln);font:600 15px var(--ui)}.aph button{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--mut)}.aph button:hover{background:var(--veil2)}
 .apm{flex:1;overflow:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px}.ape{font:14px/1.55 var(--ui);color:var(--mut)}
 .am2{display:flex;flex-direction:column;gap:6px;max-width:100%}.am2.user{align-items:flex-end}.am2 .amb{padding:10px 13px;border-radius:12px;font:14.5px/1.55 var(--ui);max-width:100%;overflow-wrap:anywhere}.am2.user .amb{background:var(--y);color:#fff}.am2.assistant .amb{background:var(--veil1);border:1px solid var(--ln)}
@@ -1018,6 +1018,22 @@ body.bdrag{cursor:grabbing!important;user-select:none;-webkit-user-select:none}b
 
 .blankh{position:fixed;z-index:20;border:1.5px dashed color-mix(in srgb,var(--y) 45%,transparent);border-radius:12px;display:flex;align-items:center;justify-content:center;font:500 14px var(--ui);color:var(--mut);pointer-events:none;opacity:0;transition:opacity .15s;background:color-mix(in srgb,var(--y) 4%,transparent)}.blankh.on{opacity:1}
 .blk.imgb{position:relative}
+
+#rec{position:fixed;inset:0;z-index:78;display:flex;justify-content:center;align-items:flex-start;padding-top:8vh;background:rgba(10,10,10,.36);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:opacity .16s,visibility .16s}#rec.show{opacity:1;visibility:visible}
+.rctabs{display:flex;gap:6px;padding:0 20px}.rctabs button{padding:6px 12px;border-radius:9px;font:600 13px var(--ui);color:var(--mut);border:1px solid transparent}.rctabs button.on{background:var(--veil1);color:var(--tx);border-color:var(--ln)}
+.rcb2{max-height:60vh;overflow:auto;gap:8px}.rcl{display:flex;flex-direction:column;gap:6px}
+.rcr{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;border:1px solid var(--ln);border-radius:11px;padding:9px 12px;cursor:pointer;color:var(--tx)}.rcr:hover{background:var(--veil1)}
+.rcr b{font:600 14px var(--ui)}.rcr i{display:block;font:12.5px var(--ui);color:var(--mut);font-style:normal}.rcr span{display:flex;align-items:center;gap:8px;min-width:0}.rcr em{font:600 11px var(--ui);color:var(--green);font-style:normal;background:color-mix(in srgb,var(--green) 14%,transparent);padding:1px 8px;border-radius:999px}
+.rcr button{padding:5px 12px;border-radius:8px;border:1px solid var(--ln);font:600 12.5px var(--ui);color:var(--tx)}.rcr button.dg{color:var(--red)}
+.rce{font:14px/1.5 var(--ui);color:var(--mut);padding:18px 4px}.rcb{font:600 13px var(--ui);color:var(--mut);align-self:flex-start}
+#rec .aiact{display:flex;justify-content:space-between}#rec .aiact .pri{padding:8px 16px;border-radius:9px;background:var(--tx);color:var(--bg);font:600 13.5px var(--ui)}
+
+#frb{position:fixed;top:14px;right:18px;z-index:60;display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--ln);border-radius:13px;padding:8px 10px;box-shadow:0 18px 44px -16px rgba(0,0,0,.4);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .14s,transform .14s,visibility .14s;max-width:calc(100vw - 24px);flex-wrap:wrap}
+#frb.show{opacity:1;visibility:visible;transform:none}
+#frb input[type=text],#frb>input:not([type]){width:150px;background:var(--veil1);border:1px solid transparent;border-radius:8px;padding:6px 9px;font:500 13.5px var(--ui);color:var(--tx);outline:0}#frb>input:focus{border-color:color-mix(in srgb,var(--y) 55%,transparent);background:var(--bg)}
+#frb button{padding:6px 11px;border-radius:8px;border:1px solid var(--ln);font:600 12.5px var(--ui);color:var(--tx)}#frb button:hover{background:var(--veil1)}#frb button.pri{background:var(--tx);color:var(--bg);border-color:transparent}
+#frb label{display:flex;align-items:center;gap:4px;font:600 12.5px var(--ui);color:var(--mut)}#frn{font:12.5px var(--ui);color:var(--mut);min-width:64px}
+@media(max-width:760px){#ti{font-size:30px;overflow-wrap:anywhere}}
 </style>
 </head><body>
 <div id="side"><div class="sin">
@@ -1037,13 +1053,15 @@ body.bdrag{cursor:grabbing!important;user-select:none;-webkit-user-select:none}b
 <button class="b mi" id="aib" title="Connect an AI provider key for explain, flashcards and chat" data-ic="sparkle"><span class="lbl">AI settings</span></button>
 <button class="b mi" id="exmd" title="Every page as a Markdown file in folders, with images and diagrams as files" data-ic="download"><span class="lbl">Export all as Markdown (zip)</span></button>
 <button class="b mi" id="excsv" title="Your LeetCode problems as a spreadsheet" data-ic="download"><span class="lbl">Export problems (CSV)</span></button>
+<button class="b mi" id="frm" title="Find and replace text on this page (Ctrl+H)" data-ic="search"><span class="lbl">Find and replace</span></button>
+<button class="b mi" id="recb" title="Bring back deleted pages, or pick pages out of an older snapshot" data-ic="rev"><span class="lbl">Recover pages</span></button>
 <button class="b mi" id="tsb" title="Choose which templates appear and which sections they contain" data-ic="template"><span class="lbl">Customize templates</span></button>
 <button class="b mi" id="shb" title="See every keyboard shortcut (press ?)" data-ic="clip"><span class="lbl">Keyboard shortcuts</span></button>
 <button class="b mi" id="prb" title="Print this page or save it as a PDF" data-ic="download"><span class="lbl">Print or save as PDF</span></button>
 <button class="b mi" id="ms" title="Save everything now and write a full backup of the NOTERA folder (Ctrl/Cmd+S)" data-ic="save"><span class="lbl">Master save</span></button>
 </div>
 <div class="rsz" id="rsz" title="Drag to resize"></div>
-</div></div><div id="edge"></div><div id="acc"></div><div id="tpl"></div><div id="wel"></div><div id="rvm"></div><div id="scrim"></div><div id="aiset"></div><div id="tset"></div><div id="lpv"></div><div id="aim"></div><aside id="aip"></aside><div id="pkr"></div><div id="rvw"></div><div id="shc"></div>
+</div></div><div id="edge"></div><div id="acc"></div><div id="tpl"></div><div id="wel"></div><div id="rvm"></div><div id="scrim"></div><div id="aiset"></div><div id="tset"></div><div id="rec"></div><div id="frb"></div><div id="lpv"></div><div id="aim"></div><aside id="aip"></aside><div id="pkr"></div><div id="rvw"></div><div id="shc"></div>
 <button id="sctoggle" title="Show sidebar (Ctrl+\)"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
 <div id="main"><div id="ed"></div></div>
 <button id="lay"></button>
@@ -1181,10 +1199,10 @@ function render(){if(homeOn&&cur!==homeCur)homeOn=false;try{const o=JSON.parse(s
  const pageChanged=p.id!==lastRenderedPage;
  if(pageChanged){ed.style.animation='none';ed.offsetHeight;ed.style.animation='ntFadeIn .18s ease';prevBlockIds=new Set()}
  const mainScroll=$('#main').scrollTop;
- ed.innerHTML=`${crumbHtml(p)}<div id="ted"><button class="ico" id="ic" title="Page icon">${p.icon||ic('doc',24)}</button><input id="ti" placeholder="Untitled" value="${esc(p.title).replace(/"/g,'&quot;')}"></div><div id="pm" class="pm">${pageMeta(p)}</div><div id="tr"></div><div id="bl"></div>
+ ed.innerHTML=`${crumbHtml(p)}<div id="ted"><button class="ico" id="ic" title="Page icon">${p.icon||ic('doc',24)}</button><textarea id="ti" rows="1" placeholder="Untitled" spellcheck="false">${esc(p.title)}</textarea></div><div id="pm" class="pm">${pageMeta(p)}</div><div id="tr"></div><div id="bl"></div>
  <div class="add"><button class="b" data-a="prompt" title="Add one big box for pasting a whole AI answer. It stays together in a single block">${ic('doc')}<span class="lbl">Paste prompt</span></button><button class="b" data-a="leetcode" title="Add the LeetCode problem tracker and solution template to this page">${ic('code')}<span class="lbl">LeetCode</span></button><button class="b" id="addcmp" title="Insert an interactive component, import an HTML or SVG file, or add a Mermaid diagram">${ic('template')}<span class="lbl">Component</span></button><button class="b" data-a="p" title="Add a plain text paragraph block">${ic('doc')}<span class="lbl">Text</span></button><button class="b" data-a="code" title="Add a Python code block you can run">${ic('code')}<span class="lbl">Python code</span></button><button class="b" data-a="image" title="Add an image block (upload, paste, or drag a file in)">${ic('image')}<span class="lbl">Image</span></button><button class="b" id="pci" title="Add an image straight from your clipboard">${ic('clip')}<span class="lbl">Paste image</span></button><button class="b" data-a="todo" title="Add a checkbox to-do item">${ic('todo')}<span class="lbl">To-do</span></button><button class="b" data-a="toggle" title="Add a collapsible toggle section">${ic('toggle')}<span class="lbl">Toggle</span></button><button class="b" data-a="callout" title="Add a highlighted callout box">${ic('callout')}<span class="lbl">Callout</span></button><button class="b" id="ra" title="Run every Python code block on this page, top to bottom">${ic('play')}<span class="lbl">Run all</span></button><button class="b" id="mdx" title="Download this page as a Markdown (.md) file">${ic('download')}<span class="lbl">Save .md</span></button><button class="b" data-a="table" title="Add an editable table">${ic('table')}<span class="lbl">Table</span></button><button class="b" data-a="math" title="Add a LaTeX math block">${ic('math')}<span class="lbl">Math</span></button><button class="b" data-a="cols" title="Add a two-column layout block">${ic('cols')}<span class="lbl">Columns</span></button></div>`;
  wireCrumbs(ed);
- $('#ti').oninput=e=>{p.title=e.target.value;save();const t=$('#tree .pg.on .t');if(t)t.textContent=p.title||'Untitled'};
+ titleFit();$('#ti').oninput=e=>{titleFit();p.title=e.target.value;save();const t=$('#tree .pg.on .t');if(t)t.textContent=p.title||'Untitled'};
  $('#ti').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();focusB(0)}};
  $('#ic').onclick=()=>{const v=prompt('Page icon (paste an emoji)',p.icon||'');if(v!==null){p.icon=v.trim().slice(0,4);save();render()}};$('#addcmp').onclick=()=>openComponentDialog();$('#ra').onclick=runAll;$('#mdx').onclick=saveMd;$('#pci').onclick=()=>pasteImageFromClipboard(null);tagRow();ed.querySelectorAll('.add .b[data-a]').forEach(b=>b.onclick=()=>{if(b.dataset.a==='leetcode'){snap();p.blocks.push(...TPL.leetcode.make());if(!p.tags.includes('leetcode'))p.tags.push('leetcode');save();render();return}addBlock(p.blocks.length-1,b.dataset.a,true)});
  document.body.classList.toggle('cvmode',p.mode==='canvas');const bl=$('#bl'),newIds=new Set();(p.mode==='canvas'?buildCanvas:buildBlocks)(p,bl,newIds);prevBlockIds=newIds;
@@ -1454,6 +1472,8 @@ const needsLocal=src=>/^https?:/i.test(src||'')||((src||'').startsWith('data:')&
 async function localizeImage(b){try{const r=await fetch(b.src);if(!r.ok)throw 0;const bl=await r.blob();if(!/^image\//.test(bl.type))throw 0;imgFile(bl,s=>{b.src=s;save();render()})}catch(e){}}
 function looksLikeMarkdown(plain){
  return /^#{1,6}\s/m.test(plain)||/^\s*[-*+]\s+/m.test(plain)||/^\s*\d+[.)]\s+/m.test(plain)||/^```/m.test(plain)||/^>\s?/m.test(plain)||(/\|/.test(plain)&&/^[\s|:-]*-[\s|:-]*$/m.test(plain))}
+function titleFit(){const t=document.getElementById('ti');if(t&&t.tagName==='TEXTAREA'){t.style.height='auto';t.style.height=t.scrollHeight+'px'}}
+addEventListener('resize',titleFit);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(titleFit);
 function pasteH(e){const cd=e.clipboardData,plain=cd.getData('text/plain'),t=plain.trim(),html=cd.getData('text/html');
  const files=[...cd.files].filter(f=>f.type.startsWith('image/'));
  /* 0) blocks copied from Notera itself come back exactly, with fresh ids */
@@ -1606,7 +1626,7 @@ document.addEventListener('mousedown',e=>{if(!e.target.closest('#sl'))hideSl()})
 addEventListener('beforeunload',()=>{navigator.sendBeacon&&dirty&&navigator.sendBeacon('/api/state',new Blob([JSON.stringify({...S,_rev:rev})],{type:'application/json'}))});
 function snap(){H.push(JSON.stringify(S));if(H.length>40)H.shift();F.length=0}
 function undo(redo){const from=redo?F:H,to=redo?H:F;if(!from.length)return toast('Nothing to '+(redo?'redo':'undo'));to.push(JSON.stringify(S));S=JSON.parse(from.pop());if(!P(cur))cur=S.pages[0]?.id;save(1);render();toast(redo?'Redone':'Undone')}
-function trashHtml(){const T=S.trash||[];return T.length?'<div class="sec">Trash ('+T.length+')</div>'+T.map(t=>{const r=t.pages.find(p=>p.id===t.root),n=esc(r?.title||'Untitled');return'<div class="trw"><span title="'+n+'">'+n+(t.pages.length>1?' +'+(t.pages.length-1):'')+'</span><button data-r="'+t.id+'" title="Restore">↺</button><button data-x="'+t.id+'" title="Delete forever">×</button></div>'}).join(''):''}
+function trashHtml(){const T=S.trash||[];return T.length?'<div class="sec" data-rec="1" style="cursor:pointer" title="Open recovery">Trash ('+T.length+')</div>'+T.map(t=>{const r=t.pages.find(p=>p.id===t.root),n=esc(r?.title||'Untitled');return'<div class="trw"><span title="'+n+'">'+n+(t.pages.length>1?' +'+(t.pages.length-1):'')+'</span><button data-r="'+t.id+'" title="Restore">↺</button><button data-x="'+t.id+'" title="Delete forever">×</button></div>'}).join(''):''}
 function movePg(id,to){if(!id||id===to)return;for(let x=to;x;x=P(x)?.parent)if(x===id)return toast('Cannot move a page into itself');snap();P(id).parent=to;if(to)P(to).open=true;save();renderSide()}
 function pgExtras(t){
  t.querySelectorAll('.trw button').forEach(b=>b.onclick=()=>{const T=S.trash,k=T.find(x=>x.id===(b.dataset.r||b.dataset.x));if(b.dataset.r){snap();k.pages.forEach(p=>{if(!P(p.id))S.pages.push(p)});const r=P(k.root);if(r&&r.parent&&!P(r.parent))r.parent=null;S.trash=T.filter(x=>x!==k);cur=k.root;save(1);render();toast('Restored')}else if(confirm('Delete forever?')){S.trash=T.filter(x=>x!==k);save(1);renderSide()}});
@@ -2944,16 +2964,19 @@ function drawAcc(){const a=$('#acc');if(!a.classList.contains('show'))return;con
 /* ---------- Home ---------- */
 const QUOTES=['Write it down. Future you will say thanks.','One page at a time.','Small notes, big memory.','A clear head makes clean notes.','Today\u2019s scribble is tomorrow\u2019s project.','Capture first, tidy later.'];
 const ago=t=>{if(!t)return'';const m=Math.round((Date.now()-t)/60000);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':Math.round(m/1440)+' d ago'};
+function activityStats(real){const ev=[];real.forEach(p=>{(p.hist||[]).forEach(x=>ev.push(x.t));if(p.mt&&Date.now()-p.mt<DAYMS)ev.push(p.mt);const b=p.blocks.find(x=>x.t==='lc');if(b)[b.first,b.solved,b.last].forEach(d=>{if(d)ev.push(new Date(d+'T12:00:00').getTime())})});
+ const d0=new Date();d0.setHours(0,0,0,0);const day=t=>Math.floor((t-d0.getTime())/DAYMS),set=new Set(ev.map(day));let s=0,i=set.has(0)?0:-1;while(set.has(i)){s++;i--}
+ return{streak:s,week:ev.filter(t=>day(t)>-7&&day(t)<=0).length}}
 function drawHome(){if(homeMode==='lib')return drawLibrary();const ed=$('#ed'),h=new Date().getHours(),g=h<5?'Still up':h<12?'Good morning':h<17?'Good afternoon':h<21?'Good evening':'Good night';
  const real=S.pages.filter(p=>!p.folder),pages=[...real].sort((a,b)=>(b.mt||0)-(a.mt||0)),recent=pages.slice(0,6),dueP=real.filter(revDue).sort((a,b)=>a.rev.due-b.rev.due).slice(0,6);
  const words=real.reduce((n,p)=>n+(plain(p).trim().split(/\s+/).filter(Boolean).length),0),shared=real.filter(p=>p.share).length;
  const snip=p=>{const b=p.blocks.find(b=>stripH(b.h||'').length>2);return b?stripH(b.h).slice(0,92):'Empty page'};
- const peers=(NET.members||[]).filter(m=>m.id!==ME.id);
+ const peers=(NET.members||[]).filter(m=>m.id!==ME.id);const act=activityStats(real);
  ed.innerHTML=`<div class="home"><div class="hh"><div class="hq">${esc(QUOTES[new Date().getDate()%QUOTES.length])}</div><h1>${g}, ${esc(ME.name.split(' ')[0])}.</h1><div class="hd">${new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})}</div></div>
  <div class="hcta"><button class="hb c1" id="hnew">${ic('plus',15)} New page</button><button class="hb c2" id="hfind">${ic('search',15)} Quick find <kbd>Ctrl P</kbd></button><button class="hb c3" id="hprompt">${ic('doc',15)} Paste an AI answer</button><button class="hb c4" id="hleet">${ic('code',15)} LeetCode problem</button><button class="hb c5" id="htoday">${ic('sun',15)} Today</button><button class="hb c7" id="hlib">${ic('folder',15)} Library</button><button class="hb c6" id="hrev">${ic('rev',15)} Review${reviewCount()?' ('+reviewCount()+')':''}</button></div>
  ${dueP.length?`<div class="hsec">Due for revision</div><div class="hgrid">${dueP.map(p=>`<button class="hc due" data-id="${p.id}" style="--pc:var(--purple)"><span class="hci">${ic('rev',16)}</span><b>${esc(p.title||'Untitled')}</b><span class="hcs">${esc(snip(p))}</span><span class="hct">Due ${ago(p.rev.due)}</span></button>`).join('')}</div><div class="hsec" style="margin-top:26px">Jump back in</div>`:'<div class="hsec">Jump back in</div>'}<div class="hgrid">${recent.map(p=>`<button class="hc" data-id="${p.id}" style="--pc:${pcol(p.id)}"><span class="hci">${p.icon||ic('doc',16)}</span><b>${esc(p.title||'Untitled')}</b><span class="hcs">${esc(snip(p))}</span><span class="hct">${ago(p.mt)||'&nbsp;'}</span></button>`).join('')}</div>
  <button class="hlibt" id="hlib2">${ic('folder',22)}<span><b>Your library</b><i>${S.pages.filter(p=>!p.folder).length} pages in ${S.pages.filter(p=>p.folder).length} folders. Browse, move and preview them.</i></span>${ic('chev',14)}</button>
- <div class="hstats"><div><b>${real.length}</b><span>pages</span></div><div><b>${words.toLocaleString()}</b><span>words written</span></div><div><b>${shared}</b><span>shared</span></div></div>
+ <div class="hstats"><div><b>${act.streak}</b><span>day streak</span></div><div><b>${act.week}</b><span>actions this week</span></div><div><b>${real.length}</b><span>pages</span></div><div><b>${words.toLocaleString()}</b><span>words written</span></div><div><b>${shared}</b><span>shared</span></div></div>
  ${practiceHtml(real)}<div class="hsec" style="margin-top:26px">Quick capture</div><div class="hcap"><button data-k="note">${ic('doc',15)} Note</button><button data-k="snippet">${ic('code',15)} Code snippet</button><button data-k="leetcode">${ic('code',15)} LeetCode entry</button><button data-k="interview">${ic('sparkle',15)} Interview question</button><button data-k="card">${ic('card',15)} Flashcard</button><button data-k="project">${ic('folder',15)} Project note</button></div><div class="hbar2"><button id="hcol">${ic('folderPlus',14)} Set up collections</button><button id="hpat">${ic('sparkle',14)} Install the DSA pattern library</button></div><button class="hshare" id="hshare">${peers.length?peers.slice(0,1).map(m=>avHtml(m,30)).join('')+'<span><b>Sharing with '+esc(peers.map(m=>m.name).join(', '))+'</b><i>Open your sharing space</i></span>':ic('users',20)+'<span><b>Share notes with a friend</b><i>Create a 6-digit key and link two Notera notebooks</i></span>'}</button></div>`;
  ed.querySelectorAll('.hc').forEach(b=>b.onclick=()=>{homeOn=false;cur=b.dataset.id;render()});
  $('#hnew').onclick=e=>startNewPage(e);ed.querySelectorAll('.hcap button').forEach(b=>b.onclick=()=>quickCapture(b.dataset.k));$('#hcol').onclick=setupCollections;$('#hpat').onclick=installPatterns;ed.querySelectorAll('.dq').forEach(a=>a.onclick=()=>{homeOn=false;cur=a.dataset.id;render()});$('#htoday').onclick=()=>openToday();$('#hrev').onclick=()=>startReview();$('#hlib').onclick=()=>openLibrary();$('#hlib2').onclick=()=>openLibrary();$('#hfind').onclick=()=>openQS();
@@ -3041,6 +3064,58 @@ const TPL={
  bugfix:{label:'Bug and fix log',desc:'Symptom, cause, fix, how to avoid it',icon:'warning',color:'var(--red)',tags:['bug'],make:()=>[
   mkB('callout','',{ci:1,lbl:'Symptom'}),mkB('h2','Cause'),mkB('p',''),mkB('h2','Fix'),mkB('code','',{lang:'python',label:'Fixed'}),mkB('callout','',{ci:2,lbl:'How to avoid it'})]}};
 
+
+
+/* ---------- find and replace on the open page ---------- */
+const FR={q:'',r:'',cs:false};
+const frRe=()=>FR.q?new RegExp(FR.q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),FR.cs?'g':'gi'):null;
+const FR_TEXT=['h','a','cap'];
+function frEach(p,fn){p.blocks.forEach(b=>{if(['html','svg','image'].includes(b.t))return;FR_TEXT.forEach(k=>{if(typeof b[k]!=='string'||!b[k])return;
+  if(b.t==='code'&&k==='h'){const n=fn(b[k],false);if(n!==null)b[k]=n}
+  else if(/[<&]/.test(b[k])){const d=new DOMParser().parseFromString('<body>'+b[k],'text/html'),w=document.createTreeWalker(d.body,NodeFilter.SHOW_TEXT);let t,ch=false;const ns=[];while(t=w.nextNode())ns.push(t);
+   ns.forEach(t=>{if(t.parentElement&&t.parentElement.closest('.mx,script,style'))return;const n=fn(t.nodeValue,true);if(n!==null){t.nodeValue=n;ch=true}});if(ch)b[k]=d.body.innerHTML}
+  else{const n=fn(b[k],true);if(n!==null)b[k]=n}});
+  if(b.rows)b.rows.forEach(r=>r.forEach((c,i)=>{const n=fn(String(c),true);if(n!==null)r[i]=n}))})}
+function frCount(){const re=frRe();if(!re)return 0;let n=0;frEach(page(),s=>{const m=s.match(re);if(m)n+=m.length;return null});return n}
+function openFind(){const w=$('#frb'),p=page();if(!p||homeOn||p.folder||p.mode==='canvas')return toast('Open a document page first');
+ w.innerHTML=`<input id="frq" placeholder="Find" value="${esc(FR.q).replace(/"/g,'&quot;')}" spellcheck="false"><input id="frr" placeholder="Replace with" value="${esc(FR.r).replace(/"/g,'&quot;')}" spellcheck="false"><span id="frn"></span><label title="Match case"><input type="checkbox" id="frc" ${FR.cs?'checked':''}> Aa</label><button id="frnx" title="Next match (Enter)">Next</button><button id="frone">Replace</button><button id="frall" class="pri">Replace all</button><button id="frx" title="Close (Esc)">${ic('close',14)}</button>`;
+ w.classList.add('show');const q=$('#frq'),upd=()=>{FR.q=q.value;FR.r=$('#frr').value;FR.cs=$('#frc').checked;const n=frCount();$('#frn').textContent=FR.q?n+' match'+(n===1?'':'es'):''};
+ q.oninput=$('#frr').oninput=$('#frc').onchange=upd;
+ const next=()=>{upd();if(FR.q)window.find(FR.q,FR.cs,false,true)};
+ q.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();next()}};
+ $('#frnx').onclick=next;
+ const doReplace=all=>{upd();const re=frRe();if(!re)return;snap();let done=0;frEach(page(),s=>{let c=0;const o=s.replace(re,m=>{if(!all&&done+c>=1)return m;c++;return FR.r});if(!c)return null;done+=c;return o});if(!done)return toast('Nothing to replace');save();render();openFind();toast(done+' replaced')};
+ $('#frone').onclick=()=>doReplace(false);$('#frall').onclick=()=>doReplace(true);
+ $('#frx').onclick=closeFind;w.onkeydown=e=>{if(e.key==='Escape'){e.stopPropagation();closeFind()}};upd();q.focus();q.select()}
+function closeFind(){$('#frb').classList.remove('show')}
+$('#frm').onclick=()=>{$('#mmenu').classList.remove('show');openFind()};
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&e.key.toLowerCase()==='h'){e.preventDefault();openFind()}});
+/* ---------- recovery: recently deleted pages and pages from older snapshots ---------- */
+function openRecover(tab){const w=$('#rec');let snaps=null,open=null,openState=null,sel=new Set();tab=tab||'trash';
+ const close=()=>w.classList.remove('show');
+ const when=ms=>{const d=Math.round((Date.now()-ms)/6e4);return d<1?'just now':d<60?d+' min ago':d<1440?Math.round(d/60)+' h ago':new Date(ms).toLocaleDateString()+' '+new Date(ms).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})};
+ const addBack=(pages)=>{snap();const ids=new Set(S.pages.map(x=>x.id)),have=new Set(pages.map(x=>x.id));let n=0;const now=Date.now();
+  pages.forEach(pg=>{const c=JSON.parse(JSON.stringify(pg));c.mt=now;if(ids.has(c.id)){c.id=uid();c.title=(c.title||'Untitled')+' (recovered)';c.parent=null;if(c.rev)delete c.rev}else if(c.parent&&!ids.has(c.parent)&&!have.has(c.parent))c.parent=null;S.pages.push(c);n++});return n};
+ const draw=()=>{let body='';
+  if(tab==='trash'){const T=[...(S.trash||[])].sort((a,b)=>b.at-a.at);
+   body=T.length?T.map(t=>{const r=t.pages.find(p=>p.id===t.root)||t.pages[0],n=esc((r&&r.title)||'Untitled');return`<div class="rcr"><div><b>${n}${t.pages.length>1?' and '+(t.pages.length-1)+' more':''}</b><i>Deleted ${when(t.at)} \u00b7 ${t.pages.reduce((k,p)=>k+p.blocks.length,0)} blocks</i></div><span><button data-r="${t.id}">Restore</button><button class="dg" data-x="${t.id}" title="Delete forever">Delete</button></span></div>`}).join(''):'<div class="rce">Nothing has been deleted. Deleted pages wait here until you remove them for good.</div>'}
+  else if(open){const mine=new Set(S.pages.map(x=>x.id)),ps=openState.pages.filter(x=>!x.folder||openState.pages.some(y=>y.parent===x.id)),miss=ps.filter(x=>!mine.has(x.id));
+   body=`<button class="rcb" id="rcback">\u2190 All snapshots</button><p>${miss.length?'<b>'+miss.length+' page'+(miss.length>1?'s are':' is')+' in this snapshot but not in your notes now.</b> They are ticked.':'Every page here is still in your notes. Restoring one makes a copy.'}</p><div class="rcl">${ps.map(x=>`<label class="rcr"><span><input type="checkbox" data-id="${x.id}" ${sel.has(x.id)?'checked':''}> <b>${esc(x.title||(x.folder?'Untitled folder':'Untitled'))}</b>${mine.has(x.id)?'':' <em>missing now</em>'}</span><i>${x.folder?'folder':(x.blocks||[]).length+' blocks'}</i></label>`).join('')}</div><div class="aiact"><span></span><button class="pri" id="rcgo">Restore ${sel.size} selected</button></div>`}
+  else{body=snaps===null?'<div class="rce">Loading...</div>':snaps.length?`<p>Automatic snapshots are kept every few minutes for the last hours, hourly for two days and daily for three months. Pick one to choose pages from it.</p><div class="rcl">${snaps.map(s=>`<button class="rcr" data-f="${s.file}"><span><b>${when(s.mtime*1000)}</b></span><i>${s.pageCount} pages \u00b7 ${s.blockCount} blocks</i></button>`).join('')}</div>`:'<div class="rce">No snapshots yet.</div>'}
+  w.innerHTML=`<div class="icbox"><div class="ich"><b>Recover pages</b><button id="rcx">${ic('close',16)}</button></div><div class="rctabs"><button data-t="trash" class="${tab==='trash'?'on':''}">Recently deleted${(S.trash||[]).length?' ('+S.trash.length+')':''}</button><button data-t="snap" class="${tab==='snap'?'on':''}">Snapshots</button></div><div class="icb rcb2">${body}</div></div>`;
+  w.querySelector('#rcx').onclick=close;
+  w.querySelectorAll('.rctabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;open=null;draw();if(tab==='snap'&&snaps===null)load()});
+  w.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const T=S.trash,k=T.find(x=>x.id===b.dataset.r);if(!k)return;snap();const n=addBack(k.pages);S.trash=T.filter(x=>x!==k);save(1);render();toast(n+' page'+(n>1?'s':'')+' restored');draw()});
+  w.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{if(!confirm('Delete forever? Older snapshots may still hold a copy, but this cannot be undone here.'))return;S.trash=S.trash.filter(x=>x.id!==b.dataset.x);save(1);renderSide();draw()});
+  w.querySelectorAll('[data-f]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{openState=await (await fetch('/api/backups/'+b.dataset.f)).json();open=b.dataset.f;const mine=new Set(S.pages.map(x=>x.id));sel=new Set(openState.pages.filter(x=>!mine.has(x.id)).map(x=>x.id));draw()}catch(e){toast('Could not open that snapshot');b.disabled=false}});
+  const bk=w.querySelector('#rcback');if(bk)bk.onclick=()=>{open=null;draw()};
+  w.querySelectorAll('.rcl input[type=checkbox]').forEach(c=>c.onchange=()=>{c.checked?sel.add(c.dataset.id):sel.delete(c.dataset.id);w.querySelector('#rcgo').textContent='Restore '+sel.size+' selected'});
+  const go=w.querySelector('#rcgo');if(go)go.onclick=()=>{const pick=new Set(sel);let g=1;while(g){g=0;openState.pages.forEach(x=>{if(pick.has(x.id)&&x.parent&&!pick.has(x.parent)&&!S.pages.some(y=>y.id===x.parent)&&openState.pages.some(y=>y.id===x.parent)){pick.add(x.parent);g=1}})}
+   const n=addBack(openState.pages.filter(x=>pick.has(x.id)));save(1);render();toast(n+' page'+(n===1?'':'s')+' recovered');close()}};
+ const load=async()=>{try{snaps=await (await fetch('/api/backups')).json()}catch(e){snaps=[]}draw()};
+ w.onmousedown=e=>{if(e.target===w)close()};w.classList.add('show');draw();if(tab==='snap')load()}
+$('#recb').onclick=()=>{$('#mmenu').classList.remove('show');openRecover('trash')};
+$('#tree').addEventListener('click',e=>{if(e.target.closest('[data-rec]'))openRecover('trash')});
 /* ---------- template customisation: which templates show, and which sections each contains ---------- */
 const TPL_FULL={};Object.keys(TPL).forEach(k=>{TPL_FULL[k]=TPL[k].make});
 const tplCfg=()=>{S.settings=S.settings||{};return S.settings.tpl=S.settings.tpl||{hidden:[],skip:{}}};

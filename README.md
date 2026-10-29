@@ -125,3 +125,8 @@ are git-ignored.
 
 ## Tests
 `python tests/run_all.py` runs every script. `tests/test_browser.py` drives a real Chromium on a temporary data folder (needs `pip install playwright` and `playwright install chromium`; it skips itself if Playwright is missing).
+
+## Images, lists and colour
+- **Text around an image:** drag the picture itself to the left or right edge of a paragraph (a label says "Image left, text wraps"), or use the two wrap buttons that appear on the picture. Click the same button again to switch wrapping off. Dragging by the grip on the left still builds columns.
+- **Bullets:** the *Bullets* and *Numbered* chips, `Ctrl+Shift+8` / `Ctrl+Shift+7`, and list buttons in the selection toolbar.
+- **Colourful notes** (Theme panel, on by default): every theme has its own six-colour palette used for headings, bullets, links, quotes and doodles. The selection toolbar also has wavy and marker underlines.

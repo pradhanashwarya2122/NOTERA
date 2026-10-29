@@ -181,6 +181,38 @@ try:
         pg.evaluate("homeOn=true;homeMode='home';homeCur=cur;render()")
         ok("day streak" in pg.inner_text(".hstats"), "Home shows the streak")
 
+        # drag an image so the text wraps around it, and bullets
+        svg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='orange'/></svg>"
+        long = "A long paragraph that should wrap around the picture and then continue underneath it. " * 4
+        pg.evaluate("""([svg,long])=>{S.pages.push({id:'p9',title:'wrap',parent:null,tags:[],mt:5,blocks:[{id:'w1',t:'image',src:svg,size:'m',h:''},{id:'w2',t:'p',h:long},{id:'w3',t:'p',h:long}]});homeOn=false;cur='p9';render()}""", [svg, long])
+        pg.wait_for_timeout(500)
+        im = pg.locator("#bl .blk.imgb .im").bounding_box()
+        tgt = pg.locator("#bl .blk").nth(1).bounding_box()
+        pg.mouse.move(im["x"] + 40, im["y"] + 40)
+        pg.mouse.down()
+        pg.mouse.move(im["x"] + 50, im["y"] + 80, steps=4)
+        pg.mouse.move(tgt["x"] + 20, tgt["y"] + 20, steps=8)
+        pg.wait_for_timeout(150)
+        ok("wraps" in (pg.evaluate("document.querySelector('#dind').dataset.l") or ""), "dragging an image to a page edge offers to wrap the text")
+        pg.mouse.up()
+        pg.wait_for_timeout(500)
+        ok(pg.evaluate("page().blocks.find(b=>b.id==='w1').fl") == "l" and pg.locator(".wrapg").count() == 1, "dropping makes the image float with text around it")
+        r = pg.evaluate("""()=>{const i=document.querySelector('.wrapg .imgb').getBoundingClientRect(),t=document.querySelector('.wrapg>.blk:not(.imgb) .ce').getBoundingClientRect();const lines=[...document.querySelectorAll('.wrapg>.blk:not(.imgb) .ce')][0];return{imgRight:i.right,textLeft:t.left,imgBottom:i.bottom,textBottom:t.bottom}}""")
+        ok(r["textLeft"] <= r["imgRight"] and r["textBottom"] > r["imgBottom"], "the text block sits beside the image and continues below it")
+        pg.evaluate("document.querySelector('.szc button[data-z=wr]').click()")
+        pg.wait_for_timeout(300)
+        ok(pg.evaluate("page().blocks.find(b=>b.id==='w1').fl") == "r", "the wrap-right button moves the image to the right")
+        pg.evaluate("document.querySelector('.szc button[data-z=wr]').click()")
+        pg.wait_for_timeout(300)
+        ok(pg.locator(".wrapg").count() == 0, "clicking it again turns wrapping off")
+        pg.locator('#bl .blk[data-t="p"] .ce').first.click()
+        pg.keyboard.press("Control+Shift+Digit8")
+        pg.wait_for_timeout(300)
+        ok(pg.evaluate("page().blocks.some(b=>b.t==='ul')"), "Ctrl+Shift+8 turns a paragraph into a bullet")
+        pg.evaluate("setFun(false)")
+        ok(not pg.evaluate("document.body.classList.contains('fun')"), "the colourful mode can be switched off")
+        pg.evaluate("setFun(true)")
+
         # LeetCode chip and section choice
         pg.evaluate("homeOn=false;cur='p1';render()")
         pg.locator('.add .b[data-a="leetcode"]').click()

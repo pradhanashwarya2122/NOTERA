@@ -138,3 +138,9 @@ are git-ignored.
 - **Undo and redo** now follow typing: pause for a moment and that stretch of typing becomes one step, even while the cursor is still in the block.
 - **Roadmap** (Home): the free Blind 75 problems grouped by topic, with progress per topic and a *Next up* suggestion. Problems you already track are matched by their link; the rest are created for you in one click.
 - **Solve timer** on every problem card: start, stop, and it keeps your best and average time.
+
+## Premium feel
+`static/premium.css` and `static/premium.js` add the interaction layer on top of the app (and never break it if they fail to load):
+frosted-glass menus and sidebar, spring-eased windows and press states on every button, blocks that rise in one after another when a page opens, a large title that settles into a translucent bar as you scroll, numbers that count up, a pointer spotlight on cards, theme changes that cross-fade, and confetti when you tick a to-do, solve a problem on your own or log a clean review. Everything that moves respects the system's *reduce motion* setting.
+
+The roadmap now has a second list: the full **NeetCode 150** (Premium-only problems are marked).

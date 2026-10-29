@@ -278,6 +278,15 @@ try:
         pg.wait_for_selector(".road")
         ok(pg.locator(".rdr.ok, .rdr .rds").count() > 0 and "Open" in pg.locator(".rdr").first.inner_text(), "the roadmap now recognises that page")
 
+        # NeetCode 150
+        pg.evaluate("openRoadmap()")
+        pg.wait_for_selector(".road")
+        pg.locator('.rdtabs button[data-l="nc"]').click()
+        pg.wait_for_timeout(400)
+        ok(pg.locator(".rdr").count() == 150 and pg.locator(".rdr .pm").count() == 7, "NeetCode 150 lists all 150 problems with the Premium ones marked: %d" % pg.locator(".rdr").count())
+        ok(pg.evaluate("NC150.every(([c,l])=>l.every(x=>/^[a-z0-9-]+$/.test(x[1])))"), "every NeetCode problem has a clean link name")
+        pg.locator('.rdtabs button[data-l="b75"]').click()
+
         # solve timer
         pg.evaluate("homeOn=false;cur=S.pages.find(p=>p.blocks.some(b=>b.t==='lc')).id;render()")
         pg.wait_for_timeout(400)

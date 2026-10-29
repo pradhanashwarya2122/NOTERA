@@ -1,0 +1,82 @@
+/* Premium interaction layer: springs, glass, press states, entrances, large-title bar.
+   Everything that moves sits inside prefers-reduced-motion:no-preference. */
+:root{--spring:cubic-bezier(.34,1.56,.64,1);--smooth:cubic-bezier(.32,.72,0,1);--glass:blur(22px) saturate(1.7)}
+
+/* focus that feels native */
+:where(button,select,input,textarea,[contenteditable]):focus-visible{outline:2px solid color-mix(in srgb,var(--y) 65%,transparent);outline-offset:2px;border-radius:8px}
+.ce:focus-visible,#ti:focus-visible{outline:0}
+
+/* frosted glass on floating surfaces */
+.menu,#thp,#hip,#tpl,#rvm,#lyp,#stk,#lpv,#frb,#sl,#toast,.icbox,#qs .qbox,#ctb{-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass)}
+.menu,#thp,#hip,#tpl,#rvm,#lyp,#stk,#lpv,#frb,#sl,.icbox,#qs .qbox{background:color-mix(in srgb,var(--panel) 86%,transparent)}
+#side{-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass)}
+
+/* large title that settles into a translucent bar, like iOS */
+#ctb{position:fixed;top:0;left:var(--sw,272px);right:0;height:46px;z-index:6;display:flex;align-items:center;justify-content:center;padding:0 120px;font:600 14px var(--ui);color:var(--tx);background:color-mix(in srgb,var(--bg) 72%,transparent);border-bottom:1px solid var(--ln);opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .28s var(--smooth),transform .35s var(--smooth),left .3s var(--smooth);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ctb.on{opacity:1;transform:none}
+body.sidecol #ctb,body.solo.libv #ctb{left:0}
+@media(max-width:760px){#ctb{left:0;padding:0 60px}}
+
+/* confetti canvas */
+#confetti{position:fixed;inset:0;z-index:200;pointer-events:none}
+
+/* spotlight that follows the pointer on cards */
+.hc,.rdc,.dt,.hlibt,.rdn,.lcard{position:relative;--mx:50%;--my:50%}
+.hc::after,.dt::after,.hlibt::after,.rdn::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .25s;background:radial-gradient(220px circle at var(--mx) var(--my),color-mix(in srgb,var(--y) 14%,transparent),transparent 70%)}
+.hc:hover::after,.dt:hover::after,.hlibt:hover::after,.rdn:hover::after{opacity:1}
+
+@media (prefers-reduced-motion:no-preference){
+ /* app opens with a soft fade and settle */
+ body{animation:ntBoot .6s ease backwards}
+ @keyframes ntBoot{from{opacity:0}to{opacity:1}}
+
+ /* press feedback everywhere */
+ .b,.hb,.tpi,.rdr button,.lcp,.lcg2,.chip,.abtn,#frb button,.stkg button,.hcap button,.szc button,.pg{transition:transform .22s var(--spring),background-color .15s,color .15s,border-color .15s,box-shadow .2s}
+ .b:active,.hb:active,.tpi:active,.rdr button:active,.lcp:active,.lcg2:active,.abtn:active,.hcap button:active{transform:scale(.95)}
+ .hb:hover,.hcap button:hover{transform:translateY(-2px);box-shadow:0 8px 20px -10px rgba(0,0,0,.35)}
+ .hb:active,.hcap button:active{transform:scale(.95)}
+
+ /* cards lift and glow */
+ .hc,.dt,.hlibt,.rdn{transition:transform .35s var(--spring),box-shadow .3s,border-color .2s,background .2s}
+ .hc:hover,.dt:hover{transform:translateY(-4px);box-shadow:0 18px 36px -18px rgba(0,0,0,.4)}
+ .hc:active{transform:translateY(-1px) scale(.99)}
+
+ /* windows spring in */
+ .icbox{animation:ntPop .5s var(--spring) both!important}
+ #qs.show .qbox{animation:ntPop .45s var(--spring) both}
+ @keyframes ntPop{from{opacity:0;transform:translateY(14px) scale(.95)}to{opacity:1;transform:none}}
+ #toast{transition:opacity .25s,transform .5s var(--spring)}
+ #toast:not(.s){transform:translate(-50%,24px) scale(.92)}
+
+ /* popovers open from where they are anchored */
+ .menu,#tpl,#rvm,#lyp,#thp,#hip,#stk,#frb{transform-origin:top center}
+ #stk,#tpl,#rvm,#lyp{transition:opacity .18s,transform .42s var(--spring),visibility .18s}
+ #stk:not(.show),#tpl:not(.show),#rvm:not(.show),#lyp:not(.show){transform:translateY(8px) scale(.94)}
+
+ /* blocks rise in one after another when a page opens */
+ body.entering #bl>*{animation:ntRise .55s var(--smooth) both;animation-delay:calc(var(--i,0)*26ms)}
+ @keyframes ntRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+ body.entering #ted,body.entering #pm,body.entering .hh,body.entering .hcta{animation:ntRise .6s var(--smooth) both}
+ body.entering #pm{animation-delay:.05s}
+ body.entering .hcta{animation-delay:.08s}
+ body.entering .hgrid .hc{animation:ntRise .6s var(--smooth) both;animation-delay:calc(var(--i,0)*45ms + .1s)}
+ body.entering .rdr{animation:ntFadeIn .5s both;animation-delay:calc(var(--i,0)*8ms)}
+
+ /* progress fills in */
+ .rdp i::after,.rdc header i::after{animation:ntFill 1s var(--smooth) both}
+ @keyframes ntFill{from{width:0}}
+
+ /* checkboxes pop */
+ input[type=checkbox]{transition:transform .25s var(--spring)}
+ input[type=checkbox]:active{transform:scale(.8)}
+ input[type=checkbox]:checked{animation:ntTick .4s var(--spring)}
+ @keyframes ntTick{0%{transform:scale(.7)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+
+ /* theme changes cross-fade instead of snapping */
+ body.themeswap *,body.themeswap{transition:background-color .45s ease,color .45s ease,border-color .45s ease,fill .45s ease!important}
+
+ /* dragged things feel physical */
+ .dgh{transition:transform .2s var(--spring)}
+ .blk.dragging{transition:opacity .2s}
+ .blk[data-sticker] .im:hover img{transition:transform .35s var(--spring)}
+}

@@ -1123,7 +1123,7 @@ body.fun .ce.h1{border-bottom:0}
 body.fun .blk[data-t=p]>.bd,body.fun .blk[data-t=quote]>.bd,body.fun .blk[data-t=callout]>.bd{position:relative}
 body.fun .blk[data-t=p]>.bd .ce,body.fun .blk[data-t=quote]>.bd .ce{border-color:transparent}
 body.fun .blk[data-t=p]>.bd::before,body.fun .blk[data-t=quote]>.bd::before{content:'';position:absolute;inset:0;border:1.5px solid color-mix(in srgb,var(--tx) 34%,transparent);border-radius:8px 11px 9px 12px/11px 8px 12px 9px;filter:url(#rough2);pointer-events:none}
-body.fun .blk[data-t=p]>.bd::after{content:'';position:absolute;inset:1px;border:1px solid color-mix(in srgb,var(--tx) 18%,transparent);border-radius:11px 8px 12px 9px/8px 12px 9px 11px;filter:url(#rough);pointer-events:none}
+body.fun .blk[data-t=p]>.bd::after{content:'';position:absolute;inset:1px;border:1px solid color-mix(in srgb,var(--tx) 10%,transparent);border-radius:11px 8px 12px 9px/8px 12px 9px 11px;filter:url(#rough);pointer-events:none}
 body.fun .wrapg>.blk .bd::before,body.fun .wrapg>.blk .bd::after{display:none}
 body.fun .imgf:not(.x)::before{content:'';position:absolute;top:-9px;left:50%;width:74px;height:20px;margin-left:-37px;transform:rotate(-3deg);background:repeating-linear-gradient(90deg,color-mix(in srgb,var(--fc,var(--f2)) 55%,transparent) 0 8px,color-mix(in srgb,var(--fc,var(--f6)) 30%,transparent) 8px 16px);box-shadow:0 1px 2px rgba(0,0,0,.18);z-index:4;pointer-events:none}
 .rowg .imgf::before{display:none!important}
@@ -1138,7 +1138,11 @@ body.fun .imgf:not(.x)::before{content:'';position:absolute;top:-9px;left:50%;wi
 .rds{color:var(--sc);font-size:15px;text-align:center}.rdt{font:500 14.5px var(--ui);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rdst{font:12.5px var(--ui);color:var(--mut)}.rdr button{padding:4px 10px;border-radius:8px;border:1px solid var(--ln);font:600 12px var(--ui);color:var(--tx)}
 @media(max-width:700px){.rdr{grid-template-columns:20px 1fr auto 56px}.rdst{display:none}.rdh h1{font-size:34px}}
 .hb.c8{background:color-mix(in srgb,var(--pink) 12%,var(--bg));color:var(--pink)}
+
+.rdtabs{display:inline-flex;gap:4px;margin-top:10px;padding:3px;border:1px solid var(--ln);border-radius:10px;background:var(--veil1)}.rdtabs button{padding:5px 14px;border-radius:8px;font:600 12.5px var(--ui);color:var(--mut);transition:all .2s}.rdtabs button.on{background:var(--bg);color:var(--tx);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.pm{font:600 10.5px var(--ui);font-style:normal;padding:1px 7px;border-radius:99px;margin-left:6px;background:color-mix(in srgb,var(--purple) 14%,transparent);color:var(--purple)}
 </style>
+<link rel="stylesheet" href="premium.css">
 </head><body>
 <div id="side"><div class="sin">
 <div class="brand"><div class="mark">N</div><h1>Notera</h1><button id="sctb" title="Hide sidebar (Ctrl+\)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button></div>
@@ -3282,16 +3286,42 @@ const ROADMAP=[
  ['Intervals',[['Insert Interval','insert-interval','Medium'],['Merge Intervals','merge-intervals','Medium'],['Non-overlapping Intervals','non-overlapping-intervals','Medium']]],
  ['Bits',[['Number of 1 Bits','number-of-1-bits','Easy'],['Counting Bits','counting-bits','Easy'],['Reverse Bits','reverse-bits','Easy'],['Missing Number','missing-number','Easy'],['Sum of Two Integers','sum-of-two-integers','Medium']]]
 ];
+const NC_PLACEHOLDER=0;
+/* the NeetCode 150, written as "Title E|M|H" with a trailing P for LeetCode Premium problems */
+const NC150_RAW={
+ 'Arrays and Hashing':'Contains Duplicate E;Valid Anagram E;Two Sum E;Group Anagrams M;Top K Frequent Elements M;Encode and Decode Strings M P;Product of Array Except Self M;Valid Sudoku M;Longest Consecutive Sequence M',
+ 'Two Pointers':'Valid Palindrome E;Two Sum II Input Array Is Sorted M;3Sum M;Container With Most Water M;Trapping Rain Water H',
+ 'Sliding Window':'Best Time to Buy and Sell Stock E;Longest Substring Without Repeating Characters M;Longest Repeating Character Replacement M;Permutation in String M;Minimum Window Substring H;Sliding Window Maximum H',
+ 'Stack':'Valid Parentheses E;Min Stack M;Evaluate Reverse Polish Notation M;Generate Parentheses M;Daily Temperatures M;Car Fleet M;Largest Rectangle in Histogram H',
+ 'Binary Search':'Binary Search E;Search a 2D Matrix M;Koko Eating Bananas M;Find Minimum in Rotated Sorted Array M;Search in Rotated Sorted Array M;Time Based Key-Value Store M;Median of Two Sorted Arrays H',
+ 'Linked List':'Reverse Linked List E;Merge Two Sorted Lists E;Reorder List M;Remove Nth Node From End of List M;Copy List with Random Pointer M;Add Two Numbers M;Linked List Cycle E;Find the Duplicate Number M;LRU Cache M;Merge k Sorted Lists H;Reverse Nodes in k-Group H',
+ 'Trees':'Invert Binary Tree E;Maximum Depth of Binary Tree E;Diameter of Binary Tree E;Balanced Binary Tree E;Same Tree E;Subtree of Another Tree E;Lowest Common Ancestor of a Binary Search Tree M;Binary Tree Level Order Traversal M;Binary Tree Right Side View M;Count Good Nodes in Binary Tree M;Validate Binary Search Tree M;Kth Smallest Element in a BST M;Construct Binary Tree from Preorder and Inorder Traversal M;Binary Tree Maximum Path Sum H;Serialize and Deserialize Binary Tree H',
+ 'Tries':'Implement Trie (Prefix Tree) M;Design Add and Search Words Data Structure M;Word Search II H',
+ 'Heap / Priority Queue':'Kth Largest Element in a Stream E;Last Stone Weight E;K Closest Points to Origin M;Kth Largest Element in an Array M;Task Scheduler M;Design Twitter M;Find Median from Data Stream H',
+ 'Backtracking':'Subsets M;Combination Sum M;Permutations M;Subsets II M;Combination Sum II M;Word Search M;Palindrome Partitioning M;Letter Combinations of a Phone Number M;N-Queens H',
+ 'Graphs':'Number of Islands M;Max Area of Island M;Clone Graph M;Walls and Gates M P;Rotting Oranges M;Pacific Atlantic Water Flow M;Surrounded Regions M;Course Schedule M;Course Schedule II M;Redundant Connection M;Number of Connected Components in an Undirected Graph M P;Graph Valid Tree M P;Word Ladder H',
+ 'Advanced Graphs':'Reconstruct Itinerary H;Min Cost to Connect All Points M;Network Delay Time M;Swim in Rising Water H;Alien Dictionary H P;Cheapest Flights Within K Stops M',
+ '1-D Dynamic Programming':'Climbing Stairs E;Min Cost Climbing Stairs E;House Robber M;House Robber II M;Longest Palindromic Substring M;Palindromic Substrings M;Decode Ways M;Coin Change M;Maximum Product Subarray M;Word Break M;Longest Increasing Subsequence M;Partition Equal Subset Sum M',
+ '2-D Dynamic Programming':'Unique Paths M;Longest Common Subsequence M;Best Time to Buy and Sell Stock with Cooldown M;Coin Change II M;Target Sum M;Interleaving String M;Longest Increasing Path in a Matrix H;Distinct Subsequences H;Edit Distance M;Burst Balloons H;Regular Expression Matching H',
+ 'Greedy':'Maximum Subarray M;Jump Game M;Jump Game II M;Gas Station M;Hand of Straights M;Merge Triplets to Form Target Triplet M;Partition Labels M;Valid Parenthesis String M',
+ 'Intervals':'Insert Interval M;Merge Intervals M;Non-overlapping Intervals M;Meeting Rooms E P;Meeting Rooms II M P;Minimum Interval to Include Each Query H',
+ 'Math and Geometry':'Rotate Image M;Spiral Matrix M;Set Matrix Zeroes M;Happy Number E;Plus One E;Pow(x, n) M;Multiply Strings M;Detect Squares M',
+ 'Bit Manipulation':'Single Number E;Number of 1 Bits E;Counting Bits E;Reverse Bits E;Missing Number E;Sum of Two Integers M;Reverse Integer M'};
+const NC_SLUG={'Implement Trie (Prefix Tree)':'implement-trie-prefix-tree'};
+const ncSlug=t=>NC_SLUG[t]||t.toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-');
+const NC150=Object.entries(NC150_RAW).map(([cat,s])=>[cat,s.split(';').map(x=>{const m=/^(.*) (E|M|H)( P)?$/.exec(x);return[m[1],ncSlug(m[1]),{E:'Easy',M:'Medium',H:'Hard'}[m[2]],!!m[3]]})]);
+let rmList=(()=>{try{return localStorage.getItem('nt.road')==='nc'?'nc':'b75'}catch(e){return'b75'}})();
 const rmFind=slug=>{for(const p of S.pages){if(p.folder)continue;const b=p.blocks.find(x=>x.t==='lc'&&x.url&&x.url.toLowerCase().includes('/problems/'+slug+'/')||x.t==='lc'&&x.url&&x.url.toLowerCase().endsWith('/problems/'+slug));if(b)return{p,b}}return null};
-function drawRoadmap(){const ed=$('#ed');let tot=0,done=0,next=null;
- const cats=ROADMAP.map(([name,list])=>{const items=list.map(([t,slug,d])=>{const f=rmFind(slug),st=f?(f.b.status||'Not started'):null,ok=!!st&&LC_SOLVED.includes(st);tot++;if(ok)done++;const it={t,slug,d,f,st,ok};if(!ok&&!next)next=it;return it});return{name,items,ok:items.filter(i=>i.ok).length}});
+function drawRoadmap(){const ed=$('#ed');let tot=0,done=0,next=null;const src=rmList==='nc'?NC150:ROADMAP;
+ const cats=src.map(([name,list])=>{const items=list.map(([t,slug,d,prem])=>{const f=rmFind(slug),st=f?(f.b.status||'Not started'):null,ok=!!st&&LC_SOLVED.includes(st);tot++;if(ok)done++;const it={t,slug,d,f,st,ok,prem};if(!ok&&!next)next=it;return it});return{name,items,ok:items.filter(i=>i.ok).length}});
  const pct=Math.round(done/tot*100);
- ed.innerHTML=`<div class="road"><div class="rdh"><div><h1>Roadmap</h1><div class="lbs">The Blind 75 (the free ones, no Premium needed): ${done} of ${tot} solved. Pages you already have are matched by their problem link.</div></div><div class="rdp"><b>${pct}%</b><i style="--p:${pct}%"></i></div></div>
+ ed.innerHTML=`<div class="road"><div class="rdh"><div><h1>Roadmap</h1><div class="lbs">${rmList==='nc'?'The NeetCode 150':'The Blind 75 (free problems only)'}: ${done} of ${tot} solved. Pages you already have are matched by their problem link.</div><div class="rdtabs"><button data-l="b75" class="${rmList==='b75'?'on':''}">Blind 75</button><button data-l="nc" class="${rmList==='nc'?'on':''}">NeetCode 150</button></div></div><div class="rdp"><b>${pct}%</b><i style="--p:${pct}%"></i></div></div>
  ${next?`<button class="rdn" id="rdnext"><span>Next up</span><b>${esc(next.t)}</b><em class="df ${next.d}">${next.d}</em><span class="go">${next.f?'Open':'Start'} \u2192</span></button>`:'<div class="rdn done">You finished the whole list. Time for review!</div>'}
- ${cats.map((c,ci)=>`<section class="rdc"><header><b>${esc(c.name)}</b><span>${c.ok}/${c.items.length}</span><i style="--p:${Math.round(c.ok/c.items.length*100)}%"></i></header>${c.items.map((it,ii)=>`<div class="rdr${it.ok?' ok':''}" data-c="${ci}" data-i="${ii}"><span class="rds" style="--sc:${it.st?LC_COL[it.st]:'var(--mut)'}">${it.ok?'\u2713':it.f?'\u25CF':'\u25CB'}</span><span class="rdt">${esc(it.t)}</span><em class="df ${it.d}">${it.d}</em><span class="rdst">${it.st?esc(it.st):'Not added yet'}</span><button>${it.f?'Open':'Add'}</button></div>`).join('')}</section>`).join('')}</div>`;
+ ${cats.map((c,ci)=>`<section class="rdc"><header><b>${esc(c.name)}</b><span>${c.ok}/${c.items.length}</span><i style="--p:${Math.round(c.ok/c.items.length*100)}%"></i></header>${c.items.map((it,ii)=>`<div class="rdr${it.ok?' ok':''}" data-c="${ci}" data-i="${ii}"><span class="rds" style="--sc:${it.st?LC_COL[it.st]:'var(--mut)'}">${it.ok?'\u2713':it.f?'\u25CF':'\u25CB'}</span><span class="rdt">${esc(it.t)}${it.prem?' <em class="pm" title="Needs LeetCode Premium">Premium</em>':''}</span><em class="df ${it.d}">${it.d}</em><span class="rdst">${it.st?esc(it.st):'Not added yet'}</span><button>${it.f?'Open':'Add'}</button></div>`).join('')}</section>`).join('')}</div>`;
  const go=it=>{if(it.f){homeOn=false;cur=it.f.p.id;render();return}
   snap();const f=ensureFolder('DSA and LeetCode');f.open=true;const blocks=TPL.leetcode.make(),lc=blocks.find(b=>b.t==='lc');lc.url='https://leetcode.com/problems/'+it.slug+'/';lc.diff=it.d;lc.title=it.t;
   const pg={id:uid(),title:it.t,parent:f.id,tags:['leetcode',it.d.toLowerCase()],fav:false,open:true,blocks};S.pages.push(pg);homeOn=false;cur=pg.id;save();render();lcFetch(lc,pg,true)};
+ ed.querySelectorAll('.rdtabs button').forEach(b=>b.onclick=()=>{rmList=b.dataset.l;try{localStorage.setItem('nt.road',rmList)}catch(e){}render()});
  ed.querySelectorAll('.rdr').forEach(r=>r.onclick=()=>go(cats[+r.dataset.c].items[+r.dataset.i]));
  const nb=$('#rdnext');if(nb)nb.onclick=()=>go(next)}
 function openRoadmap(){homeOn=true;homeMode='road';homeCur=cur;render()}
@@ -3552,4 +3582,4 @@ boot();
 /* heartbeat autosave: re-persists every 30s regardless of edits, so the server's
    30s-throttled backup rotation always has a fresh copy to roll even on a quiet page */
 setInterval(()=>{if(dirty)save(1)},30000);
-</script></body></html>
+</script><script src="premium.js" defer></script></body></html>

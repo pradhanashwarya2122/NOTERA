@@ -183,7 +183,7 @@ try:
 
         # drag an image so the text wraps around it, and bullets
         svg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='orange'/></svg>"
-        long = "A long paragraph that should wrap around the picture and then continue underneath it. " * 4
+        long = "A long paragraph that should wrap around the picture and then continue underneath it. " * 12
         pg.evaluate("""([svg,long])=>{S.pages.push({id:'p9',title:'wrap',parent:null,tags:[],mt:5,blocks:[{id:'w1',t:'image',src:svg,size:'m',h:''},{id:'w2',t:'p',h:long},{id:'w3',t:'p',h:long}]});homeOn=false;cur='p9';render()}""", [svg, long])
         pg.wait_for_timeout(500)
         im = pg.locator("#bl .blk.imgb .im").bounding_box()
@@ -212,6 +212,81 @@ try:
         pg.evaluate("setFun(false)")
         ok(not pg.evaluate("document.body.classList.contains('fun')"), "the colourful mode can be switched off")
         pg.evaluate("setFun(true)")
+
+        # undo and redo while still typing
+        pg.evaluate("homeOn=false;cur='p1';render()")
+        pg.wait_for_timeout(500)
+        pg.locator('#bl .blk[data-t="p"] .ce').first.click()
+        pg.keyboard.press("End")
+        base = pg.evaluate("page().blocks.find(b=>b.t==='p').h")
+        pg.keyboard.type(" ALPHA")
+        pg.wait_for_timeout(900)
+        pg.keyboard.type(" BETA")
+        pg.wait_for_timeout(900)
+        pg.keyboard.press("Control+z")
+        pg.wait_for_timeout(300)
+        t1 = pg.evaluate("page().blocks.find(b=>b.t==='p').h")
+        ok("ALPHA" in t1 and "BETA" not in t1, "Ctrl+Z undoes the last typing step while the cursor is still in the block: " + t1[-20:])
+        pg.keyboard.press("Control+z")
+        pg.wait_for_timeout(300)
+        now2 = pg.evaluate("page().blocks.find(b=>b.t==='p').h")
+        ok(now2 == base, "a second Ctrl+Z goes back to the original text: %r vs %r" % (now2[-30:], base[-30:]))
+        pg.keyboard.press("Control+Shift+z")
+        pg.wait_for_timeout(300)
+        ok("ALPHA" in pg.evaluate("page().blocks.find(b=>b.t==='p').h"), "Ctrl+Shift+Z redoes it")
+        ok(pg.evaluate("document.activeElement.classList.contains('ce')"), "the cursor stays in the text after undo")
+
+        # resizing a picture reflows the text around it
+        pg.evaluate("homeOn=false;cur='p9';render()")
+        pg.evaluate("page().blocks.find(b=>b.id==='w1').fl='l';render()")
+        pg.wait_for_timeout(500)
+        wrapped = pg.evaluate("!document.querySelector('.wrapg').classList.contains('stack')")
+        pg.evaluate("page().blocks.find(b=>b.id==='w1').pw=900;render()")
+        pg.wait_for_timeout(500)
+        ok(wrapped and pg.evaluate("document.querySelector('.wrapg').classList.contains('stack')"), "a very wide picture pushes the text below it")
+        pg.evaluate("delete page().blocks.find(b=>b.id==='w1').pw;delete page().blocks.find(b=>b.id==='w1').fl;render()")
+
+        # stickers
+        pg.evaluate("homeOn=false;cur='p1';render();setFun(true)")
+        pg.wait_for_timeout(400)
+        pg.locator("#addstk").click()
+        pg.wait_for_selector("#stk.show")
+        ok(pg.locator("#stk .stkg button").count() >= 10, "the sticker picker lists cute stickers")
+        pg.locator("#stk .stkt button[data-t=tech]").click()
+        n_tech = pg.locator("#stk .stkg button").count()
+        pg.locator("#stk .stkg button").first.click()
+        pg.wait_for_timeout(500)
+        ok(n_tech >= 10 and pg.evaluate("page().blocks.some(b=>b.sticker&&b.fl==='r')") and pg.locator(".blk[data-sticker]").count() == 1, "a tech sticker is added and floats beside the text")
+        ok(pg.evaluate("page().blocks.find(b=>b.sticker).svg.includes('<svg')"), "the sticker survives the SVG sanitiser")
+
+        # highlighter and wavy underline
+        pg.locator('#bl .blk[data-t="p"] .ce').first.click()
+        pg.keyboard.press("Control+a")
+        pg.wait_for_timeout(200)
+        pg.evaluate("document.querySelector('#ft [data-bg]').click()")
+        pg.wait_for_timeout(300)
+        ok(pg.evaluate("!!document.querySelector('.hm[data-hc]')") and pg.evaluate("getComputedStyle(document.querySelector('.hm[data-hc]')).backgroundImage.includes('svg')"), "the highlighter draws a hand-made marker stroke")
+
+        # roadmap
+        pg.evaluate("openRoadmap()")
+        pg.wait_for_selector(".road")
+        ok(pg.locator(".rdr").count() >= 65, "the roadmap lists the free Blind 75: %d" % pg.locator(".rdr").count())
+        pg.locator(".rdr").first.click()
+        pg.wait_for_timeout(600)
+        ok(pg.evaluate("page().blocks.some(b=>b.t==='lc'&&/contains-duplicate/.test(b.url))"), "choosing a roadmap problem creates its page with the link filled in")
+        pg.evaluate("openRoadmap()")
+        pg.wait_for_selector(".road")
+        ok(pg.locator(".rdr.ok, .rdr .rds").count() > 0 and "Open" in pg.locator(".rdr").first.inner_text(), "the roadmap now recognises that page")
+
+        # solve timer
+        pg.evaluate("homeOn=false;cur=S.pages.find(p=>p.blocks.some(b=>b.t==='lc')).id;render()")
+        pg.wait_for_timeout(400)
+        pg.locator('[data-x="timer"]').click()
+        pg.wait_for_timeout(1200)
+        ok("Stop" in pg.locator(".lctm").inner_text(), "the timer runs on the problem card")
+        pg.locator('[data-x="timer"]').click()
+        pg.wait_for_timeout(400)
+        ok(pg.evaluate("S.pages.some(p=>p.blocks.some(b=>b.t==='lc'&&b.times&&b.times.length===1))"), "stopping logs the time")
 
         # LeetCode chip and section choice
         pg.evaluate("homeOn=false;cur='p1';render()")

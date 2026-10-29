@@ -130,3 +130,11 @@ are git-ignored.
 - **Text around an image:** drag the picture itself to the left or right edge of a paragraph (a label says "Image left, text wraps"), or use the two wrap buttons that appear on the picture. Click the same button again to switch wrapping off. Dragging by the grip on the left still builds columns.
 - **Bullets:** the *Bullets* and *Numbered* chips, `Ctrl+Shift+8` / `Ctrl+Shift+7`, and list buttons in the selection toolbar.
 - **Colourful notes** (Theme panel, on by default): every theme has its own six-colour palette used for headings, bullets, links, quotes and doodles. The selection toolbar also has wavy and marker underlines.
+
+## Stickers, sketch looks, roadmap and timer
+- **Stickers** (colourful mode): the *Stickers* chip opens 28 hand-drawn cute and tech stickers (cat, rocket, bug, Git branch, O(n) and more). They float beside your text; drag one to a page edge to change sides.
+- **Real marker and pencil:** highlights from the selection toolbar are drawn as uneven marker strokes, underlines as marker swipes, headings get pencil double-lines and paragraphs a sketched frame, and pictures get washi tape. All of it switches off with *Colourful notes*.
+- **Pictures:** drag the corner handle to resize. Text beside a picture shrinks a little as the gap narrows and moves below it when there is no room. Text in columns scales down in narrow columns too.
+- **Undo and redo** now follow typing: pause for a moment and that stretch of typing becomes one step, even while the cursor is still in the block.
+- **Roadmap** (Home): the free Blind 75 problems grouped by topic, with progress per topic and a *Next up* suggestion. Problems you already track are matched by their link; the rest are created for you in one click.
+- **Solve timer** on every problem card: start, stop, and it keeps your best and average time.

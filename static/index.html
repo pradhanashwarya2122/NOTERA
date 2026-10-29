@@ -1090,6 +1090,54 @@ body.fun .hh{position:relative}
 body.fun .hstats>div:nth-child(6n+1) b{color:var(--f1)}body.fun .hstats>div:nth-child(6n+2) b{color:var(--f2)}body.fun .hstats>div:nth-child(6n+3) b{color:var(--f3)}body.fun .hstats>div:nth-child(6n+4) b{color:var(--f4)}body.fun .hstats>div:nth-child(6n+5) b{color:var(--f5)}
 @media(max-width:700px){body.fun .hdoodle{display:none}}
 @media(prefers-reduced-motion:reduce){body.fun .hdoodle *{animation:none!important}}
+
+.wrapg:not(.stack)>.blk:not(.imgb) .ce{zoom:var(--ws,1)}
+.wrapg.stack>.blk.imgb,.wrapg.stack>.blk.imgb[data-fl=r]{float:none;max-width:100%;margin:6px 0}
+.wrapg>.blk.imgb[data-pw]{max-width:none}
+.imgf{position:relative}
+.rsz{position:absolute;right:5px;bottom:5px;width:18px;height:18px;border-radius:5px;cursor:nwse-resize;opacity:0;transition:opacity .15s;z-index:3;background:linear-gradient(135deg,transparent 52%,rgba(255,255,255,.95) 52% 60%,transparent 60% 72%,rgba(255,255,255,.95) 72% 80%,transparent 80%);filter:drop-shadow(0 1px 2px rgba(0,0,0,.5));touch-action:none}
+.im:hover .rsz,.rsz:active{opacity:1}
+.rowg .rsz{display:none}
+.rowg>.blk{container-type:inline-size}
+.rowg>.blk .ce{font-size:clamp(13px,4.7cqi,1em)}
+
+/* ---------- stickers ---------- */
+.stkb{display:none!important}body.fun .stkb{display:inline-flex!important}
+#stk{position:fixed;z-index:80;width:330px;background:var(--panel);border:1px solid var(--ln);border-radius:14px;box-shadow:0 24px 60px -18px rgba(0,0,0,.45);padding:10px;opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .14s,transform .14s,visibility .14s}
+#stk.show{opacity:1;visibility:visible;transform:none}
+.stkt{display:flex;gap:6px;margin-bottom:8px}.stkt button{padding:5px 12px;border-radius:8px;font:600 12.5px var(--ui);color:var(--mut);border:1px solid transparent}.stkt button.on{background:var(--veil1);color:var(--tx);border-color:var(--ln)}
+.stkg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;max-height:250px;overflow:auto}.stkg button{aspect-ratio:1;border-radius:10px;padding:5px;transition:transform .12s,background .12s}.stkg button:hover{background:var(--veil1);transform:scale(1.12) rotate(-3deg)}.stkg svg{width:100%;height:100%}
+.blk[data-sticker] .im{border:0;background:none;box-shadow:none;overflow:visible;cursor:grab}
+.blk[data-sticker] .im img{filter:drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(0 4px 5px rgba(0,0,0,.28));transition:transform .2s}
+.blk[data-sticker] .im:hover img{transform:rotate(-4deg) scale(1.04)}
+.blk[data-sticker] .cap{display:none}
+.blk[data-sticker] .imgf::before{display:none!important}
+/* ---------- marker and pencil ---------- */
+body.fun .hm,body.fun .um[data-hc]{background-color:transparent}
+.hm{background:color-mix(in srgb,var(--uc,#ffe14d) 50%,transparent);border-radius:3px}
+body.fun .hm{background-color:transparent}
+.um[data-hc]{background-color:transparent}
+body.fun .ce.h1::after,body.fun .ce.h2::after{content:'';display:block;height:10px;width:min(360px,70%);margin-top:3px;background:var(--fc,var(--f4));opacity:.85;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M2 6C30 2 60 9 100 4S170 7 198 3' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M12 10C50 6 90 11 150 8' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat 0 0/100% 100%;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M2 6C30 2 60 9 100 4S170 7 198 3' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M12 10C50 6 90 11 150 8' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat 0 0/100% 100%}
+body.fun .ce.h2,body.fun .doc h2{text-decoration:none}
+body.fun .ce.h1{border-bottom:0}
+body.fun .blk[data-t=p]>.bd,body.fun .blk[data-t=quote]>.bd,body.fun .blk[data-t=callout]>.bd{position:relative}
+body.fun .blk[data-t=p]>.bd .ce,body.fun .blk[data-t=quote]>.bd .ce{border-color:transparent}
+body.fun .blk[data-t=p]>.bd::before,body.fun .blk[data-t=quote]>.bd::before{content:'';position:absolute;inset:0;border:1.5px solid color-mix(in srgb,var(--tx) 34%,transparent);border-radius:8px 11px 9px 12px/11px 8px 12px 9px;filter:url(#rough2);pointer-events:none}
+body.fun .blk[data-t=p]>.bd::after{content:'';position:absolute;inset:1px;border:1px solid color-mix(in srgb,var(--tx) 18%,transparent);border-radius:11px 8px 12px 9px/8px 12px 9px 11px;filter:url(#rough);pointer-events:none}
+body.fun .wrapg>.blk .bd::before,body.fun .wrapg>.blk .bd::after{display:none}
+body.fun .imgf:not(.x)::before{content:'';position:absolute;top:-9px;left:50%;width:74px;height:20px;margin-left:-37px;transform:rotate(-3deg);background:repeating-linear-gradient(90deg,color-mix(in srgb,var(--fc,var(--f2)) 55%,transparent) 0 8px,color-mix(in srgb,var(--fc,var(--f6)) 30%,transparent) 8px 16px);box-shadow:0 1px 2px rgba(0,0,0,.18);z-index:4;pointer-events:none}
+.rowg .imgf::before{display:none!important}
+/* ---------- roadmap ---------- */
+.road{max-width:860px;margin:0 auto;padding:6px 0 80px}
+.rdh{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:18px}.rdh h1{font:600 46px/1.1 var(--serif);margin:0}
+.rdp{text-align:right;min-width:150px}.rdp b{font:600 30px var(--serif)}.rdp i,.rdc header i{display:block;height:7px;border-radius:99px;background:var(--veil2);position:relative;margin-top:6px;overflow:hidden}.rdp i::after,.rdc header i::after{content:'';position:absolute;inset:0 auto 0 0;width:var(--p);background:linear-gradient(90deg,var(--f3),var(--f4));border-radius:99px;transition:width .5s var(--ease)}
+.rdn{display:flex;align-items:center;gap:12px;width:100%;padding:14px 18px;border:1px solid var(--ln);border-radius:14px;margin-bottom:20px;text-align:left;color:var(--tx);background:linear-gradient(90deg,color-mix(in srgb,var(--f2) 10%,var(--bg)),var(--bg));transition:transform .15s}.rdn:hover{transform:translateY(-1px)}.rdn span:first-child{font:600 11.5px var(--ui);text-transform:uppercase;letter-spacing:.6px;color:var(--mut)}.rdn b{font:600 16px var(--ui);flex:1}.rdn .go{font:600 13px var(--ui);color:var(--y)}.rdn.done{justify-content:center}
+.df{font:600 11.5px var(--ui);font-style:normal;padding:2px 9px;border-radius:99px}.df.Easy{background:color-mix(in srgb,var(--green) 14%,transparent);color:var(--green)}.df.Medium{background:color-mix(in srgb,var(--orange) 14%,transparent);color:var(--orange)}.df.Hard{background:color-mix(in srgb,var(--red) 14%,transparent);color:var(--red)}
+.rdc{border:1px solid var(--ln);border-radius:14px;margin-bottom:14px;overflow:hidden}.rdc header{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;padding:11px 16px;background:var(--veil1)}.rdc header b{font:650 14.5px var(--ui)}.rdc header span{font:600 12.5px var(--ui);color:var(--mut)}.rdc header i{grid-column:1/-1;margin:0}
+.rdr{display:grid;grid-template-columns:22px 1fr auto 150px 64px;gap:10px;align-items:center;padding:8px 16px;border-top:1px solid var(--ln);cursor:pointer;transition:background .12s}.rdr:hover{background:var(--veil1)}.rdr.ok .rdt{color:var(--mut);text-decoration:line-through;text-decoration-thickness:1px}
+.rds{color:var(--sc);font-size:15px;text-align:center}.rdt{font:500 14.5px var(--ui);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rdst{font:12.5px var(--ui);color:var(--mut)}.rdr button{padding:4px 10px;border-radius:8px;border:1px solid var(--ln);font:600 12px var(--ui);color:var(--tx)}
+@media(max-width:700px){.rdr{grid-template-columns:20px 1fr auto 56px}.rdst{display:none}.rdh h1{font-size:34px}}
+.hb.c8{background:color-mix(in srgb,var(--pink) 12%,var(--bg));color:var(--pink)}
 </style>
 </head><body>
 <div id="side"><div class="sin">
@@ -1117,7 +1165,7 @@ body.fun .hstats>div:nth-child(6n+1) b{color:var(--f1)}body.fun .hstats>div:nth-
 <button class="b mi" id="ms" title="Save everything now and write a full backup of the NOTERA folder (Ctrl/Cmd+S)" data-ic="save"><span class="lbl">Master save</span></button>
 </div>
 <div class="rsz" id="rsz" title="Drag to resize"></div>
-</div></div><div id="edge"></div><div id="acc"></div><div id="tpl"></div><div id="wel"></div><div id="rvm"></div><div id="scrim"></div><div id="aiset"></div><div id="tset"></div><div id="rec"></div><div id="frb"></div><div id="lpv"></div><div id="aim"></div><aside id="aip"></aside><div id="pkr"></div><div id="rvw"></div><div id="shc"></div>
+</div></div><div id="edge"></div><div id="acc"></div><div id="tpl"></div><div id="wel"></div><div id="rvm"></div><div id="scrim"></div><div id="aiset"></div><div id="tset"></div><div id="rec"></div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3"/></filter><filter id="rough2"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4.5"/></filter></svg><div id="frb"></div><div id="lpv"></div><div id="aim"></div><aside id="aip"></aside><div id="pkr"></div><div id="rvw"></div><div id="shc"></div>
 <button id="sctoggle" title="Show sidebar (Ctrl+\)"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
 <div id="main"><div id="ed"></div></div>
 <button id="lay"></button>
@@ -1197,7 +1245,7 @@ const pj=p=>{const{mt,...r}=p;return JSON.stringify(r)};
 const baseline=()=>{snapMap={};S.pages.forEach(p=>snapMap[p.id]=pj(p))};
 /* every page remembers when it was last edited (mt) so two laptops can merge page by page */
 function stamp(){S.pages.forEach(p=>{const j=pj(p);if(snapMap[p.id]!==j){p.mt=Date.now();snapMap[p.id]=j}})}
-function adopt(st){const id=cur;rev=st._rev||rev;delete st._rev;S=st;if(!P(id))cur=S.pages[0]?.id;baseline()}
+function adopt(st){const id=cur;rev=st._rev||rev;delete st._rev;S=st;lastSnap=null;if(!P(id))cur=S.pages[0]?.id;baseline()}
 async function save(now){dirty=true;clearTimeout(tm);const f=async()=>{saving=true;setSaveStatus('Saving…');try{stamp();const r=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...S,_rev:rev})});if(!r.ok)throw 0;const d=await r.json();rev=d.rev;if(d.state){adopt({...d.state,_rev:d.rev});render()}dirty=false;setSaveStatus('Saved')}catch(e){setSaveStatus('Not saved. Server offline?',true)}saving=false};
  if(now)await f();else tm=setTimeout(f,400)}
 function toast(t){const e=$('#toast');e.textContent=t;e.className='s';clearTimeout(toast.t);toast.t=setTimeout(()=>e.className='',1800)}
@@ -1252,16 +1300,16 @@ function hl(s,lang){const L=LANGS[lang]||LANGS.python;
 /* editor */
 const TYPES=[['p','Text'],['h1','Heading 1'],['h2','Heading 2'],['h3','Heading 3'],['ul','Bullet list'],['todo','To-do'],['toggle','Toggle'],['callout','Callout'],['quote','Quote'],['code','Python code'],['prompt','Paste prompt'],['qa','Flashcard'],['ai','Ask AI about this note'],['lc','LeetCode problem tracker'],['solution','Solution block'],['interview','Interview question'],['link','Link to a note'],['snippet','Saved snippet'],['component','Interactive component (HTML or SVG)'],['mermaid','Mermaid diagram'],['stepper','Algorithm stepper'],['quiz','Quiz'],['tabs','Tabs comparison'],['import','Import a file'],['hint','Hint'],['pitfall','Pitfall / mistake'],['idea','Key idea'],['complexity','Complexity'],['leetcode','LeetCode template (insert here)'],['array','Array visual'],['image','Image'],['ol','Numbered list'],['table','Table'],['cols','2 columns'],['math','Math (LaTeX)'],['hr','Divider']];
 let lastRenderedPage=null,prevBlockIds=new Set();
-function render(){if(homeOn&&cur!==homeCur)homeOn=false;try{const o=JSON.parse(sessionStorage.getItem('nt.view')||'{}');sessionStorage.setItem('nt.view',JSON.stringify({c:cur,h:homeOn,m:homeMode,y:(o.c===cur&&o.h===homeOn)?o.y:0}))}catch(e){}document.body.classList.toggle('solo',homeOn);document.body.classList.toggle('libv',homeOn&&homeMode==='lib');{const lb=document.getElementById('libsel');if(lb&&!(homeOn&&homeMode==='lib'))lb.classList.remove('show')}renderSide();if(homeOn){drawHome();return}const p=page(),ed=$('#ed');document.body.classList.toggle('solo',!!p.folder);document.body.classList.toggle('libv',false);if(p.folder){drawFolder(p);return}
+function render(){if(homeOn&&cur!==homeCur)homeOn=false;{const k=document.getElementById('stk');if(k)k.classList.remove('show')}try{const o=JSON.parse(sessionStorage.getItem('nt.view')||'{}');sessionStorage.setItem('nt.view',JSON.stringify({c:cur,h:homeOn,m:homeMode,y:(o.c===cur&&o.h===homeOn)?o.y:0}))}catch(e){}document.body.classList.toggle('solo',homeOn);document.body.classList.toggle('libv',homeOn&&(homeMode==='lib'||homeMode==='road'));{const lb=document.getElementById('libsel');if(lb&&!(homeOn&&homeMode==='lib'))lb.classList.remove('show')}renderSide();if(homeOn){drawHome();return}const p=page(),ed=$('#ed');document.body.classList.toggle('solo',!!p.folder);document.body.classList.toggle('libv',false);if(p.folder){drawFolder(p);return}
  const pageChanged=p.id!==lastRenderedPage;
  if(pageChanged){ed.style.animation='none';ed.offsetHeight;ed.style.animation='ntFadeIn .18s ease';prevBlockIds=new Set()}
  const mainScroll=$('#main').scrollTop;
  ed.innerHTML=`${crumbHtml(p)}<div id="ted"><button class="ico" id="ic" title="Page icon">${p.icon||ic('doc',24)}</button><textarea id="ti" rows="1" placeholder="Untitled" spellcheck="false">${esc(p.title)}</textarea></div><div id="pm" class="pm">${pageMeta(p)}</div><div id="tr"></div><div id="bl"></div>
- <div class="add"><button class="b" data-a="prompt" title="Add one big box for pasting a whole AI answer. It stays together in a single block">${ic('doc')}<span class="lbl">Paste prompt</span></button><button class="b" data-a="leetcode" title="Add the LeetCode problem tracker and solution template to this page">${ic('code')}<span class="lbl">LeetCode</span></button><button class="b" id="addcmp" title="Insert an interactive component, import an HTML or SVG file, or add a Mermaid diagram">${ic('template')}<span class="lbl">Component</span></button><button class="b" data-a="p" title="Add a plain text paragraph block">${ic('doc')}<span class="lbl">Text</span></button><button class="b" data-a="code" title="Add a Python code block you can run">${ic('code')}<span class="lbl">Python code</span></button><button class="b" data-a="image" title="Add an image block (upload, paste, or drag a file in)">${ic('image')}<span class="lbl">Image</span></button><button class="b" id="pci" title="Add an image straight from your clipboard">${ic('clip')}<span class="lbl">Paste image</span></button><button class="b" data-a="todo" title="Add a checkbox to-do item">${ic('todo')}<span class="lbl">To-do</span></button><button class="b" data-a="ul" title="Add a bulleted list (Ctrl+Shift+8)">${ic('list')}<span class="lbl">Bullets</span></button><button class="b" data-a="ol" title="Add a numbered list (Ctrl+Shift+7)">${ic('list')}<span class="lbl">Numbered</span></button><button class="b" data-a="toggle" title="Add a collapsible toggle section">${ic('toggle')}<span class="lbl">Toggle</span></button><button class="b" data-a="callout" title="Add a highlighted callout box">${ic('callout')}<span class="lbl">Callout</span></button><button class="b" id="ra" title="Run every Python code block on this page, top to bottom">${ic('play')}<span class="lbl">Run all</span></button><button class="b" id="mdx" title="Download this page as a Markdown (.md) file">${ic('download')}<span class="lbl">Save .md</span></button><button class="b" data-a="table" title="Add an editable table">${ic('table')}<span class="lbl">Table</span></button><button class="b" data-a="math" title="Add a LaTeX math block">${ic('math')}<span class="lbl">Math</span></button><button class="b" data-a="cols" title="Add a two-column layout block">${ic('cols')}<span class="lbl">Columns</span></button></div>`;
+ <div class="add"><button class="b" data-a="prompt" title="Add one big box for pasting a whole AI answer. It stays together in a single block">${ic('doc')}<span class="lbl">Paste prompt</span></button><button class="b" data-a="leetcode" title="Add the LeetCode problem tracker and solution template to this page">${ic('code')}<span class="lbl">LeetCode</span></button><button class="b stkb" id="addstk" title="Cute and tech stickers. They float beside your text">${ic('star')}<span class="lbl">Stickers</span></button><button class="b" id="addcmp" title="Insert an interactive component, import an HTML or SVG file, or add a Mermaid diagram">${ic('template')}<span class="lbl">Component</span></button><button class="b" data-a="p" title="Add a plain text paragraph block">${ic('doc')}<span class="lbl">Text</span></button><button class="b" data-a="code" title="Add a Python code block you can run">${ic('code')}<span class="lbl">Python code</span></button><button class="b" data-a="image" title="Add an image block (upload, paste, or drag a file in)">${ic('image')}<span class="lbl">Image</span></button><button class="b" id="pci" title="Add an image straight from your clipboard">${ic('clip')}<span class="lbl">Paste image</span></button><button class="b" data-a="todo" title="Add a checkbox to-do item">${ic('todo')}<span class="lbl">To-do</span></button><button class="b" data-a="ul" title="Add a bulleted list (Ctrl+Shift+8)">${ic('list')}<span class="lbl">Bullets</span></button><button class="b" data-a="ol" title="Add a numbered list (Ctrl+Shift+7)">${ic('list')}<span class="lbl">Numbered</span></button><button class="b" data-a="toggle" title="Add a collapsible toggle section">${ic('toggle')}<span class="lbl">Toggle</span></button><button class="b" data-a="callout" title="Add a highlighted callout box">${ic('callout')}<span class="lbl">Callout</span></button><button class="b" id="ra" title="Run every Python code block on this page, top to bottom">${ic('play')}<span class="lbl">Run all</span></button><button class="b" id="mdx" title="Download this page as a Markdown (.md) file">${ic('download')}<span class="lbl">Save .md</span></button><button class="b" data-a="table" title="Add an editable table">${ic('table')}<span class="lbl">Table</span></button><button class="b" data-a="math" title="Add a LaTeX math block">${ic('math')}<span class="lbl">Math</span></button><button class="b" data-a="cols" title="Add a two-column layout block">${ic('cols')}<span class="lbl">Columns</span></button></div>`;
  wireCrumbs(ed);
  titleFit();$('#ti').oninput=e=>{titleFit();p.title=e.target.value;save();const t=$('#tree .pg.on .t');if(t)t.textContent=p.title||'Untitled'};
  $('#ti').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();focusB(0)}};
- $('#ic').onclick=()=>{const v=prompt('Page icon (paste an emoji)',p.icon||'');if(v!==null){p.icon=v.trim().slice(0,4);save();render()}};$('#addcmp').onclick=()=>openComponentDialog();$('#ra').onclick=runAll;$('#mdx').onclick=saveMd;$('#pci').onclick=()=>pasteImageFromClipboard(null);tagRow();ed.querySelectorAll('.add .b[data-a]').forEach(b=>b.onclick=()=>{if(b.dataset.a==='leetcode'){snap();p.blocks.push(...TPL.leetcode.make());if(!p.tags.includes('leetcode'))p.tags.push('leetcode');save();render();return}addBlock(p.blocks.length-1,b.dataset.a,true)});
+ $('#ic').onclick=()=>{const v=prompt('Page icon (paste an emoji)',p.icon||'');if(v!==null){p.icon=v.trim().slice(0,4);save();render()}};$('#addcmp').onclick=()=>openComponentDialog();$('#addstk').onclick=e=>openStickers(e.currentTarget);$('#ra').onclick=runAll;$('#mdx').onclick=saveMd;$('#pci').onclick=()=>pasteImageFromClipboard(null);tagRow();ed.querySelectorAll('.add .b[data-a]').forEach(b=>b.onclick=()=>{if(b.dataset.a==='leetcode'){snap();p.blocks.push(...TPL.leetcode.make());if(!p.tags.includes('leetcode'))p.tags.push('leetcode');save();render();return}addBlock(p.blocks.length-1,b.dataset.a,true)});
  document.body.classList.toggle('cvmode',p.mode==='canvas');const bl=$('#bl'),newIds=new Set();(p.mode==='canvas'?buildCanvas:buildBlocks)(p,bl,newIds);prevBlockIds=newIds;
  SEL.forEach(id=>{if(!p.blocks.some(b=>b.id===id))SEL.delete(id)});selBar();
  lastRenderedPage=p.id;applyFolds();buildOutline();renderMath($('#bl'));renderBacklinks(p);if(pageChanged)noteRecent(p.id);if(!pageChanged)$('#main').scrollTop=mainScroll}
@@ -1314,20 +1362,24 @@ function blockEl(b,i,isNew){const p=page(),w=document.createElement('div');w.cla
  const al=b.al==='c'?'center':b.al==='r'?'right':'left';bd.style.textAlign=al;w.append(bd);
  const ce=(cls,ph)=>{const d=document.createElement('div');d.className='ce '+(cls||'');d.contentEditable=true;d.dataset.ph=ph||'';d.innerHTML=b.h||'';wire(d,b,i);return d};
  if(b.t==='hr'){bd.innerHTML='<hr>'}
- else if(b.t==='image'||b.t==='svg'){w.classList.add('imgb');w.classList.toggle('full',imgFull(b)&&!b.fl);if(b.fl)w.dataset.fl=b.fl;const isSvg=b.t==='svg',srcUrl=isSvg?svgUrl(b.svg):b.src;
+ else if(b.t==='image'||b.t==='svg'){if(b.sticker)w.dataset.sticker='1';w.classList.add('imgb');w.classList.toggle('full',imgFull(b)&&!b.fl&&!b.pw);if(b.fl)w.dataset.fl=b.fl;if(b.pw&&!b.rg)w.dataset.pw='1';const isSvg=b.t==='svg',srcUrl=isSvg?svgUrl(b.svg):b.src;
   if(srcUrl){const sz=imgSize(b),f=document.createElement('div');f.className='imgf';f.dataset.s=sz;
-   f.innerHTML=`<div class="im${isSvg?' svg':''}"><img src="${escA(srcUrl)}" alt="${escA(b.alt||'')}" draggable="false"><div class="szc">${[['s','Small'],['m','Medium'],['l','Large']].map(([k,l])=>`<button type="button" data-z="${k}" title="${l}" class="${k===sz?'on':''}">${k.toUpperCase()}</button>`).join('')}<button type="button" data-z="wl" title="Image on the left, text flows around it" class="${b.fl==='l'?'on':''}">\u25E7</button><button type="button" data-z="wr" title="Image on the right, text flows around it" class="${b.fl==='r'?'on':''}">\u25E8</button>${isSvg?'<button type="button" data-z="src" title="Edit SVG source" class="code">&lt;/&gt;</button>':''}</div></div>`;
+   f.innerHTML=`<div class="im${isSvg?' svg':''}"><img src="${escA(srcUrl)}" alt="${escA(b.alt||'')}" draggable="false"><div class="rsz" title="Drag to resize. The text around it adapts"></div><div class="szc">${[['s','Small'],['m','Medium'],['l','Large']].map(([k,l])=>`<button type="button" data-z="${k}" title="${l}" class="${k===sz?'on':''}">${k.toUpperCase()}</button>`).join('')}<button type="button" data-z="wl" title="Image on the left, text flows around it" class="${b.fl==='l'?'on':''}">\u25E7</button><button type="button" data-z="wr" title="Image on the right, text flows around it" class="${b.fl==='r'?'on':''}">\u25E8</button>${isSvg?'<button type="button" data-z="src" title="Edit SVG source" class="code">&lt;/&gt;</button>':''}</div></div>`;
    const cp=document.createElement('div');cp.className='ce cap';cp.contentEditable=true;cp.dataset.ph='Add a caption';cp.innerHTML=b.cap||'';cp.oninput=()=>{b.cap=cp.innerHTML;save()};
    f.append(cp);bd.append(f);
    const im=f.querySelector('img');im.onerror=()=>{f.querySelector('.im').innerHTML='<div class="imgbad">'+ic('image',16)+'<span>Image unavailable'+(b.src&&/^https?:/.test(b.src)?' <a href="'+escA(b.src)+'" target="_blank" rel="noopener">open original</a>':'')+'</span></div>'};
+   if(b.pw&&!b.rg)f.style.width=b.pw+'px';
+   const rz=f.querySelector('.rsz');rz.onpointerdown=e=>{e.preventDefault();e.stopPropagation();const x0=e.clientX,w0=f.getBoundingClientRect().width,maxW=Math.max(120,(w.parentElement?w.parentElement.clientWidth:900)-(b.fl?120:0));let moved=false;rz.setPointerCapture(e.pointerId);
+    const mv=ev=>{moved=true;const nw=Math.max(80,Math.min(maxW,w0+(ev.clientX-x0)*(b.fl==='r'?-1:1)));f.style.width=nw+'px';w.dataset.pw='1';w.classList.remove('full')};
+    const up=()=>{rz.removeEventListener('pointermove',mv);rz.removeEventListener('pointerup',up);if(moved){snap();b.pw=Math.round(f.getBoundingClientRect().width);if(!b.rg)f.style.width=b.pw+'px';save()}};rz.addEventListener('pointermove',mv);rz.addEventListener('pointerup',up)};
    const szc=f.querySelector('.szc');
    szc.onclick=e=>{e.stopPropagation();const z=e.target.closest('button')?.dataset.z;if(!z)return;
     if(z==='src'){let ta=f.querySelector('.srcw');if(ta){ta.remove();return}ta=document.createElement('textarea');ta.className='srcw';ta.spellcheck=false;ta.value=b.svg;
      ta.oninput=()=>{const sv=sanitizeSvgText(ta.value);ta.classList.toggle('bad',!sv);if(sv){b.svg=sv;im.src=svgUrl(sv);save()}};f.insertBefore(ta,cp);ta.focus();return}
     if(z==='wl'||z==='wr'){snap();const v=z==='wl'?'l':'r';if(b.fl===v)delete b.fl;else{b.fl=v;delete b.rg;delete b.rw}save();render();return}
-    if(z===imgSize(b))return;snap();b.size=z;delete b.w;f.dataset.s=z;szc.querySelectorAll('button[data-z="s"],button[data-z="m"],button[data-z="l"]').forEach(x=>x.classList.toggle('on',x.dataset.z===z));w.classList.toggle('full',imgFull(b));save()};
-   f.querySelector('.im').onclick=e=>{if(!e.target.closest('.szc'))openLightbox(srcUrl)};
-   f.querySelector('.im').addEventListener('pointerdown',e=>{if(e.target.closest('.szc,button,a'))return;startBlockDrag(e,b,w,true)})}
+    if(z===imgSize(b)&&!b.pw)return;snap();b.size=z;delete b.w;delete b.pw;f.style.width='';delete w.dataset.pw;f.dataset.s=z;szc.querySelectorAll('button[data-z="s"],button[data-z="m"],button[data-z="l"]').forEach(x=>x.classList.toggle('on',x.dataset.z===z));w.classList.toggle('full',imgFull(b));save()};
+   f.querySelector('.im').onclick=e=>{if(!e.target.closest('.szc,.rsz'))openLightbox(srcUrl)};
+   f.querySelector('.im').addEventListener('pointerdown',e=>{if(e.target.closest('.szc,button,a,.rsz'))return;startBlockDrag(e,b,w,true)})}
   else{bd.innerHTML='<div class="imgempty">'+ic('image',16)+'<span>Paste with Ctrl/Cmd+V, <a href="#" data-x="clip">from clipboard</a>, or <a href="#" data-x="file">choose a file</a></span></div>';
    const al=bd.querySelector('[data-x="file"]');al.onclick=e=>{e.preventDefault();pickImg(b)};
    const ac=bd.querySelector('[data-x="clip"]');ac.onclick=e=>{e.preventDefault();pasteImageFromClipboard(b)}}}
@@ -1683,8 +1735,15 @@ $('#q').oninput=e=>{q=e.target.value.trim().toLowerCase();renderSide()};
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();masterSave()}});
 document.addEventListener('mousedown',e=>{if(!e.target.closest('#sl'))hideSl()});
 addEventListener('beforeunload',()=>{navigator.sendBeacon&&dirty&&navigator.sendBeacon('/api/state',new Blob([JSON.stringify({...S,_rev:rev})],{type:'application/json'}))});
-function snap(){H.push(JSON.stringify(S));if(H.length>40)H.shift();F.length=0}
-function undo(redo){const from=redo?F:H,to=redo?H:F;if(!from.length)return toast('Nothing to '+(redo?'redo':'undo'));to.push(JSON.stringify(S));S=JSON.parse(from.pop());if(!P(cur))cur=S.pages[0]?.id;save(1);render();toast(redo?'Redone':'Undone')}
+/* one undo stack for everything: typing is grouped into a step after a short pause, structural edits are steps of their own */
+let lastSnap=null,typeT=0;
+function flushTyping(){const now=JSON.stringify(S);if(lastSnap!==null&&now!==lastSnap){H.push(lastSnap);if(H.length>80)H.shift();F.length=0}lastSnap=now}
+function snap(){flushTyping();H.push(lastSnap);if(H.length>80)H.shift();F.length=0}
+document.addEventListener('input',e=>{if(e.target.matches&&e.target.matches('.ce,textarea.cd,.mt')){if(lastSnap===null)lastSnap=JSON.stringify(S);clearTimeout(typeT);typeT=setTimeout(flushTyping,650)}},true);
+function undo(redo){clearTimeout(typeT);if(!redo)flushTyping();const from=redo?F:H,to=redo?H:F;if(!from.length)return toast('Nothing to '+(redo?'redo':'undo'));
+ const ae=document.activeElement,fb=ae&&ae.closest&&ae.closest('#bl .blk'),fid=fb&&fb.dataset.id;
+ to.push(JSON.stringify(S));S=JSON.parse(from.pop());if(!P(cur))cur=S.pages[0]?.id;save(1);lastSnap=JSON.stringify(S);render();toast(redo?'Redone':'Undone');
+ if(fid){const el=document.querySelector('#bl .blk[data-id="'+fid+'"] .ce,#bl .blk[data-id="'+fid+'"] textarea');if(el){el.focus();try{const r=document.createRange();r.selectNodeContents(el);r.collapse(false);const s=getSelection();s.removeAllRanges();s.addRange(r)}catch(x){}}}}
 function trashHtml(){const T=S.trash||[];return T.length?'<div class="sec" data-rec="1" style="cursor:pointer" title="Open recovery">Trash ('+T.length+')</div>'+T.map(t=>{const r=t.pages.find(p=>p.id===t.root),n=esc(r?.title||'Untitled');return'<div class="trw"><span title="'+n+'">'+n+(t.pages.length>1?' +'+(t.pages.length-1):'')+'</span><button data-r="'+t.id+'" title="Restore">↺</button><button data-x="'+t.id+'" title="Delete forever">×</button></div>'}).join(''):''}
 function movePg(id,to){if(!id||id===to)return;for(let x=to;x;x=P(x)?.parent)if(x===id)return toast('Cannot move a page into itself');snap();P(id).parent=to;if(to)P(to).open=true;save();renderSide()}
 function pgExtras(t){
@@ -1704,10 +1763,13 @@ function buildBlocks(p,bl,newIds){normalizeRows(p);let row=null,wrap=null;
   if(b.rg){wrap=null;if(!row||row.dataset.rg!==b.rg){row=document.createElement('div');row.className='rowg';row.dataset.rg=b.rg;bl.append(row)}
    else{const d=document.createElement('div');d.className='cdiv';d.title='Drag to resize. Double-click to even out';row.append(d)}
    el.style.flex=(b.rw||1)+' 1 0%';row.append(el)}
-  else if(b.fl&&(b.t==='image'||b.t==='svg')){row=null;wrap=document.createElement('div');wrap.className='wrapg';bl.append(wrap);wrap.append(el)}
+  else if(b.fl&&(b.t==='image'||b.t==='svg')){row=null;wrap=document.createElement('div');wrap.className='wrapg';bl.append(wrap);wrap.append(el);adaptWrap(wrap,el)}
   else if(wrap&&WRAPPABLE.has(b.t)){row=null;wrap.append(el)}
   else{row=null;wrap=null;bl.append(el)}});
  bl.querySelectorAll('.rowg').forEach(r=>wireRow(r,p))}
+/* the text beside a floated image adapts: it shrinks a little as the gap narrows, and drops below the image when there is no room */
+function adaptWrap(g,img){const apply=()=>{const gw=g.clientWidth,iw=img.getBoundingClientRect().width,avail=gw-iw-26;g.classList.toggle('stack',avail<190);g.style.setProperty('--ws',Math.max(.84,Math.min(1,avail/380)).toFixed(3))};
+ apply();if(window.ResizeObserver){const ro=new ResizeObserver(apply);ro.observe(g);ro.observe(img)}}
 const WRAPPABLE=new Set(['p','h1','h2','h3','ul','ol','todo','quote','doc','toggle']);
 function addColumn(b){const p=page(),i=p.blocks.indexOf(b);if(rowOf(p,b).length>=4)return toast('Four columns is the maximum');snap();
  if(!b.rg){b.rg=uid();b.rw=1}const g=rowOf(p,b),last=p.blocks.indexOf(g[g.length-1]);
@@ -1812,7 +1874,8 @@ const FT=document.createElement('div');FT.id='ft';const FC=['#ffe14d','#ff6ac1',
 FT.innerHTML='<button data-c="bold" title="Bold (Ctrl/Cmd+B)"><b>B</b></button><button data-c="italic" title="Italic (Ctrl/Cmd+I)"><i>I</i></button><button data-c="underline" title="Underline"><u>U</u></button><button data-c="strikeThrough" title="Strikethrough"><s>S</s></button><button data-c="code" title="Inline code">&lt;/&gt;</button><button data-c="ul" title="Bulleted list (Ctrl+Shift+8)">\u2022 List</button><button data-c="ol" title="Numbered list (Ctrl+Shift+7)">1. List</button><button data-c="link" title="Turn the selection into a link (Ctrl/Cmd+K)">Link</button><button data-c="clear" title="Clear all formatting on the selection">Clear</button><button data-c="ai" title="Ask AI about the selected text">AI</button><div style="width:100%"></div>'+FC.map(c=>'<i data-fg="'+c+'" style="background:'+c+'" title="Set text color"></i>').join('')+'<span style="color:var(--mut)">|</span>'+FC.map(c=>'<i data-uw="'+c+'" class="uwi" style="--uc:'+c+'" title="Wavy underline">~</i>').join('')+FC.slice(0,5).map(c=>'<i data-um="'+c+'" class="umi" style="--uc:'+c+'" title="Marker underline"></i>').join('')+'<span style="color:var(--mut)">|</span>'+FC.map(c=>'<i data-bg="'+c+'" style="background:'+c+'55;border-color:'+c+'" title="Highlight text with this color"></i>').join('');
 document.body.append(FT);FT.onmousedown=e=>e.preventDefault();
 FT.onclick=e=>{const t=e.target.closest('[data-c],[data-fg],[data-bg],[data-uw],[data-um]');if(!t)return;const sel=getSelection(),an=sel.anchorNode&&(sel.anchorNode.nodeType===1?sel.anchorNode:sel.anchorNode.parentElement),ce=an&&an.closest('.ce'),d=t.dataset;document.execCommand('styleWithCSS',false,true);
- if(d.uw||d.um){const s=sel.toString();if(s)document.execCommand('insertHTML',false,'<span class="'+(d.uw?'uw':'um')+'" style="--uc:'+(d.uw||d.um)+'">'+esc(s)+'</span>')}
+ if(d.uw||d.um){const s=sel.toString();if(s)document.execCommand('insertHTML',false,'<span class="'+(d.uw?'uw':'um')+'" data-hc="'+(d.uw||d.um)+'" style="--uc:'+(d.uw||d.um)+'">'+esc(s)+'</span>')}
+ else if(d.bg&&document.body.classList.contains('fun')){const s=sel.toString();if(s)document.execCommand('insertHTML',false,'<span class="hm" data-hc="'+d.bg+'" style="--uc:'+d.bg+'">'+esc(s)+'</span>')}
  else if(d.c==='ul')document.execCommand('insertUnorderedList');else if(d.c==='ol')document.execCommand('insertOrderedList');
  else if(d.fg)document.execCommand('foreColor',false,d.fg);else if(d.bg)document.execCommand('hiliteColor',false,d.bg+'55');
  else if(d.c==='code')document.execCommand('insertHTML',false,'<code>'+esc(sel.toString())+'</code>');
@@ -1829,15 +1892,12 @@ document.addEventListener('keydown',e=>{if(e.altKey&&e.code==='KeyZ'){e.preventD
    per-field undo so it always drives our single app-wide undo/redo stack instead of
    silently desyncing from it */
 document.addEventListener('keydown',e=>{
+ const t=e.target;if(t&&t.matches&&t.matches('input,textarea:not(.cd)'))return;
  if((e.ctrlKey||e.metaKey)&&!e.altKey&&e.key.toLowerCase()==='z'){e.preventDefault();undo(e.shiftKey)}
  else if((e.ctrlKey||e.metaKey)&&!e.altKey&&e.key.toLowerCase()==='y'){e.preventDefault();undo(true)}
 });
 /* chunk text edits (typing, cutting, pasting inside a block) into one undo step per
    focus session, instead of only undoing structural changes like add/delete/reorder */
-let editSnapshot=null;
-document.addEventListener('focusin',e=>{if(e.target.matches?.('.ce,textarea.cd,.mt'))editSnapshot=JSON.stringify(S)});
-document.addEventListener('focusout',e=>{if(editSnapshot!==null&&e.target.matches?.('.ce,textarea.cd,.mt')){
- const now=JSON.stringify(S);if(now!==editSnapshot){H.push(editSnapshot);if(H.length>40)H.shift();F.length=0}editSnapshot=null}});
 $('#un').onclick=()=>undo();$('#re').onclick=()=>undo(true);
 function setSidebar(collapsed){const sd=document.getElementById('side');document.body.classList.toggle('side-over',!collapsed&&innerWidth<=760);sd.classList.toggle('collapsed',collapsed);sd.inert=collapsed;document.body.classList.toggle('sidecol',collapsed);try{localStorage.setItem('nt.sidebar',collapsed?'1':'0')}catch(e){}}
 const LAY_ICO=w=>'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/>'+(w?'<path d="M7 9h10M7 12h10M7 15h10"/>':'<path d="M9 9h6M9 12h6M9 15h6"/>')+'</svg>';
@@ -2365,18 +2425,19 @@ function lcEl(b){const w=document.createElement('div');w.className='lc';const p=
  <div class="lcg"><label>Platform<select data-f="plat">${opt(['LeetCode','Codeforces','HackerRank','GeeksforGeeks','CodeChef','Custom'],b.plat||'LeetCode')}</select></label><label>Number<input data-f="num" value="${q(b.num)}" placeholder="1"></label><label>Difficulty<select data-f="diff">${opt(['Easy','Medium','Hard'],b.diff||'Medium')}</select></label><label>Confidence<span class="lcstars">${[1,2,3,4,5].map(n=>`<button type="button" data-s="${n}" class="${n<=(b.conf||0)?'on':''}" title="${n} of 5">${n<=(b.conf||0)?'\u2605':'\u2606'}</button>`).join('')}</span></label></div>
  <details class="lcmore"${b.first||b.solved||b.last||b.rel?' open':''}><summary>Dates, attempts and related problems</summary><div class="lcg"><label>Attempts<span class="lcn"><button type="button" data-n="-1">-</button><b>${b.attempts||0}</b><button type="button" data-n="1">+</button></span></label><label>First attempted<input type="date" data-f="first" value="${q(b.first)}"></label><label>Solved<input type="date" data-f="solved" value="${q(b.solved)}"></label><label>Last reviewed<input type="date" data-f="last" value="${q(b.last)}"></label>
  <label class="wide">Related problems<input data-f="rel" value="${q(b.rel)}" placeholder="e.g. Two Sum II, 3Sum, Container With Most Water"></label></div></details></div>
- <div class="lcf"><span class="lcdue"></span><span class="lca"><button type="button" class="lcg2" data-x="analyse" title="AI explains the pattern, brute force and optimal approach">${ic('sparkle',14)}Analyse</button><button type="button" class="lcp" data-x="log">Log a review</button></span></div>`;
+ <div class="lcf"><span class="lcdue"></span><span class="lca"><button type="button" class="lcg2" data-x="timer" title="Time yourself on this problem">${ic('clock',14)}<span class="lctm">Start timer</span></button><button type="button" class="lcg2" data-x="analyse" title="AI explains the pattern, brute force and optimal approach">${ic('sparkle',14)}Analyse</button><button type="button" class="lcp" data-x="log">Log a review</button></span></div>`;
  const due=w.querySelector('.lcdue'),a=w.querySelector('.lco'),st=w.querySelector('.lcst');
- const paint=()=>{st.style.setProperty('--sc',LC_COL[b.status||'Not started']);a.hidden=!/^https?:\/\//i.test(b.url||'');a.href=/^https?:\/\//i.test(b.url||'')?b.url:'#';const rv=p.rev;due.textContent=rv?(rv.due<=Date.now()?'Review due now':'Next review in '+Math.ceil((rv.due-Date.now())/DAYMS)+' day(s)')+' · reviewed '+rv.n+' time(s)':'No review scheduled yet'};paint();
+ const paint=()=>{st.style.setProperty('--sc',LC_COL[b.status||'Not started']);a.hidden=!/^https?:\/\//i.test(b.url||'');a.href=/^https?:\/\//i.test(b.url||'')?b.url:'#';const tm=b.times&&b.times.length?lcTimes(b)+' \u00b7 ':'';const rv=p.rev;due.textContent=tm+(rv?(rv.due<=Date.now()?'Review due now':'Next review in '+Math.ceil((rv.due-Date.now())/DAYMS)+' day(s)')+' · reviewed '+rv.n+' time(s)':'No review scheduled yet')};paint();
+ lcShowTimer(b,w);
  w.addEventListener('change',e=>{const f=e.target.dataset.f;if(!f)return;snap();b[f]=e.target.value;if(f==='status'||f==='diff'||f==='plat'){lcSync(p,b);save();render();return}paint();save()});
  w.addEventListener('input',e=>{const f=e.target.dataset.f;if(f&&e.target.tagName==='INPUT'&&e.target.type!=='date'){b[f]=e.target.value;if(f==='url')paint();save()}});
  w.addEventListener('click',e=>{const s=e.target.closest('.lcstars button');if(s){const n=+s.dataset.s;b.conf=b.conf===n?0:n;save();render();return}const nb=e.target.closest('.lcn button');if(nb){b.attempts=Math.max(0,(b.attempts||0)+(+nb.dataset.n));save();render();return}
-  if(e.target.closest('[data-x="log"]'))revMenu(e.target,p);if(e.target.closest('[data-x="fetch"]'))lcFetch(b,p);if(e.target.closest('[data-x="analyse"]'))lcAnalyse(b,p)});
+  if(e.target.closest('[data-x="log"]'))revMenu(e.target,p);if(e.target.closest('[data-x="timer"]')){lcTimer(b,w);return}if(e.target.closest('[data-x="fetch"]'))lcFetch(b,p);if(e.target.closest('[data-x="analyse"]'))lcAnalyse(b,p)});
  return w}
 
 function lcText(html){const d=new DOMParser().parseFromString(html||'','text/html');return d.body.textContent.replace(/\n{3,}/g,'\n\n').trim()}
-async function lcFetch(b,p){if(!/^https?:\/\//i.test(b.url||''))return toast('Paste the problem link first');toast('Fetching from LeetCode...');
- const r=await netPost('/api/lc/fetch',{url:b.url});if(!r.ok||!r.d.ok)return alert((r.d&&r.d.error)||'Could not fetch the problem.');const d=r.d;snap();
+async function lcFetch(b,p,quiet){if(!/^https?:\/\//i.test(b.url||''))return toast('Paste the problem link first');toast('Fetching from LeetCode...');
+ const r=await netPost('/api/lc/fetch',{url:b.url});if(!r.ok||!r.d.ok)return quiet?toast('Added. Press Fetch when you are online to fill in the details'):alert((r.d&&r.d.error)||'Could not fetch the problem.');const d=r.d;snap();
  b.plat='LeetCode';b.num=d.num;b.diff=d.diff;b.title=d.title;if(d.similar.length)b.rel=d.similar.join(', ');if(!p.title)p.title=d.num+'. '+d.title;
  [d.diff.toLowerCase(),'leetcode',...d.topics.map(t=>t.toLowerCase().replace(/\s+/g,'-'))].forEach(t=>{if(!p.tags.includes(t))p.tags.push(t)});
  const i=p.blocks.indexOf(b);if(!p.blocks.some(x=>x.lcs===b.id)){const hs=d.hints.length?'<details><summary>Hints</summary><ol>'+d.hints.map(x=>'<li>'+x+'</li>').join('')+'</ol></details>':'';const st={id:uid(),t:'doc',h:cleanHtmlStored('<details open><summary>Problem statement</summary>'+d.html+'</details>'+hs),lcs:b.id};p.blocks.splice(i+1,0,st)}
@@ -2385,6 +2446,14 @@ async function lcAnalyse(b,p){const st=p.blocks.find(x=>x.lcs===b.id&&x.t==='doc
  const txt=b.title+' ('+b.diff+')\n'+lcText(st.h);aiBusy(true);toast('Analysing...');
  try{const r=await netPost('/api/ai',{task:'lc_analyze',text:txt});if(!r.ok||!r.d.ok){if(r.d&&r.d.setup)openAiSetup(r.d.error);else alert((r.d&&r.d.error)||'The AI did not answer.');return}
   snap();const i=p.blocks.indexOf(st);p.blocks.splice(i+1,0,{id:uid(),t:'doc',h:mdToDocHtml(r.d.text),lcs:b.id});save();render()}finally{aiBusy(false)}}
+function lcTimes(b){const t=b.times||[];return t.length?'Best '+Math.min(...t)+' min \u00b7 average '+Math.round(t.reduce((a,x)=>a+x,0)/t.length)+' min \u00b7 '+t.length+' timed':'No timed attempts yet'}
+let lcTick=0;
+function lcTimer(b,w){const lab=w.querySelector('.lctm');clearInterval(lcTick);
+ if(b.tstart){const m=Math.max(1,Math.round((Date.now()-b.tstart)/6e4));snap();(b.times=b.times||[]).push(m);delete b.tstart;b.attempts=(b.attempts||0)+0;save();render();toast('Solved in '+m+' min. '+lcTimes(b));return}
+ snap();b.tstart=Date.now();save();lcShowTimer(b,w)}
+function lcShowTimer(b,w){const lab=w.querySelector('.lctm'),due=w.querySelector('.lcdue');if(!lab)return;clearInterval(lcTick);
+ if(!b.tstart){lab.textContent='Start timer';if(due&&b.times&&b.times.length)due.dataset.tm=lcTimes(b);return}
+ const tick=()=>{const s=Math.floor((Date.now()-b.tstart)/1000);lab.textContent='Stop '+String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};tick();lcTick=setInterval(()=>{if(!document.body.contains(lab)){clearInterval(lcTick);return}tick()},1000)}
 const REV_OUT=[['indep','I solved it on my own'],['hint','I needed a hint'],['explain','I could explain it but not write it'],['forgot','I forgot the approach'],['again','I need another review soon']];
 function logReview(p,o){snap();const INT=getInts(),lv=Math.min((p.rev&&p.rev.lv)||0,INT.length-1);let nl=lv,days;
  if(o==='indep'){nl=Math.min(INT.length-1,lv+1);days=INT[nl]}else if(o==='hint'){days=INT[lv]}else if(o==='explain'){days=Math.min(INT[lv],3)}else if(o==='forgot'){nl=0;days=INT[0]}else{days=INT[0]}
@@ -2875,7 +2944,7 @@ document.addEventListener('keydown',e=>{if(e.altKey&&!e.ctrlKey&&!e.metaKey&&e.k
 
 /* everything that comes from a file is rebuilt from an allow-list before it can touch the page */
 const OK_TAGS=new Set('a b i u s strong em code pre p br h1 h2 h3 h4 ul ol li blockquote table thead tbody tr td th hr span div details summary input sup sub mark small font figure figcaption'.split(' '));
-const OK_ATTR=new Set(['class','href','target','rel','title','alt','type','checked','start','colspan','rowspan','data-lang','data-tex','data-pg','data-r','contenteditable','open','color']);
+const OK_ATTR=new Set(['data-hc','class','href','target','rel','title','alt','type','checked','start','colspan','rowspan','data-lang','data-tex','data-pg','data-r','contenteditable','open','color']);
 function cleanHtmlStored(html){const d=new DOMParser().parseFromString('<body>'+String(html),'text/html');
  const walk=el=>{[...el.childNodes].forEach(n=>{if(n.nodeType!==1)return;const t=n.tagName.toLowerCase();if(!OK_TAGS.has(t)){n.remove();return}
   if(t==='input'&&(n.getAttribute('type')||'').toLowerCase()!=='checkbox'){n.remove();return}
@@ -3043,19 +3112,19 @@ const ago=t=>{if(!t)return'';const m=Math.round((Date.now()-t)/60000);return m<1
 function activityStats(real){const ev=[];real.forEach(p=>{(p.hist||[]).forEach(x=>ev.push(x.t));if(p.mt&&Date.now()-p.mt<DAYMS)ev.push(p.mt);const b=p.blocks.find(x=>x.t==='lc');if(b)[b.first,b.solved,b.last].forEach(d=>{if(d)ev.push(new Date(d+'T12:00:00').getTime())})});
  const d0=new Date();d0.setHours(0,0,0,0);const day=t=>Math.floor((t-d0.getTime())/DAYMS),set=new Set(ev.map(day));let s=0,i=set.has(0)?0:-1;while(set.has(i)){s++;i--}
  return{streak:s,week:ev.filter(t=>day(t)>-7&&day(t)<=0).length}}
-function drawHome(){if(homeMode==='lib')return drawLibrary();const ed=$('#ed'),h=new Date().getHours(),g=h<5?'Still up':h<12?'Good morning':h<17?'Good afternoon':h<21?'Good evening':'Good night';
+function drawHome(){if(homeMode==='lib')return drawLibrary();if(homeMode==='road')return drawRoadmap();const ed=$('#ed'),h=new Date().getHours(),g=h<5?'Still up':h<12?'Good morning':h<17?'Good afternoon':h<21?'Good evening':'Good night';
  const real=S.pages.filter(p=>!p.folder),pages=[...real].sort((a,b)=>(b.mt||0)-(a.mt||0)),recent=pages.slice(0,6),dueP=real.filter(revDue).sort((a,b)=>a.rev.due-b.rev.due).slice(0,6);
  const words=real.reduce((n,p)=>n+(plain(p).trim().split(/\s+/).filter(Boolean).length),0),shared=real.filter(p=>p.share).length;
  const snip=p=>{const b=p.blocks.find(b=>stripH(b.h||'').length>2);return b?stripH(b.h).slice(0,92):'Empty page'};
  const peers=(NET.members||[]).filter(m=>m.id!==ME.id);const act=activityStats(real);
  ed.innerHTML=`<div class="home"><div class="hh"><div class="hq">${esc(QUOTES[new Date().getDate()%QUOTES.length])}</div><h1>${g}, ${esc(ME.name.split(' ')[0])}.<svg class="hsq" viewBox="0 0 200 12" preserveAspectRatio="none"><path d="M2 7 Q12 1 22 7 T42 7 T62 7 T82 7 T102 7 T122 7 T142 7 T162 7 T182 7 T198 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></h1><svg class="hdoodle" viewBox="0 0 160 110" aria-hidden="true"><path class="d1" d="M20 22l4 10 10 4-10 4-4 10-4-10-10-4 10-4z"/><path class="d2" d="M118 12l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><circle class="d3" cx="84" cy="70" r="7"/><path class="d4" d="M20 90q10-14 20 0t20 0 20 0" fill="none"/><path class="d5" d="M120 70c8-12 26-6 20 6s-22 10-14 22" fill="none"/></svg><div class="hd">${new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})}</div></div>
- <div class="hcta"><button class="hb c1" id="hnew">${ic('plus',15)} New page</button><button class="hb c2" id="hfind">${ic('search',15)} Quick find <kbd>Ctrl P</kbd></button><button class="hb c3" id="hprompt">${ic('doc',15)} Paste an AI answer</button><button class="hb c4" id="hleet">${ic('code',15)} LeetCode problem</button><button class="hb c5" id="htoday">${ic('sun',15)} Today</button><button class="hb c7" id="hlib">${ic('folder',15)} Library</button><button class="hb c6" id="hrev">${ic('rev',15)} Review${reviewCount()?' ('+reviewCount()+')':''}</button></div>
+ <div class="hcta"><button class="hb c1" id="hnew">${ic('plus',15)} New page</button><button class="hb c2" id="hfind">${ic('search',15)} Quick find <kbd>Ctrl P</kbd></button><button class="hb c3" id="hprompt">${ic('doc',15)} Paste an AI answer</button><button class="hb c4" id="hleet">${ic('code',15)} LeetCode problem</button><button class="hb c5" id="htoday">${ic('sun',15)} Today</button><button class="hb c8" id="hroad">${ic('check',15)} Roadmap</button><button class="hb c7" id="hlib">${ic('folder',15)} Library</button><button class="hb c6" id="hrev">${ic('rev',15)} Review${reviewCount()?' ('+reviewCount()+')':''}</button></div>
  ${dueP.length?`<div class="hsec">Due for revision</div><div class="hgrid">${dueP.map(p=>`<button class="hc due" data-id="${p.id}" style="--pc:var(--purple)"><span class="hci">${ic('rev',16)}</span><b>${esc(p.title||'Untitled')}</b><span class="hcs">${esc(snip(p))}</span><span class="hct">Due ${ago(p.rev.due)}</span></button>`).join('')}</div><div class="hsec" style="margin-top:26px">Jump back in</div>`:'<div class="hsec">Jump back in</div>'}<div class="hgrid">${recent.map(p=>`<button class="hc" data-id="${p.id}" style="--pc:${pcol(p.id)}"><span class="hci">${p.icon||ic('doc',16)}</span><b>${esc(p.title||'Untitled')}</b><span class="hcs">${esc(snip(p))}</span><span class="hct">${ago(p.mt)||'&nbsp;'}</span></button>`).join('')}</div>
  <button class="hlibt" id="hlib2">${ic('folder',22)}<span><b>Your library</b><i>${S.pages.filter(p=>!p.folder).length} pages in ${S.pages.filter(p=>p.folder).length} folders. Browse, move and preview them.</i></span>${ic('chev',14)}</button>
  <div class="hstats"><div><b>${act.streak}</b><span>day streak</span></div><div><b>${act.week}</b><span>actions this week</span></div><div><b>${real.length}</b><span>pages</span></div><div><b>${words.toLocaleString()}</b><span>words written</span></div><div><b>${shared}</b><span>shared</span></div></div>
  ${practiceHtml(real)}<div class="hsec" style="margin-top:26px">Quick capture</div><div class="hcap"><button data-k="note">${ic('doc',15)} Note</button><button data-k="snippet">${ic('code',15)} Code snippet</button><button data-k="leetcode">${ic('code',15)} LeetCode entry</button><button data-k="interview">${ic('sparkle',15)} Interview question</button><button data-k="card">${ic('card',15)} Flashcard</button><button data-k="project">${ic('folder',15)} Project note</button></div><div class="hbar2"><button id="hcol">${ic('folderPlus',14)} Set up collections</button><button id="hpat">${ic('sparkle',14)} Install the DSA pattern library</button></div><button class="hshare" id="hshare">${peers.length?peers.slice(0,1).map(m=>avHtml(m,30)).join('')+'<span><b>Sharing with '+esc(peers.map(m=>m.name).join(', '))+'</b><i>Open your sharing space</i></span>':ic('users',20)+'<span><b>Share notes with a friend</b><i>Create a 6-digit key and link two Notera notebooks</i></span>'}</button></div>`;
  ed.querySelectorAll('.hc').forEach(b=>b.onclick=()=>{homeOn=false;cur=b.dataset.id;render()});
- $('#hnew').onclick=e=>startNewPage(e);ed.querySelectorAll('.hcap button').forEach(b=>b.onclick=()=>quickCapture(b.dataset.k));$('#hcol').onclick=setupCollections;$('#hpat').onclick=installPatterns;ed.querySelectorAll('.dq').forEach(a=>a.onclick=()=>{homeOn=false;cur=a.dataset.id;render()});$('#htoday').onclick=()=>openToday();$('#hrev').onclick=()=>startReview();$('#hlib').onclick=()=>openLibrary();$('#hlib2').onclick=()=>openLibrary();$('#hfind').onclick=()=>openQS();
+ $('#hnew').onclick=e=>startNewPage(e);ed.querySelectorAll('.hcap button').forEach(b=>b.onclick=()=>quickCapture(b.dataset.k));$('#hcol').onclick=setupCollections;$('#hpat').onclick=installPatterns;ed.querySelectorAll('.dq').forEach(a=>a.onclick=()=>{homeOn=false;cur=a.dataset.id;render()});$('#htoday').onclick=()=>openToday();$('#hrev').onclick=()=>startReview();$('#hroad').onclick=()=>openRoadmap();$('#hlib').onclick=()=>openLibrary();$('#hlib2').onclick=()=>openLibrary();$('#hfind').onclick=()=>openQS();
  $('#hleet')&&($('#hleet').onclick=()=>newFromTemplate('leetcode'));$('#hprompt').onclick=e=>startNewPage(e,pid=>{newPage(pid);const pg=page();pg.title='AI answer';pg.blocks=[{id:uid(),t:'prompt',h:''}];save();render();focusB(0)});
  $('#hshare').onclick=e=>{e.stopPropagation();openAcc()}}
 
@@ -3142,6 +3211,90 @@ const TPL={
 
 
 
+
+/* ---------- stickers: small hand-drawn SVGs that float beside the text ---------- */
+const stkSvg=i=>'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#2d2a32" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">'+i+'</svg>';
+const E2='<circle cx="25" cy="38" r="2" fill="#2d2a32" stroke="none"/><circle cx="39" cy="38" r="2" fill="#2d2a32" stroke="none"/>';
+const STK=[
+ ['Star','cute','<path d="M32 6l7.5 17 18.5 1.7-14 12.3 4.3 18.2L32 45.5 15.7 55.2 20 37 6 24.7 24.5 23z" fill="#ffd54a"/>'],
+ ['Heart','cute','<path d="M32 54C10 38 8 24 16 16c7-6 14-2 16 4 2-6 9-10 16-4 8 8 6 22-16 38z" fill="#ff7aa8"/><path d="M18 22c2-3 5-3 7-1" stroke="#fff" stroke-width="2.5"/>'],
+ ['Cloud','cute','<path d="M18 48a10 10 0 010-20 14 14 0 0126-4 11 11 0 013 24z" fill="#bfe6ff"/><circle cx="27" cy="37" r="1.8" fill="#2d2a32" stroke="none"/><circle cx="39" cy="37" r="1.8" fill="#2d2a32" stroke="none"/><path d="M30 42q3 3 6 0"/>'],
+ ['Sun','cute','<circle cx="32" cy="32" r="12" fill="#ffc93c"/><path d="M32 6v8M32 50v8M6 32h8M50 32h8M13 13l6 6M45 45l6 6M13 51l6-6M45 19l6-6"/><circle cx="28" cy="30" r="1.6" fill="#2d2a32" stroke="none"/><circle cx="36" cy="30" r="1.6" fill="#2d2a32" stroke="none"/><path d="M29 36q3 3 6 0"/>'],
+ ['Moon','cute','<path d="M44 10a24 24 0 1010 36A20 20 0 0144 10z" fill="#ffe08a"/><path d="M50 12l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z" fill="#fff" stroke-width="2"/>'],
+ ['Flower','cute','<g fill="#ff9ec7"><circle cx="32" cy="15" r="9"/><circle cx="48" cy="27" r="9"/><circle cx="42" cy="46" r="9"/><circle cx="22" cy="46" r="9"/><circle cx="16" cy="27" r="9"/></g><circle cx="32" cy="33" r="8" fill="#ffd54a"/>'],
+ ['Cat','cute','<path d="M14 54c-4-10-4-22 0-32l8 6c6-3 14-3 20 0l8-6c4 10 4 22 0 32z" fill="#ffc78a"/>'+E2+'<path d="M30 43h4l-2 3z" fill="#ff7aa8"/><path d="M16 44l-8-2M16 48l-8 3M48 44l8-2M48 48l8 3"/>'],
+ ['Bunny','cute','<path d="M22 28C16 8 20 4 25 6c5 2 6 14 5 22M42 28c6-20 2-24-3-22-5 2-6 14-5 22" fill="#fff"/><ellipse cx="32" cy="42" rx="17" ry="15" fill="#fff"/>'+E2+'<path d="M30 45h4l-2 3z" fill="#ff7aa8"/><circle cx="20" cy="46" r="3" fill="#ffc2d6" stroke="none"/><circle cx="44" cy="46" r="3" fill="#ffc2d6" stroke="none"/>'],
+ ['Rainbow','cute','<path d="M6 48a26 26 0 0152 0" stroke="#ff5d5d" stroke-width="5"/><path d="M13 48a19 19 0 0138 0" stroke="#ffc93c" stroke-width="5"/><path d="M20 48a12 12 0 0124 0" stroke="#4fd1ff" stroke-width="5"/>'],
+ ['Sparkles','cute','<path d="M24 8l4.5 13 13 4.5-13 4.5L24 43l-4.5-13L6.5 25.5 19.5 21z" fill="#ffd54a"/><path d="M47 34l2.8 8 8 2.8-8 2.8L47 56l-2.8-8.4-8-2.8 8-2.8z" fill="#ff9ec7"/>'],
+ ['Cupcake','cute','<path d="M16 34l4 22h24l4-22z" fill="#ffb877"/><path d="M12 34c0-10 8-12 10-18 4-4 16-4 20 0 2 6 10 8 10 18z" fill="#ff9ec7"/><circle cx="32" cy="11" r="4" fill="#ff5d5d"/>'],
+ ['Ghost','cute','<path d="M14 56V30a18 18 0 0136 0v26l-6-5-6 5-6-5-6 5-6-5z" fill="#fff"/><circle cx="26" cy="30" r="2.2" fill="#2d2a32" stroke="none"/><circle cx="38" cy="30" r="2.2" fill="#2d2a32" stroke="none"/><path d="M29 38q3 3 6 0"/>'],
+ ['Laptop','tech','<rect x="12" y="14" width="40" height="28" rx="3" fill="#b8c7ff"/><path d="M6 46h52l-4 6H10z" fill="#e8e8ef"/><path d="M25 23l-5 6 5 6M39 23l5 6-5 6M34 21l-4 16"/>'],
+ ['Bug','tech','<ellipse cx="32" cy="36" rx="12" ry="16" fill="#8ce99a"/><circle cx="32" cy="18" r="7" fill="#8ce99a"/><path d="M20 30l-10-4M20 38H8M21 46l-9 6M44 30l10-4M44 38h12M43 46l9 6M28 12l-4-6M36 12l4-6M32 24v26"/>'],
+ ['Terminal','tech','<rect x="6" y="12" width="52" height="40" rx="5" fill="#2d2a32"/><path d="M16 26l8 6-8 6M30 40h14" stroke="#6ee7a0"/>'],
+ ['Git branch','tech','<circle cx="20" cy="14" r="5" fill="#ffd54a"/><circle cx="20" cy="50" r="5" fill="#ffd54a"/><circle cx="46" cy="26" r="5" fill="#ff9ec7"/><path d="M20 19v26M46 31c0 10-26 6-26 14"/>'],
+ ['CPU','tech','<rect x="16" y="16" width="32" height="32" rx="4" fill="#c4b5fd"/><rect x="25" y="25" width="14" height="14" rx="2" fill="#fff"/><path d="M24 6v10M32 6v10M40 6v10M24 48v10M32 48v10M40 48v10M6 24h10M6 32h10M6 40h10M48 24h10M48 32h10M48 40h10"/>'],
+ ['Wi-Fi','tech','<path d="M8 26a34 34 0 0148 0M16 34a22 22 0 0132 0M24 42a10 10 0 0116 0" stroke="#4fb0ff" stroke-width="4"/><circle cx="32" cy="50" r="3.5" fill="#4fb0ff" stroke="none"/>'],
+ ['Robot','tech','<rect x="14" y="20" width="36" height="30" rx="8" fill="#c4d4ff"/><path d="M32 20V10M10 30v10M54 30v10M25 43h14"/><circle cx="32" cy="8" r="3" fill="#ff7aa8"/><circle cx="25" cy="33" r="4" fill="#fff"/><circle cx="39" cy="33" r="4" fill="#fff"/>'],
+ ['Floppy','tech','<path d="M10 10h38l6 6v38H10z" fill="#7aa2ff"/><rect x="18" y="10" width="24" height="14" fill="#fff"/><rect x="18" y="36" width="28" height="18" rx="2" fill="#e8e8ef"/>'],
+ ['Code','tech','<rect x="3" y="7" width="58" height="50" rx="12" fill="#ffe08a"/><path d="M23 20L11 32l12 12M41 20l12 12-12 12M36 16l-8 32" stroke-width="4.5"/>'],
+ ['Coffee','tech','<path d="M12 24h34v16a14 14 0 01-14 14h-6a14 14 0 01-14-14z" fill="#fff"/><path d="M46 28h4a6 6 0 010 14h-5M22 8c-3 4 3 6 0 10M32 8c-3 4 3 6 0 10"/><path d="M15 31h28" stroke="#a0673a" stroke-width="5"/>'],
+ ['Idea','tech','<path d="M32 6a16 16 0 00-8 30v6h16v-6A16 16 0 0032 6z" fill="#ffe66d"/><path d="M26 48h12M28 54h8"/>'],
+ ['Rocket','tech','<path d="M32 6c10 8 12 22 8 34H24C20 28 22 14 32 6z" fill="#fff"/><circle cx="32" cy="24" r="5" fill="#7ec8ff"/><path d="M24 34l-8 8 2-12zM40 34l8 8-2-12z" fill="#ff7aa8"/><path d="M28 44l4 12 4-12z" fill="#ffb347"/>'],
+ ['Trophy','tech','<path d="M20 8h24v18a12 12 0 01-24 0z" fill="#ffd54a"/><path d="M20 12h-8c0 10 4 14 9 14M44 12h8c0 10-4 14-9 14M32 38v10M22 54h20M26 48h12"/>'],
+ ['Key','tech','<circle cx="20" cy="32" r="12" fill="#ffd54a"/><circle cx="20" cy="32" r="4" fill="#fff"/><path d="M32 32h26M48 32v9M56 32v7"/>'],
+ ['Shield','tech','<path d="M32 6l22 8v16c0 14-10 22-22 28C20 52 10 44 10 30V14z" fill="#8ce99a"/><path d="M22 32l7 7 13-14" stroke-width="4"/>'],
+ ['Database','tech','<path d="M12 16v32c0 5 9 8 20 8s20-3 20-8V16" fill="#b8c7ff"/><ellipse cx="32" cy="16" rx="20" ry="8" fill="#d6defe"/><path d="M12 32c0 5 9 8 20 8s20-3 20-8"/>'],
+ ['Accepted','tech','<rect x="6" y="14" width="52" height="36" rx="8" fill="#8ce99a"/><path d="M18 32l8 8 18-18" stroke-width="5"/>'],
+ ['O(n)','tech','<rect x="4" y="16" width="56" height="32" rx="10" fill="#ffd1dc"/><text x="32" y="38" font-size="19" text-anchor="middle" font-family="monospace" font-weight="700" fill="#2d2a32" stroke="none">O(n)</text>'],
+ ['O(1)','tech','<rect x="4" y="16" width="56" height="32" rx="10" fill="#c7f0d8"/><text x="32" y="38" font-size="19" text-anchor="middle" font-family="monospace" font-weight="700" fill="#2d2a32" stroke="none">O(1)</text>']
+];
+function openStickers(btn){let m=document.getElementById('stk');if(!m){m=document.createElement('div');m.id='stk';document.body.append(m);document.addEventListener('mousedown',e=>{if(!e.target.closest('#stk,#addstk,.stkopen'))m.classList.remove('show')})}
+ let tab='cute';const draw=()=>{m.innerHTML=`<div class="stkt"><button data-t="cute" class="${tab==='cute'?'on':''}">Cute</button><button data-t="tech" class="${tab==='tech'?'on':''}">Tech</button></div><div class="stkg">${STK.map((s,i)=>s[1]===tab?`<button data-i="${i}" title="${esc(s[0])}">${stkSvg(s[2])}</button>`:'').join('')}</div>`;
+  m.querySelectorAll('.stkt button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;draw()});
+  m.querySelectorAll('.stkg button').forEach(b=>b.onclick=()=>{m.classList.remove('show');addSticker(STK[+b.dataset.i])})};draw();
+ const r=btn.getBoundingClientRect();m.style.left=Math.max(8,Math.min(r.left,innerWidth-340))+'px';m.style.top=Math.max(8,Math.min(r.top-300,innerHeight-310))+'px';m.classList.add('show')}
+function addSticker(s){const p=page();if(!p||p.folder)return;snap();const svg=sanitizeSvgText(stkSvg(s[2]))||stkSvg(s[2]);const b={id:uid(),t:'svg',svg,alt:s[0],sticker:1,size:'s',h:''};
+ if(p.mode==='canvas'){p.blocks.push(b);p.cvDirty=true}else{b.fl='r';b.pw=92;const ae=document.activeElement,w=ae&&ae.closest&&ae.closest('#bl .blk'),i=w?p.blocks.findIndex(x=>x.id===w.dataset.id):p.blocks.length-1;p.blocks.splice(i+1,0,b)}
+ save();render();toast(s[0]+' sticker added. Drag it to a page edge to switch sides')}
+
+/* real-feeling highlighter and underline strokes, generated per colour */
+const HM_COLORS=['#ffe14d','#ff6ac1','#4fd1ff','#4ecb71','#b38cff','#ff9d4d','#f2efe3'];
+(()=>{const enc=s=>'url("data:image/svg+xml,'+encodeURIComponent(s)+'")';let css='';
+ HM_COLORS.forEach(c=>{const full=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M1 4 Q8 1 20 3 T50 2 T80 3 L99 2 Q101 10 98 17 Q70 19 45 17 T3 18 Q-1 11 1 4z" fill="${c}" fill-opacity=".62"/></svg>`,
+  und=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0 11 Q10 8 25 10 T60 9 T100 10 L100 17 Q70 19.5 40 17 T0 18z" fill="${c}" fill-opacity=".75"/></svg>`;
+  css+=`.hm[data-hc="${c}"]{background-image:${enc(full)}}.um[data-hc="${c}"]{background-image:${enc(und)}}`});
+ css+='.hm,.um{background-size:100% 100%;background-repeat:no-repeat;-webkit-box-decoration-break:clone;box-decoration-break:clone;padding:0 3px}.um[data-hc]{background:none;background-image:inherit}';
+ const st=document.createElement('style');st.textContent=css.replace('.um[data-hc]{background:none;background-image:inherit}','');document.head.append(st)})();
+
+/* ---------- DSA roadmap (the Blind 75) tied to your pages ---------- */
+const ROADMAP=[
+ ['Arrays and Hashing',[['Contains Duplicate','contains-duplicate','Easy'],['Valid Anagram','valid-anagram','Easy'],['Two Sum','two-sum','Easy'],['Group Anagrams','group-anagrams','Medium'],['Top K Frequent Elements','top-k-frequent-elements','Medium'],['Product of Array Except Self','product-of-array-except-self','Medium'],['Longest Consecutive Sequence','longest-consecutive-sequence','Medium']]],
+ ['Two Pointers',[['Valid Palindrome','valid-palindrome','Easy'],['3Sum','3sum','Medium'],['Container With Most Water','container-with-most-water','Medium']]],
+ ['Sliding Window',[['Best Time to Buy and Sell Stock','best-time-to-buy-and-sell-stock','Easy'],['Longest Substring Without Repeating Characters','longest-substring-without-repeating-characters','Medium'],['Longest Repeating Character Replacement','longest-repeating-character-replacement','Medium'],['Minimum Window Substring','minimum-window-substring','Hard']]],
+ ['Stack',[['Valid Parentheses','valid-parentheses','Easy']]],
+ ['Binary Search',[['Find Minimum in Rotated Sorted Array','find-minimum-in-rotated-sorted-array','Medium'],['Search in Rotated Sorted Array','search-in-rotated-sorted-array','Medium']]],
+ ['Linked List',[['Reverse Linked List','reverse-linked-list','Easy'],['Merge Two Sorted Lists','merge-two-sorted-lists','Easy'],['Linked List Cycle','linked-list-cycle','Easy'],['Reorder List','reorder-list','Medium'],['Remove Nth Node From End of List','remove-nth-node-from-end-of-list','Medium'],['Merge k Sorted Lists','merge-k-sorted-lists','Hard']]],
+ ['Trees',[['Invert Binary Tree','invert-binary-tree','Easy'],['Maximum Depth of Binary Tree','maximum-depth-of-binary-tree','Easy'],['Same Tree','same-tree','Easy'],['Subtree of Another Tree','subtree-of-another-tree','Easy'],['Lowest Common Ancestor of a Binary Search Tree','lowest-common-ancestor-of-a-binary-search-tree','Medium'],['Binary Tree Level Order Traversal','binary-tree-level-order-traversal','Medium'],['Validate Binary Search Tree','validate-binary-search-tree','Medium'],['Kth Smallest Element in a BST','kth-smallest-element-in-a-bst','Medium'],['Construct Binary Tree from Preorder and Inorder Traversal','construct-binary-tree-from-preorder-and-inorder-traversal','Medium'],['Binary Tree Maximum Path Sum','binary-tree-maximum-path-sum','Hard'],['Serialize and Deserialize Binary Tree','serialize-and-deserialize-binary-tree','Hard']]],
+ ['Tries and Heaps',[['Implement Trie (Prefix Tree)','implement-trie-prefix-tree','Medium'],['Design Add and Search Words Data Structure','design-add-and-search-words-data-structure','Medium'],['Word Search II','word-search-ii','Hard'],['Find Median from Data Stream','find-median-from-data-stream','Hard']]],
+ ['Backtracking and Matrix',[['Word Search','word-search','Medium'],['Set Matrix Zeroes','set-matrix-zeroes','Medium'],['Spiral Matrix','spiral-matrix','Medium'],['Rotate Image','rotate-image','Medium']]],
+ ['Graphs',[['Number of Islands','number-of-islands','Medium'],['Clone Graph','clone-graph','Medium'],['Pacific Atlantic Water Flow','pacific-atlantic-water-flow','Medium'],['Course Schedule','course-schedule','Medium']]],
+ ['Dynamic Programming',[['Climbing Stairs','climbing-stairs','Easy'],['House Robber','house-robber','Medium'],['House Robber II','house-robber-ii','Medium'],['Longest Palindromic Substring','longest-palindromic-substring','Medium'],['Palindromic Substrings','palindromic-substrings','Medium'],['Decode Ways','decode-ways','Medium'],['Coin Change','coin-change','Medium'],['Maximum Product Subarray','maximum-product-subarray','Medium'],['Word Break','word-break','Medium'],['Longest Increasing Subsequence','longest-increasing-subsequence','Medium'],['Unique Paths','unique-paths','Medium'],['Longest Common Subsequence','longest-common-subsequence','Medium'],['Jump Game','jump-game','Medium'],['Maximum Subarray','maximum-subarray','Medium'],['Combination Sum IV','combination-sum-iv','Medium']]],
+ ['Intervals',[['Insert Interval','insert-interval','Medium'],['Merge Intervals','merge-intervals','Medium'],['Non-overlapping Intervals','non-overlapping-intervals','Medium']]],
+ ['Bits',[['Number of 1 Bits','number-of-1-bits','Easy'],['Counting Bits','counting-bits','Easy'],['Reverse Bits','reverse-bits','Easy'],['Missing Number','missing-number','Easy'],['Sum of Two Integers','sum-of-two-integers','Medium']]]
+];
+const rmFind=slug=>{for(const p of S.pages){if(p.folder)continue;const b=p.blocks.find(x=>x.t==='lc'&&x.url&&x.url.toLowerCase().includes('/problems/'+slug+'/')||x.t==='lc'&&x.url&&x.url.toLowerCase().endsWith('/problems/'+slug));if(b)return{p,b}}return null};
+function drawRoadmap(){const ed=$('#ed');let tot=0,done=0,next=null;
+ const cats=ROADMAP.map(([name,list])=>{const items=list.map(([t,slug,d])=>{const f=rmFind(slug),st=f?(f.b.status||'Not started'):null,ok=!!st&&LC_SOLVED.includes(st);tot++;if(ok)done++;const it={t,slug,d,f,st,ok};if(!ok&&!next)next=it;return it});return{name,items,ok:items.filter(i=>i.ok).length}});
+ const pct=Math.round(done/tot*100);
+ ed.innerHTML=`<div class="road"><div class="rdh"><div><h1>Roadmap</h1><div class="lbs">The Blind 75 (the free ones, no Premium needed): ${done} of ${tot} solved. Pages you already have are matched by their problem link.</div></div><div class="rdp"><b>${pct}%</b><i style="--p:${pct}%"></i></div></div>
+ ${next?`<button class="rdn" id="rdnext"><span>Next up</span><b>${esc(next.t)}</b><em class="df ${next.d}">${next.d}</em><span class="go">${next.f?'Open':'Start'} \u2192</span></button>`:'<div class="rdn done">You finished the whole list. Time for review!</div>'}
+ ${cats.map((c,ci)=>`<section class="rdc"><header><b>${esc(c.name)}</b><span>${c.ok}/${c.items.length}</span><i style="--p:${Math.round(c.ok/c.items.length*100)}%"></i></header>${c.items.map((it,ii)=>`<div class="rdr${it.ok?' ok':''}" data-c="${ci}" data-i="${ii}"><span class="rds" style="--sc:${it.st?LC_COL[it.st]:'var(--mut)'}">${it.ok?'\u2713':it.f?'\u25CF':'\u25CB'}</span><span class="rdt">${esc(it.t)}</span><em class="df ${it.d}">${it.d}</em><span class="rdst">${it.st?esc(it.st):'Not added yet'}</span><button>${it.f?'Open':'Add'}</button></div>`).join('')}</section>`).join('')}</div>`;
+ const go=it=>{if(it.f){homeOn=false;cur=it.f.p.id;render();return}
+  snap();const f=ensureFolder('DSA and LeetCode');f.open=true;const blocks=TPL.leetcode.make(),lc=blocks.find(b=>b.t==='lc');lc.url='https://leetcode.com/problems/'+it.slug+'/';lc.diff=it.d;lc.title=it.t;
+  const pg={id:uid(),title:it.t,parent:f.id,tags:['leetcode',it.d.toLowerCase()],fav:false,open:true,blocks};S.pages.push(pg);homeOn=false;cur=pg.id;save();render();lcFetch(lc,pg,true)};
+ ed.querySelectorAll('.rdr').forEach(r=>r.onclick=()=>go(cats[+r.dataset.c].items[+r.dataset.i]));
+ const nb=$('#rdnext');if(nb)nb.onclick=()=>go(next)}
+function openRoadmap(){homeOn=true;homeMode='road';homeCur=cur;render()}
 /* ---------- find and replace on the open page ---------- */
 const FR={q:'',r:'',cs:false};
 const frRe=()=>FR.q?new RegExp(FR.q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),FR.cs?'g':'gi'):null;
@@ -3390,7 +3543,7 @@ async function loadMe(){try{ME=await (await fetch('/api/me')).json();renderProfi
 async function boot(){try{const r=await fetch('/api/state');if(r.ok){adopt(await r.json())}setSaveStatus('Saved')}catch(e){setSaveStatus('Could not load from server',true)}
  /* a refresh returns to the same page; a fresh launch opens Home */
  let sv=null;try{sv=JSON.parse(sessionStorage.getItem('nt.view')||'null')}catch(e){}
- if(sv&&sv.c&&P(sv.c)){cur=sv.c;if(sv.h){homeOn=true;homeMode=sv.m==='lib'?'lib':'home';homeCur=cur}}else if(!(S.pages.length<=1&&!S.pages[0].title&&S.pages[0].blocks.length<=1)){homeOn=true;homeMode='home';homeCur=cur}
+ if(sv&&sv.c&&P(sv.c)){cur=sv.c;if(sv.h){homeOn=true;homeMode=sv.m==='lib'||sv.m==='road'?sv.m:'home';homeCur=cur}}else if(!(S.pages.length<=1&&!S.pages[0].title&&S.pages[0].blocks.length<=1)){homeOn=true;homeMode='home';homeCur=cur}
  render();restoreScroll(sv);loadMe();poll();setInterval(poll,4000);
  $('#sv').onclick=async()=>{const e=$('#sv');e.textContent='Syncing…';try{syncInfo=await (await fetch('/api/sync/now',{method:'POST'})).json()}catch(x){}
   if(syncInfo.status==='off'){const u=prompt('Paste your PRIVATE notes repo URL to sync between laptops (https://github.com/you/notera-notes.git)');if(u){try{syncInfo=await (await fetch('/api/sync/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({remote:u})})).json()}catch(x){}}}

@@ -80,3 +80,14 @@ body.sidecol #ctb,body.solo.libv #ctb{left:0}
  .blk.dragging{transition:opacity .2s}
  .blk[data-sticker] .im:hover img{transition:transform .35s var(--spring)}
 }
+
+/* phones with a notch or a home bar */
+#toast{bottom:max(24px,env(safe-area-inset-bottom))}
+@media(max-width:760px){#ed{padding-bottom:max(120px,calc(env(safe-area-inset-bottom) + 100px))}}
+
+/* sidebar selection pill */
+#tree{position:relative}
+#tree .pg{position:relative;z-index:1}
+#tree.haspill .pg.on{background:transparent!important}
+.sbpill{position:absolute;left:6px;right:6px;border-radius:9px;background:var(--veil2);z-index:0;pointer-events:none}
+@media (prefers-reduced-motion:no-preference){.sbpill{transition:top .42s cubic-bezier(.34,1.56,.64,1),height .3s cubic-bezier(.32,.72,0,1)}}

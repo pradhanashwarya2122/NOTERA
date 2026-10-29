@@ -1,0 +1,40 @@
+name: Publish the phone app
+
+# Publishes the contents of static/ as a website, so the phone can install Notera and always get the newest version.
+# One-time setup: repository Settings -> Pages -> Build and deployment -> Source: GitHub Actions.
+# Only the app itself is published. Your notes are never in this repository.
+
+on:
+  push:
+    branches: [main]
+    paths: ['static/**', '.github/workflows/pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Collect the app files
+        run: |
+          mkdir _site
+          cp -r static/. _site/
+          touch _site/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

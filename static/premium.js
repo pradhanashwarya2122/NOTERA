@@ -50,6 +50,14 @@ function afterRender(){const ed=$('#ed');if(!ed)return;
 const ed=$('#ed');if(ed){new MutationObserver(afterRender).observe(ed,{childList:true})}
 afterRender();
 
+/* ---------- the sidebar highlight glides between pages ---------- */
+(()=>{const tree=$('#tree');if(!tree)return;let prev=null;
+ const place=()=>{const on=tree.querySelector('.pg.on');tree.classList.toggle('haspill',!!on);if(!on){prev=null;return}
+  const y=on.offsetTop,h=on.offsetHeight,pill=document.createElement('div');pill.className='sbpill';
+  pill.style.cssText='top:'+(prev&&!calm()?prev.y:y)+'px;height:'+(prev&&!calm()?prev.h:h)+'px';tree.prepend(pill);
+  if(prev&&!calm())requestAnimationFrame(()=>requestAnimationFrame(()=>{pill.style.top=y+'px';pill.style.height=h+'px'}));prev={y,h}};
+ new MutationObserver(m=>{if(m.every(x=>[...x.addedNodes].every(n=>n.className==='sbpill')&&x.removedNodes.length===0))return;place()}).observe(tree,{childList:true});place()})();
+
 /* ---------- themes cross-fade ---------- */
 (function wrapTheme(){if(typeof window.applyTheme!=='function')return setTimeout(wrapTheme,300);const o=window.applyTheme;let first=true;window.applyTheme=function(){if(!first&&!calm()){document.body.classList.add('themeswap');setTimeout(()=>document.body.classList.remove('themeswap'),550)}first=false;return o.apply(this,arguments)}})();
 })();

@@ -180,6 +180,10 @@ try:
         # home progress
         pg.evaluate("homeOn=true;homeMode='home';homeCur=cur;render()")
         ok("day streak" in pg.inner_text(".hstats"), "Home shows the streak")
+        ok(pg.evaluate("document.body.classList.contains('glass')&&parseFloat(getComputedStyle(document.querySelector('#side')).borderRadius)>=20&&getComputedStyle(document.querySelector('#side')).backdropFilter.includes('blur')"), "Liquid Glass is on by default: the sidebar floats as rounded, blurred glass")
+        pg.evaluate("setGlass(false)")
+        ok(pg.evaluate("parseFloat(getComputedStyle(document.querySelector('#side')).borderRadius)<10"), "Liquid Glass can be switched off")
+        pg.evaluate("setGlass(true)")
 
         # drag an image so the text wraps around it, and bullets
         svg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='orange'/></svg>"

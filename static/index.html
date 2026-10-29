@@ -1966,7 +1966,7 @@ function applyTheme(name,accent){const t=THEMES[name]||THEMES.light,root=documen
  try{localStorage.setItem('nt.theme',name);if(accent)localStorage.setItem('nt.accent',accent);else localStorage.removeItem('nt.accent')}catch(e){}
  drawThemePanel(name,accent)}
 function drawThemePanel(active,accent){const p=$('#thp');
- p.innerHTML='<label class="funtg"><input type="checkbox" id="funtg" '+(document.body.classList.contains('fun')?'checked':'')+'> <span><b>Colourful notes</b><i>Rainbow bullets, wavy underlines and doodles</i></span></label><div class="tlabel">Theme presets</div><div class="swgrid">'+Object.entries(THEMES).map(([k,t])=>{return`<div class="sw ${k===active&&!accent?'on':''}" data-th="${k}" style="background:${t.bg};color:${t.tx}"><i style="background:${t.y}"></i><span>${t.label}</span></div>`}).join('')+'</div>'
+ p.innerHTML='<label class="glasstg"><input type="checkbox" id="glasstg" '+(document.body.classList.contains('glass')?'checked':'')+'> <span><b>Liquid Glass</b><i>Translucent floating panels over a soft colour field</i></span></label><label class="funtg"><input type="checkbox" id="funtg" '+(document.body.classList.contains('fun')?'checked':'')+'> <span><b>Colourful notes</b><i>Rainbow bullets, wavy underlines and doodles</i></span></label><div class="tlabel">Theme presets</div><div class="swgrid">'+Object.entries(THEMES).map(([k,t])=>{return`<div class="sw ${k===active&&!accent?'on':''}" data-th="${k}" style="background:${t.bg};color:${t.tx}"><i style="background:${t.y}"></i><span>${t.label}</span></div>`}).join('')+'</div>'
  +'<div class="tlabel">Custom accent color</div><div class="acc"><input type="color" id="accPick" value="'+(accent||(THEMES[active]||THEMES.light).y)+'"><button class="b" id="accClear">Reset</button></div>'
  +'<div class="tlabel">Page width</div><div class="seg" id="lyseg"><button data-l="0" class="'+(document.body.classList.contains('wide')?'':'on')+'">Centered</button><button data-l="1" class="'+(document.body.classList.contains('wide')?'on':'')+'">Full width</button></div>'
  +'<div class="tlabel">UI font</div><select class="fsel" id="uiFont">'+FONTS.ui.map(f=>`<option value="${f.v}" ${curUiFont===f.v?'selected':''}>${f.n}</option>`).join('')+'</select>'
@@ -1976,7 +1976,7 @@ function drawThemePanel(active,accent){const p=$('#thp');
  const accPick=$('#accPick');
  accPick.oninput=e=>{setAccentVars(e.target.value);try{localStorage.setItem('nt.accent',e.target.value)}catch(err){}};
  accPick.onchange=()=>drawThemePanel(active,accPick.value);
- $('#accClear').onclick=()=>applyTheme(active);$('#funtg').onchange=e=>setFun(e.target.checked);
+ $('#accClear').onclick=()=>applyTheme(active);$('#funtg').onchange=e=>setFun(e.target.checked);$('#glasstg').onchange=e=>window.setGlass&&setGlass(e.target.checked);
  $('#uiFont').onchange=e=>applyFont('ui',e.target.value);$('#dispFont').onchange=e=>applyFont('disp',e.target.value);p.querySelectorAll('#lyseg button').forEach(x=>x.onclick=()=>setLayout(x.dataset.l==='1'));
  $('#monoFont').onchange=e=>applyFont('mono',e.target.value)}
 $('#thb').onclick=e=>{e.stopPropagation();$('#thp').classList.toggle('show')};

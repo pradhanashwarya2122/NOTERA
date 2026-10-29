@@ -148,3 +148,6 @@ The roadmap now has a second list: the full **NeetCode 150** (Premium-only probl
 ## Phone, icon and install
 Notera has an icon and installs as an app on Android, iPhone and desktop. See [PHONE.md](PHONE.md) for the setup (website, install, sync token, APK) and what works on a phone.
 Home also has a **Today's plan** row: revisions due, your next roadmap problem and flashcards due.
+
+## Liquid Glass
+On by default (Theme panel → *Liquid Glass*): the sidebar floats as a rounded sheet of glass, menus, dialogs, toolbars and cards are translucent with a bright rim over a slowly drifting colour field, and it adapts to every theme (light and dark). It needs a browser with `backdrop-filter` (every current one) and falls back to solid panels otherwise.

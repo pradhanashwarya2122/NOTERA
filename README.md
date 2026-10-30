@@ -141,7 +141,7 @@ are git-ignored.
 
 ## Premium feel
 `static/premium.css` and `static/premium.js` add the interaction layer on top of the app (and never break it if they fail to load):
-frosted-glass menus and sidebar, spring-eased windows and press states on every button, blocks that rise in one after another when a page opens, a large title that settles into a translucent bar as you scroll, numbers that count up, a pointer spotlight on cards, theme changes that cross-fade, and confetti when you tick a to-do, solve a problem on your own or log a clean review. Everything that moves respects the system's *reduce motion* setting.
+spring-eased windows and press states on every button, blocks that rise in one after another when a page opens, a large title that settles into a translucent bar as you scroll, numbers that count up, a pointer spotlight on cards, theme changes that cross-fade, and confetti when you tick a to-do, solve a problem on your own or log a clean review. Everything that moves respects the system's *reduce motion* setting.
 
 The roadmap now has a second list: the full **NeetCode 150** (Premium-only problems are marked).
 
@@ -149,5 +149,3 @@ The roadmap now has a second list: the full **NeetCode 150** (Premium-only probl
 Notera has an icon and installs as an app on Android, iPhone and desktop. See [PHONE.md](PHONE.md) for the setup (website, install, sync token, APK) and what works on a phone.
 Home also has a **Today's plan** row: revisions due, your next roadmap problem and flashcards due.
 
-## Liquid Glass
-On by default (Theme panel → *Liquid Glass*): the sidebar floats as a rounded sheet of glass, menus, dialogs, toolbars and cards are translucent with a bright rim over a slowly drifting colour field, and it adapts to every theme (light and dark). It needs a browser with `backdrop-filter` (every current one) and falls back to solid panels otherwise.

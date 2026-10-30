@@ -7,7 +7,6 @@
 .ce:focus-visible,#ti:focus-visible{outline:0}
 
 /* frosted glass on floating surfaces */
-.icbox,#qs.show .qbox{-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass)}
 .menu,#thp,#hip,#tpl,#rvm,#lyp,#stk,#lpv,#frb,#sl,.icbox,#qs .qbox{background:color-mix(in srgb,var(--panel) 86%,transparent)}
 
 /* large title that settles into a translucent bar, like iOS */
@@ -91,65 +90,3 @@ body.sidecol #ctb,body.solo.libv #ctb{left:0}
 .sbpill{position:absolute;left:6px;right:6px;border-radius:9px;background:var(--veil2);z-index:0;pointer-events:none}
 @media (prefers-reduced-motion:no-preference){.sbpill{transition:top .42s cubic-bezier(.34,1.56,.64,1),height .3s cubic-bezier(.32,.72,0,1)}}
 
-/* ======================= Liquid Glass =======================
-   Floating, translucent surfaces with a bright specular rim, over a soft colour field that shows through them. */
-body.glass{--gl-bg:color-mix(in srgb,var(--panel) 40%,transparent);--gl-bg2:color-mix(in srgb,var(--panel) 62%,transparent);--gl-hi:rgba(255,255,255,.85);--gl-lo:rgba(255,255,255,.22);--gl-ring:rgba(255,255,255,.55);--gl-shadow:rgba(30,30,60,.28);--gl-blur:blur(16px) saturate(1.6)}
-body.glass.dk{--gl-bg:color-mix(in srgb,var(--panel) 42%,transparent);--gl-bg2:color-mix(in srgb,var(--panel) 64%,transparent);--gl-hi:rgba(255,255,255,.34);--gl-lo:rgba(255,255,255,.07);--gl-ring:rgba(255,255,255,.2);--gl-shadow:rgba(0,0,0,.55);--gl-blur:blur(16px) saturate(1.5)}
-
-/* the colour field behind everything */
-body.glass::before{content:'';position:fixed;inset:-10%;z-index:-1;pointer-events:none;
- background:radial-gradient(46% 42% at 12% 8%,color-mix(in srgb,var(--f4) 34%,transparent),transparent 70%),radial-gradient(40% 40% at 88% 14%,color-mix(in srgb,var(--f5) 30%,transparent),transparent 70%),radial-gradient(46% 44% at 78% 92%,color-mix(in srgb,var(--f6) 26%,transparent),transparent 70%),radial-gradient(40% 40% at 8% 88%,color-mix(in srgb,var(--f3) 24%,transparent),transparent 70%)}
-body.glass.dk::before{opacity:.8}
-
-/* every glass surface shares one recipe */
-body.glass #side,body.glass .menu,body.glass #thp,body.glass #hip,body.glass #tpl,body.glass #rvm,body.glass #lyp,body.glass #stk,body.glass #lpv,body.glass #frb,body.glass #sl,
-body.glass .icbox,body.glass #qs .qbox,body.glass #ft,body.glass #sb,body.glass .cvt,body.glass #ctb,body.glass #toast,body.glass #libsel,body.glass .rowtb,body.glass #pkr,body.glass #aip{
- background:var(--gl-bg)!important;border:1px solid var(--gl-ring)!important;
- box-shadow:inset 0 1.5px 0 var(--gl-hi),inset 0 -1px 0 var(--gl-lo),inset 1px 0 0 var(--gl-lo),inset -1px 0 0 var(--gl-lo),0 24px 48px -22px var(--gl-shadow),0 2px 6px rgba(0,0,0,.06)!important}
-body.glass #toast{color:var(--tx);background:var(--gl-bg2)!important}
-body.glass #ctb{border-radius:0 0 22px 22px;margin:0 12px;left:calc(var(--sw,272px) + 22px);right:12px;border-top:0!important}
-body.glass.sidecol #ctb{left:12px}
-
-/* the sidebar floats like a sheet of glass */
-body.glass #side{margin:10px 0 10px 10px;height:calc(100vh - 20px);border-radius:24px;transition:width .3s var(--ease),margin .3s var(--ease),opacity .3s,border-color .3s}
-body.glass #side.collapsed{margin-left:0;margin-right:0;border-color:transparent!important;box-shadow:none!important;opacity:0}
-body.glass #side .sin{border-radius:24px}
-body.glass #tree.haspill .pg.on{background:transparent!important}
-body.glass .sbpill{background:var(--gl-bg2);box-shadow:inset 0 1px 0 var(--gl-hi),inset 0 -1px 0 var(--gl-lo),0 6px 14px -8px var(--gl-shadow);border:1px solid var(--gl-ring)}
-@media(max-width:760px){body.glass #side{position:fixed;left:0;top:0;height:100vh;margin:0;border-radius:0 24px 24px 0}}
-
-/* floating bars are pills */
-body.glass #ft,body.glass #sb,body.glass .cvt,body.glass .rowtb{border-radius:18px}
-body.glass .icbox,body.glass #qs .qbox{border-radius:26px}
-body.glass .menu,body.glass #thp,body.glass #hip,body.glass #tpl,body.glass #rvm,body.glass #lyp,body.glass #stk,body.glass #lpv,body.glass #frb,body.glass #sl{border-radius:20px}
-
-/* a moving highlight that catches the light as the pointer passes (only on the big surfaces) */
-body.glass #side::after,body.glass .icbox::after,body.glass #qs .qbox::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.28) 0%,rgba(255,255,255,0) 28%,rgba(255,255,255,0) 72%,rgba(255,255,255,.12) 100%);mix-blend-mode:soft-light}
-body.glass .icbox,body.glass #qs .qbox{position:relative}
-
-/* cards and tiles on the page become glass too */
-body.glass .hc,body.glass .pl,body.glass .hlibt,body.glass .rdn,body.glass .rdc,body.glass .dt,body.glass .lcard,body.glass .lc,body.glass .hshare{
- background:var(--gl-bg2)!important;border:1px solid var(--gl-ring)!important;
- box-shadow:inset 0 1px 0 var(--gl-hi),inset 0 -1px 0 var(--gl-lo),0 14px 30px -20px var(--gl-shadow)!important}
-body.glass .rdc header,body.glass .lcard header{background:transparent}
-body.glass .rdr:hover,body.glass .lr:hover{background:var(--gl-lo)}
-
-/* Home buttons, chips and the selection toolbar buttons read as glass lozenges */
-body.glass .hb,body.glass .b{box-shadow:inset 0 1px 0 var(--gl-hi),inset 0 -1px 0 var(--gl-lo)}
-body.glass .add .b{background:var(--gl-bg)}
-body.glass #lay,body.glass #olb,body.glass #aib2,body.glass #sctoggle{background:var(--gl-bg);box-shadow:inset 0 1px 0 var(--gl-hi);border:1px solid var(--gl-ring);border-radius:12px}
-body.glass .lcp{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 16px -8px var(--gl-shadow)}
-
-/* page content stays calm: text blocks keep their own look, the canvas and code stay solid for legibility */
-body.glass #main{background:transparent}
-body.glass .cvw,body.glass .cb,body.glass pre,body.glass textarea.cd{-webkit-backdrop-filter:none;backdrop-filter:none}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
- body.glass #side,body.glass .menu,body.glass .icbox,body.glass #qs .qbox,body.glass #ft,body.glass #sb,body.glass .cvt,body.glass #ctb,body.glass #toast{background:var(--panel)!important}}
-.glasstg{display:flex;gap:10px;align-items:flex-start;padding:2px 2px 12px;cursor:pointer}.glasstg b{display:block;font:600 13.5px var(--ui);color:var(--tx)}.glasstg i{display:block;font:12px var(--ui);color:var(--mut);font-style:normal}.glasstg input{margin-top:3px;accent-color:var(--y)}
-
-body.glass #side,body.glass .icbox,body.glass #qs.show .qbox,body.glass #ft,body.glass #sb,body.glass #ctb{-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur)}
-body.glass .menu.show,body.glass #thp.show,body.glass #hip.show,body.glass #tpl.show,body.glass #rvm.show,body.glass #lyp.show,body.glass #stk.show,body.glass #frb.show{-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur)}
-body.glass #side::after,body.glass .icbox::after,body.glass #qs .qbox::after{display:none}
-body.glass .menu,body.glass #thp,body.glass #hip,body.glass #tpl,body.glass #rvm,body.glass #lyp,body.glass #stk,body.glass #frb,body.glass #sl,body.glass #toast{background:var(--gl-bg2)!important}
-
-.glbtn.on{color:var(--y)}

@@ -1051,7 +1051,7 @@ body.bdrag{cursor:grabbing!important;user-select:none;-webkit-user-select:none}b
 @media(max-width:600px){.wrapg>.blk.imgb,.wrapg>.blk.imgb[data-fl=r]{float:none;max-width:100%;margin:6px 0}}
 .szc button[data-z=wl],.szc button[data-z=wr]{width:22px;font-size:13px}
 /* ---------- underline styles ---------- */
-.uw{text-decoration:underline wavy var(--uc,#ff6ac1);text-decoration-thickness:2px;text-underline-offset:4px}
+.uw{text-decoration:underline var(--uc,#ff6ac1);text-decoration-thickness:2px;text-underline-offset:4px}
 .um{background:linear-gradient(transparent 60%,color-mix(in srgb,var(--uc,#ffe14d) 60%,transparent) 60% 92%,transparent 92%);padding:0 2px;border-radius:2px}
 #ft .uwi,#ft .umi{display:inline-flex;align-items:center;justify-content:center;font:700 13px var(--ui);color:var(--uc);cursor:pointer;width:16px;height:16px;border:0}
 #ft .umi{background:linear-gradient(transparent 50%,var(--uc) 50%);border-radius:2px}
@@ -1061,7 +1061,7 @@ body.bdrag{cursor:grabbing!important;user-select:none;-webkit-user-select:none}b
 #bl .blk{--fc:var(--f4)}
 #bl .blk:nth-child(6n+1){--fc:var(--f1)}#bl .blk:nth-child(6n+2){--fc:var(--f2)}#bl .blk:nth-child(6n+3){--fc:var(--f3)}#bl .blk:nth-child(6n+4){--fc:var(--f4)}#bl .blk:nth-child(6n+5){--fc:var(--f5)}#bl .blk:nth-child(6n){--fc:var(--f6)}
 body.fun .ce.h1,body.fun .doc h1{border-bottom:3px solid var(--fc,var(--f4));background-image:none}
-body.fun .ce.h2,body.fun .doc h2{color:var(--fc,var(--y));text-decoration:underline wavy color-mix(in srgb,var(--fc,var(--y)) 65%,transparent);text-decoration-thickness:1.5px;text-underline-offset:7px}
+body.fun .ce.h2,body.fun .doc h2{color:var(--fc,var(--y));text-decoration:underline color-mix(in srgb,var(--fc,var(--y)) 65%,transparent);text-decoration-thickness:1.5px;text-underline-offset:7px}
 body.fun .ce.h3,body.fun .doc h3{border-left:4px solid var(--fc,var(--y));padding-left:11px;border-radius:2px}
 body.fun .blk[data-t=ul] .mk,body.fun .blk[data-t=ol] .mk{color:var(--fc);font-weight:800}
 body.fun .blk[data-t=ul] .mk{font-size:0;display:flex;align-items:center;justify-content:center;height:1.55em}
@@ -1072,7 +1072,7 @@ body.fun .blk[data-t=todo] input,body.fun .doc input.ck{accent-color:var(--fc,va
 body.fun .doc ul li::marker,body.fun .ce ul li::marker{color:var(--f5);font-size:1.15em}
 body.fun .doc ol li::marker{color:var(--f2);font-weight:800}
 body.fun .doc ul li:nth-child(3n+1)::marker{color:var(--f1)}body.fun .doc ul li:nth-child(3n+2)::marker{color:var(--f3)}
-body.fun .ce a,body.fun .doc a{text-decoration:underline wavy color-mix(in srgb,var(--f4) 80%,transparent);text-decoration-thickness:1.5px;text-underline-offset:4px;color:var(--f4)}
+body.fun .ce a,body.fun .doc a{text-decoration:underline color-mix(in srgb,var(--f4) 80%,transparent);text-decoration-thickness:1.5px;text-underline-offset:4px;color:var(--f4)}
 body.fun .doc blockquote,body.fun .ce.quote,body.fun .blk[data-t=quote] .ce{border-left:4px solid var(--fc,var(--f2))}
 body.fun .doc code,body.fun .ce code{background:color-mix(in srgb,var(--fc,var(--f5)) 14%,var(--bg));color:var(--fc,var(--f5));border-radius:6px;padding:1px 6px}
 body.fun hr{border:0;height:8px;background:var(--f3);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='8' viewBox='0 0 24 8'%3E%3Cpath d='M0 4q6-6 12 0t12 0' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E") repeat-x center/24px 8px;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='8' viewBox='0 0 24 8'%3E%3Cpath d='M0 4q6-6 12 0t12 0' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E") repeat-x center/24px 8px}
@@ -1083,17 +1083,9 @@ body.fun .ce{caret-color:var(--fc,var(--y))}
 body.fun .lc{border-top:4px solid var(--f2)}
 body.fun .blk[data-t=callout] .ce,body.fun .callout{border-left-width:4px}
 body.fun .hh h1{position:relative;display:inline-block}
-.hsq{display:none}
-body.fun .hsq{display:block;position:absolute;left:0;bottom:-8px;width:100%;height:10px;color:var(--f2)}
-.hdoodle{display:none}
-body.fun .hdoodle{display:block;position:absolute;right:0;top:-6px;width:150px;height:105px;pointer-events:none;overflow:visible}
-body.fun .hdoodle .d1,body.fun .hdoodle .d2{fill:var(--f2)}body.fun .hdoodle .d3{fill:none;stroke:var(--f1);stroke-width:3}body.fun .hdoodle .d4{stroke:var(--f4);stroke-width:3;stroke-linecap:round}body.fun .hdoodle .d5{stroke:var(--f5);stroke-width:3;stroke-linecap:round}
-body.fun .hdoodle .d1{animation:ntBob 3.2s ease-in-out infinite}body.fun .hdoodle .d2{animation:ntBob 2.6s .6s ease-in-out infinite}body.fun .hdoodle .d3{animation:ntBob 3.8s .3s ease-in-out infinite}
 @keyframes ntBob{50%{transform:translateY(-5px) rotate(8deg)}}
 body.fun .hh{position:relative}
 body.fun .hstats>div:nth-child(6n+1) b{color:var(--f1)}body.fun .hstats>div:nth-child(6n+2) b{color:var(--f2)}body.fun .hstats>div:nth-child(6n+3) b{color:var(--f3)}body.fun .hstats>div:nth-child(6n+4) b{color:var(--f4)}body.fun .hstats>div:nth-child(6n+5) b{color:var(--f5)}
-@media(max-width:700px){body.fun .hdoodle{display:none}}
-@media(prefers-reduced-motion:reduce){body.fun .hdoodle *{animation:none!important}}
 
 .wrapg:not(.stack)>.blk:not(.imgb) .ce{zoom:var(--ws,1)}
 .wrapg.stack>.blk.imgb,.wrapg.stack>.blk.imgb[data-fl=r]{float:none;max-width:100%;margin:6px 0}
@@ -1126,9 +1118,6 @@ body.fun .ce.h2,body.fun .doc h2{text-decoration:none}
 body.fun .ce.h1{border-bottom:0}
 body.fun .blk[data-t=p]>.bd,body.fun .blk[data-t=quote]>.bd,body.fun .blk[data-t=callout]>.bd{position:relative}
 body.fun .blk[data-t=p]>.bd .ce,body.fun .blk[data-t=quote]>.bd .ce{border-color:transparent}
-body.fun .blk[data-t=p]>.bd::before,body.fun .blk[data-t=quote]>.bd::before{content:'';position:absolute;inset:0;border:1.5px solid color-mix(in srgb,var(--tx) 34%,transparent);border-radius:8px 11px 9px 12px/11px 8px 12px 9px;filter:url(#rough2);pointer-events:none}
-body.fun .blk[data-t=p]>.bd::after{content:'';position:absolute;inset:1px;border:1px solid color-mix(in srgb,var(--tx) 10%,transparent);border-radius:11px 8px 12px 9px/8px 12px 9px 11px;filter:url(#rough);pointer-events:none}
-body.fun .wrapg>.blk .bd::before,body.fun .wrapg>.blk .bd::after{display:none}
 body.fun .imgf:not(.x)::before{content:'';position:absolute;top:-9px;left:50%;width:74px;height:20px;margin-left:-37px;transform:rotate(-3deg);background:repeating-linear-gradient(90deg,color-mix(in srgb,var(--fc,var(--f2)) 55%,transparent) 0 8px,color-mix(in srgb,var(--fc,var(--f6)) 30%,transparent) 8px 16px);box-shadow:0 1px 2px rgba(0,0,0,.18);z-index:4;pointer-events:none}
 .rowg .imgf::before{display:none!important}
 /* ---------- roadmap ---------- */
@@ -1159,7 +1148,7 @@ body.fun .imgf:not(.x)::before{content:'';position:absolute;top:-9px;left:50%;wi
 <div class="brand"><div class="mark">N</div><h1>Notera</h1><button id="sctb" title="Hide sidebar (Ctrl+\)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button></div>
 <button id="prof" class="prof" title="Your profile and sharing"><span id="av"></span><span class="pn"><b id="pname">Writer</b><i id="pid"></i></span><span class="pnet" id="pnet"></span></button>
 <div class="top"><input id="q" placeholder="Filter pages and notes"><div class="tags" id="tf"></div></div>
-<div class="nav"><button class="nv" id="homeb" data-ic="home"><span class="lbl">Home</span></button><button class="nv" id="qsb" data-ic="search"><span class="lbl">Quick find</span><kbd>Ctrl P</kbd></button><button class="nv" id="revb" title="Review flashcards and pages that are due" data-ic="rev"><span class="lbl">Review</span><kbd id="revn" class="cntb"></kbd></button><button class="nv" id="np" title="Create a new blank page" data-ic="plus"><span class="lbl">New page</span></button><button class="nv" id="nfb" title="Create a folder. Folders can hold pages and more folders" data-ic="folderPlus"><span class="lbl">New folder</span></button><button class="nv" id="libb" title="Open every page and folder full screen to organise them" data-ic="expand"><span class="lbl">Library</span></button><button class="nv" id="tplb" title="Start from a ready-made layout, like a LeetCode problem" data-ic="template"><span class="lbl">From template</span></button><button class="nv glbtn" id="glb" title="Turn the Liquid Glass look on or off" data-ic="palette"><span class="lbl">Glass: off</span></button></div>
+<div class="nav"><button class="nv" id="homeb" data-ic="home"><span class="lbl">Home</span></button><button class="nv" id="qsb" data-ic="search"><span class="lbl">Quick find</span><kbd>Ctrl P</kbd></button><button class="nv" id="revb" title="Review flashcards and pages that are due" data-ic="rev"><span class="lbl">Review</span><kbd id="revn" class="cntb"></kbd></button><button class="nv" id="np" title="Create a new blank page" data-ic="plus"><span class="lbl">New page</span></button><button class="nv" id="nfb" title="Create a folder. Folders can hold pages and more folders" data-ic="folderPlus"><span class="lbl">New folder</span></button><button class="nv" id="libb" title="Open every page and folder full screen to organise them" data-ic="expand"><span class="lbl">Library</span></button><button class="nv" id="tplb" title="Start from a ready-made layout, like a LeetCode problem" data-ic="template"><span class="lbl">From template</span></button></div>
 <div id="tree"></div>
 <div class="foot"><div id="sv" title="Click to sync now">Saved</div><button id="mm" title="More: save, export, import, undo, themes, history" data-ic="more"></button></div>
 <div class="menu" id="mmenu">
@@ -1180,7 +1169,7 @@ body.fun .imgf:not(.x)::before{content:'';position:absolute;top:-9px;left:50%;wi
 <button class="b mi" id="ms" title="Save everything now and write a full backup of the NOTERA folder (Ctrl/Cmd+S)" data-ic="save"><span class="lbl">Master save</span></button>
 </div>
 <div class="rsz" id="rsz" title="Drag to resize"></div>
-</div></div><div id="edge"></div><div id="acc"></div><div id="tpl"></div><div id="wel"></div><div id="rvm"></div><div id="scrim"></div><div id="aiset"></div><div id="tset"></div><div id="rec"></div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3"/></filter><filter id="rough2"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4.5"/></filter></svg><div id="frb"></div><div id="lpv"></div><div id="aim"></div><aside id="aip"></aside><div id="pkr"></div><div id="rvw"></div><div id="shc"></div>
+</div></div><div id="edge"></div><div id="acc"></div><div id="tpl"></div><div id="wel"></div><div id="rvm"></div><div id="scrim"></div><div id="aiset"></div><div id="tset"></div><div id="rec"></div><div id="frb"></div><div id="lpv"></div><div id="aim"></div><aside id="aip"></aside><div id="pkr"></div><div id="rvw"></div><div id="shc"></div>
 <button id="sctoggle" title="Show sidebar (Ctrl+\)"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
 <div id="main"><div id="ed"></div></div>
 <button id="lay"></button>
@@ -1966,7 +1955,7 @@ function applyTheme(name,accent){const t=THEMES[name]||THEMES.light,root=documen
  try{localStorage.setItem('nt.theme',name);if(accent)localStorage.setItem('nt.accent',accent);else localStorage.removeItem('nt.accent')}catch(e){}
  drawThemePanel(name,accent)}
 function drawThemePanel(active,accent){const p=$('#thp');
- p.innerHTML='<label class="glasstg"><input type="checkbox" id="glasstg" '+(document.body.classList.contains('glass')?'checked':'')+'> <span><b>Liquid Glass</b><i>Translucent floating panels over a soft colour field</i></span></label><label class="funtg"><input type="checkbox" id="funtg" '+(document.body.classList.contains('fun')?'checked':'')+'> <span><b>Colourful notes</b><i>Rainbow bullets, wavy underlines and doodles</i></span></label><div class="tlabel">Theme presets</div><div class="swgrid">'+Object.entries(THEMES).map(([k,t])=>{return`<div class="sw ${k===active&&!accent?'on':''}" data-th="${k}" style="background:${t.bg};color:${t.tx}"><i style="background:${t.y}"></i><span>${t.label}</span></div>`}).join('')+'</div>'
+ p.innerHTML='<label class="funtg"><input type="checkbox" id="funtg" '+(document.body.classList.contains('fun')?'checked':'')+'> <span><b>Colourful notes</b><i>Rainbow bullets and coloured headings</i></span></label><div class="tlabel">Theme presets</div><div class="swgrid">'+Object.entries(THEMES).map(([k,t])=>{return`<div class="sw ${k===active&&!accent?'on':''}" data-th="${k}" style="background:${t.bg};color:${t.tx}"><i style="background:${t.y}"></i><span>${t.label}</span></div>`}).join('')+'</div>'
  +'<div class="tlabel">Custom accent color</div><div class="acc"><input type="color" id="accPick" value="'+(accent||(THEMES[active]||THEMES.light).y)+'"><button class="b" id="accClear">Reset</button></div>'
  +'<div class="tlabel">Page width</div><div class="seg" id="lyseg"><button data-l="0" class="'+(document.body.classList.contains('wide')?'':'on')+'">Centered</button><button data-l="1" class="'+(document.body.classList.contains('wide')?'on':'')+'">Full width</button></div>'
  +'<div class="tlabel">UI font</div><select class="fsel" id="uiFont">'+FONTS.ui.map(f=>`<option value="${f.v}" ${curUiFont===f.v?'selected':''}>${f.n}</option>`).join('')+'</select>'
@@ -1976,7 +1965,7 @@ function drawThemePanel(active,accent){const p=$('#thp');
  const accPick=$('#accPick');
  accPick.oninput=e=>{setAccentVars(e.target.value);try{localStorage.setItem('nt.accent',e.target.value)}catch(err){}};
  accPick.onchange=()=>drawThemePanel(active,accPick.value);
- $('#accClear').onclick=()=>applyTheme(active);$('#funtg').onchange=e=>setFun(e.target.checked);$('#glasstg').onchange=e=>window.setGlass&&setGlass(e.target.checked);
+ $('#accClear').onclick=()=>applyTheme(active);$('#funtg').onchange=e=>setFun(e.target.checked);
  $('#uiFont').onchange=e=>applyFont('ui',e.target.value);$('#dispFont').onchange=e=>applyFont('disp',e.target.value);p.querySelectorAll('#lyseg button').forEach(x=>x.onclick=()=>setLayout(x.dataset.l==='1'));
  $('#monoFont').onchange=e=>applyFont('mono',e.target.value)}
 $('#thb').onclick=e=>{e.stopPropagation();$('#thp').classList.toggle('show')};
@@ -3137,7 +3126,7 @@ function drawHome(){if(homeMode==='lib')return drawLibrary();if(homeMode==='road
  const words=real.reduce((n,p)=>n+(plain(p).trim().split(/\s+/).filter(Boolean).length),0),shared=real.filter(p=>p.share).length;
  const snip=p=>{const b=p.blocks.find(b=>stripH(b.h||'').length>2);return b?stripH(b.h).slice(0,92):'Empty page'};
  const peers=(NET.members||[]).filter(m=>m.id!==ME.id);const act=activityStats(real);
- ed.innerHTML=`<div class="home"><div class="hh"><div class="hq">${esc(QUOTES[new Date().getDate()%QUOTES.length])}</div><h1>${g}, ${esc(ME.name.split(' ')[0])}.<svg class="hsq" viewBox="0 0 200 12" preserveAspectRatio="none"><path d="M2 7 Q12 1 22 7 T42 7 T62 7 T82 7 T102 7 T122 7 T142 7 T162 7 T182 7 T198 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></h1><svg class="hdoodle" viewBox="0 0 160 110" aria-hidden="true"><path class="d1" d="M20 22l4 10 10 4-10 4-4 10-4-10-10-4 10-4z"/><path class="d2" d="M118 12l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><circle class="d3" cx="84" cy="70" r="7"/><path class="d4" d="M20 90q10-14 20 0t20 0 20 0" fill="none"/><path class="d5" d="M120 70c8-12 26-6 20 6s-22 10-14 22" fill="none"/></svg><div class="hd">${new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})}</div></div>
+ ed.innerHTML=`<div class="home"><div class="hh"><div class="hq">${esc(QUOTES[new Date().getDate()%QUOTES.length])}</div><h1>${g}, ${esc(ME.name.split(' ')[0])}.</h1><div class="hd">${new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})}</div></div>
  ${planHtml(real)}
  <div class="hcta"><button class="hb c1" id="hnew">${ic('plus',15)} New page</button><button class="hb c2" id="hfind">${ic('search',15)} Quick find <kbd>Ctrl P</kbd></button><button class="hb c3" id="hprompt">${ic('doc',15)} Paste an AI answer</button><button class="hb c4" id="hleet">${ic('code',15)} LeetCode problem</button><button class="hb c5" id="htoday">${ic('sun',15)} Today</button><button class="hb c8" id="hroad">${ic('check',15)} Roadmap</button><button class="hb c7" id="hlib">${ic('folder',15)} Library</button><button class="hb c6" id="hrev">${ic('rev',15)} Review${reviewCount()?' ('+reviewCount()+')':''}</button></div>
  ${dueP.length?`<div class="hsec">Due for revision</div><div class="hgrid">${dueP.map(p=>`<button class="hc due" data-id="${p.id}" style="--pc:var(--purple)"><span class="hci">${ic('rev',16)}</span><b>${esc(p.title||'Untitled')}</b><span class="hcs">${esc(snip(p))}</span><span class="hct">Due ${ago(p.rev.due)}</span></button>`).join('')}</div><div class="hsec" style="margin-top:26px">Jump back in</div>`:'<div class="hsec">Jump back in</div>'}<div class="hgrid">${recent.map(p=>`<button class="hc" data-id="${p.id}" style="--pc:${pcol(p.id)}"><span class="hci">${p.icon||ic('doc',16)}</span><b>${esc(p.title||'Untitled')}</b><span class="hcs">${esc(snip(p))}</span><span class="hct">${ago(p.mt)||'&nbsp;'}</span></button>`).join('')}</div>

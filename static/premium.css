@@ -1,15 +1,14 @@
 /* Premium interaction layer: springs, glass, press states, entrances, large-title bar.
    Everything that moves sits inside prefers-reduced-motion:no-preference. */
-:root{--spring:cubic-bezier(.34,1.56,.64,1);--smooth:cubic-bezier(.32,.72,0,1);--glass:blur(22px) saturate(1.7)}
+:root{--spring:cubic-bezier(.34,1.56,.64,1);--smooth:cubic-bezier(.32,.72,0,1);--glass:blur(14px) saturate(1.4)}
 
 /* focus that feels native */
 :where(button,select,input,textarea,[contenteditable]):focus-visible{outline:2px solid color-mix(in srgb,var(--y) 65%,transparent);outline-offset:2px;border-radius:8px}
 .ce:focus-visible,#ti:focus-visible{outline:0}
 
 /* frosted glass on floating surfaces */
-.menu,#thp,#hip,#tpl,#rvm,#lyp,#stk,#lpv,#frb,#sl,#toast,.icbox,#qs .qbox,#ctb{-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass)}
+.icbox,#qs.show .qbox{-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass)}
 .menu,#thp,#hip,#tpl,#rvm,#lyp,#stk,#lpv,#frb,#sl,.icbox,#qs .qbox{background:color-mix(in srgb,var(--panel) 86%,transparent)}
-#side{-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass)}
 
 /* large title that settles into a translucent bar, like iOS */
 #ctb{position:fixed;top:0;left:var(--sw,272px);right:0;height:46px;z-index:6;display:flex;align-items:center;justify-content:center;padding:0 120px;font:600 14px var(--ui);color:var(--tx);background:color-mix(in srgb,var(--bg) 72%,transparent);border-bottom:1px solid var(--ln);opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .28s var(--smooth),transform .35s var(--smooth),left .3s var(--smooth);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -54,7 +53,7 @@ body.sidecol #ctb,body.solo.libv #ctb{left:0}
  #stk:not(.show),#tpl:not(.show),#rvm:not(.show),#lyp:not(.show){transform:translateY(8px) scale(.94)}
 
  /* blocks rise in one after another when a page opens */
- body.entering #bl>*{animation:ntRise .55s var(--smooth) both;animation-delay:calc(var(--i,0)*26ms)}
+ body.entering #bl>*{animation:ntRise .35s var(--smooth) both;animation-delay:calc(var(--i,0)*14ms)}
  @keyframes ntRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
  body.entering #ted,body.entering #pm,body.entering .hh,body.entering .hcta{animation:ntRise .6s var(--smooth) both}
  body.entering #pm{animation-delay:.05s}
@@ -94,19 +93,18 @@ body.sidecol #ctb,body.solo.libv #ctb{left:0}
 
 /* ======================= Liquid Glass =======================
    Floating, translucent surfaces with a bright specular rim, over a soft colour field that shows through them. */
-body.glass{--gl-bg:color-mix(in srgb,var(--panel) 40%,transparent);--gl-bg2:color-mix(in srgb,var(--panel) 62%,transparent);--gl-hi:rgba(255,255,255,.85);--gl-lo:rgba(255,255,255,.22);--gl-ring:rgba(255,255,255,.55);--gl-shadow:rgba(30,30,60,.28);--gl-blur:blur(26px) saturate(2) brightness(1.05)}
-body.glass.dk{--gl-bg:color-mix(in srgb,var(--panel) 42%,transparent);--gl-bg2:color-mix(in srgb,var(--panel) 64%,transparent);--gl-hi:rgba(255,255,255,.34);--gl-lo:rgba(255,255,255,.07);--gl-ring:rgba(255,255,255,.2);--gl-shadow:rgba(0,0,0,.55);--gl-blur:blur(26px) saturate(1.7) brightness(1.1)}
+body.glass{--gl-bg:color-mix(in srgb,var(--panel) 40%,transparent);--gl-bg2:color-mix(in srgb,var(--panel) 62%,transparent);--gl-hi:rgba(255,255,255,.85);--gl-lo:rgba(255,255,255,.22);--gl-ring:rgba(255,255,255,.55);--gl-shadow:rgba(30,30,60,.28);--gl-blur:blur(16px) saturate(1.6)}
+body.glass.dk{--gl-bg:color-mix(in srgb,var(--panel) 42%,transparent);--gl-bg2:color-mix(in srgb,var(--panel) 64%,transparent);--gl-hi:rgba(255,255,255,.34);--gl-lo:rgba(255,255,255,.07);--gl-ring:rgba(255,255,255,.2);--gl-shadow:rgba(0,0,0,.55);--gl-blur:blur(16px) saturate(1.5)}
 
 /* the colour field behind everything */
 body.glass::before{content:'';position:fixed;inset:-10%;z-index:-1;pointer-events:none;
  background:radial-gradient(46% 42% at 12% 8%,color-mix(in srgb,var(--f4) 34%,transparent),transparent 70%),radial-gradient(40% 40% at 88% 14%,color-mix(in srgb,var(--f5) 30%,transparent),transparent 70%),radial-gradient(46% 44% at 78% 92%,color-mix(in srgb,var(--f6) 26%,transparent),transparent 70%),radial-gradient(40% 40% at 8% 88%,color-mix(in srgb,var(--f3) 24%,transparent),transparent 70%)}
 body.glass.dk::before{opacity:.8}
-@media (prefers-reduced-motion:no-preference){body.glass::before{animation:ntDrift 38s ease-in-out infinite alternate}@keyframes ntDrift{to{transform:translate3d(2.5%,-2%,0) scale(1.06) rotate(1.5deg)}}}
 
 /* every glass surface shares one recipe */
 body.glass #side,body.glass .menu,body.glass #thp,body.glass #hip,body.glass #tpl,body.glass #rvm,body.glass #lyp,body.glass #stk,body.glass #lpv,body.glass #frb,body.glass #sl,
 body.glass .icbox,body.glass #qs .qbox,body.glass #ft,body.glass #sb,body.glass .cvt,body.glass #ctb,body.glass #toast,body.glass #libsel,body.glass .rowtb,body.glass #pkr,body.glass #aip{
- background:var(--gl-bg)!important;-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur);border:1px solid var(--gl-ring)!important;
+ background:var(--gl-bg)!important;border:1px solid var(--gl-ring)!important;
  box-shadow:inset 0 1.5px 0 var(--gl-hi),inset 0 -1px 0 var(--gl-lo),inset 1px 0 0 var(--gl-lo),inset -1px 0 0 var(--gl-lo),0 24px 48px -22px var(--gl-shadow),0 2px 6px rgba(0,0,0,.06)!important}
 body.glass #toast{color:var(--tx);background:var(--gl-bg2)!important}
 body.glass #ctb{border-radius:0 0 22px 22px;margin:0 12px;left:calc(var(--sw,272px) + 22px);right:12px;border-top:0!important}
@@ -131,15 +129,15 @@ body.glass .icbox,body.glass #qs .qbox{position:relative}
 
 /* cards and tiles on the page become glass too */
 body.glass .hc,body.glass .pl,body.glass .hlibt,body.glass .rdn,body.glass .rdc,body.glass .dt,body.glass .lcard,body.glass .lc,body.glass .hshare{
- background:var(--gl-bg2)!important;-webkit-backdrop-filter:blur(18px) saturate(1.7);backdrop-filter:blur(18px) saturate(1.7);border:1px solid var(--gl-ring)!important;
+ background:var(--gl-bg2)!important;border:1px solid var(--gl-ring)!important;
  box-shadow:inset 0 1px 0 var(--gl-hi),inset 0 -1px 0 var(--gl-lo),0 14px 30px -20px var(--gl-shadow)!important}
 body.glass .rdc header,body.glass .lcard header{background:transparent}
 body.glass .rdr:hover,body.glass .lr:hover{background:var(--gl-lo)}
 
 /* Home buttons, chips and the selection toolbar buttons read as glass lozenges */
-body.glass .hb,body.glass .b{-webkit-backdrop-filter:blur(10px) saturate(1.6);backdrop-filter:blur(10px) saturate(1.6);box-shadow:inset 0 1px 0 var(--gl-hi),inset 0 -1px 0 var(--gl-lo)}
+body.glass .hb,body.glass .b{box-shadow:inset 0 1px 0 var(--gl-hi),inset 0 -1px 0 var(--gl-lo)}
 body.glass .add .b{background:var(--gl-bg)}
-body.glass #lay,body.glass #olb,body.glass #aib2,body.glass #sctoggle{background:var(--gl-bg);-webkit-backdrop-filter:blur(14px) saturate(1.8);backdrop-filter:blur(14px) saturate(1.8);box-shadow:inset 0 1px 0 var(--gl-hi);border:1px solid var(--gl-ring);border-radius:12px}
+body.glass #lay,body.glass #olb,body.glass #aib2,body.glass #sctoggle{background:var(--gl-bg);box-shadow:inset 0 1px 0 var(--gl-hi);border:1px solid var(--gl-ring);border-radius:12px}
 body.glass .lcp{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 16px -8px var(--gl-shadow)}
 
 /* page content stays calm: text blocks keep their own look, the canvas and code stay solid for legibility */
@@ -148,3 +146,10 @@ body.glass .cvw,body.glass .cb,body.glass pre,body.glass textarea.cd{-webkit-bac
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
  body.glass #side,body.glass .menu,body.glass .icbox,body.glass #qs .qbox,body.glass #ft,body.glass #sb,body.glass .cvt,body.glass #ctb,body.glass #toast{background:var(--panel)!important}}
 .glasstg{display:flex;gap:10px;align-items:flex-start;padding:2px 2px 12px;cursor:pointer}.glasstg b{display:block;font:600 13.5px var(--ui);color:var(--tx)}.glasstg i{display:block;font:12px var(--ui);color:var(--mut);font-style:normal}.glasstg input{margin-top:3px;accent-color:var(--y)}
+
+body.glass #side,body.glass .icbox,body.glass #qs.show .qbox,body.glass #ft,body.glass #sb,body.glass #ctb{-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur)}
+body.glass .menu.show,body.glass #thp.show,body.glass #hip.show,body.glass #tpl.show,body.glass #rvm.show,body.glass #lyp.show,body.glass #stk.show,body.glass #frb.show{-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur)}
+body.glass #side::after,body.glass .icbox::after,body.glass #qs .qbox::after{display:none}
+body.glass .menu,body.glass #thp,body.glass #hip,body.glass #tpl,body.glass #rvm,body.glass #lyp,body.glass #stk,body.glass #frb,body.glass #sl,body.glass #toast{background:var(--gl-bg2)!important}
+
+.glbtn.on{color:var(--y)}

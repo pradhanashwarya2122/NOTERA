@@ -180,9 +180,11 @@ try:
         # home progress
         pg.evaluate("homeOn=true;homeMode='home';homeCur=cur;render()")
         ok("day streak" in pg.inner_text(".hstats"), "Home shows the streak")
-        ok(pg.evaluate("document.body.classList.contains('glass')&&parseFloat(getComputedStyle(document.querySelector('#side')).borderRadius)>=20&&getComputedStyle(document.querySelector('#side')).backdropFilter.includes('blur')"), "Liquid Glass is on by default: the sidebar floats as rounded, blurred glass")
-        pg.evaluate("setGlass(false)")
-        ok(pg.evaluate("parseFloat(getComputedStyle(document.querySelector('#side')).borderRadius)<10"), "Liquid Glass can be switched off")
+        ok(pg.evaluate("!document.body.classList.contains('glass')"), "Liquid Glass starts off so the app stays fast")
+        pg.click("#glb")
+        ok(pg.evaluate("document.body.classList.contains('glass')&&parseFloat(getComputedStyle(document.querySelector('#side')).borderRadius)>=20&&getComputedStyle(document.querySelector('#side')).backdropFilter.includes('blur')&&document.querySelector('#glb .lbl').textContent==='Glass: on'"), "the Glass button turns on floating blurred glass")
+        pg.click("#glb")
+        ok(pg.evaluate("parseFloat(getComputedStyle(document.querySelector('#side')).borderRadius)<10"), "the Glass button turns it off again")
         pg.evaluate("setGlass(true)")
 
         # drag an image so the text wraps around it, and bullets

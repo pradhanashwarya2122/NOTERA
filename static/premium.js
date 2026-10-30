@@ -61,8 +61,8 @@ afterRender();
 /* ---------- Liquid Glass on/off and light/dark awareness ---------- */
 const darkNow=()=>/dark/.test(getComputedStyle(document.documentElement).colorScheme||'');
 const syncDark=()=>document.body.classList.toggle('dk',darkNow());
-window.setGlass=function(on){document.body.classList.toggle('glass',on);try{localStorage.setItem('nt.glass',on?'1':'0')}catch(e){}syncDark()};
-(()=>{let on=true;try{on=localStorage.getItem('nt.glass')!=='0'}catch(e){}setGlass(on);setTimeout(syncDark,400);
+window.setGlass=function(on){document.body.classList.toggle('glass',on);const gb=document.getElementById('glb');if(gb){gb.classList.toggle('on',on);const l=gb.querySelector('.lbl');if(l)l.textContent='Glass: '+(on?'on':'off')}const gt=document.getElementById('glasstg');if(gt)gt.checked=on;try{localStorage.setItem('nt.glass',on?'1':'0')}catch(e){}syncDark()};
+(()=>{let on=false;try{on=localStorage.getItem('nt.glass')==='1'}catch(e){}setGlass(on);const gb=document.getElementById('glb');if(gb)gb.onclick=()=>setGlass(!document.body.classList.contains('glass'));setTimeout(syncDark,400);
  new MutationObserver(syncDark).observe(document.documentElement,{attributes:true,attributeFilter:['style']})})();
 
 /* ---------- themes cross-fade ---------- */

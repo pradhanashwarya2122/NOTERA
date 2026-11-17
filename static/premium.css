@@ -99,3 +99,25 @@ body.sidecol #ctb,body.solo.libv #ctb{left:0}
  #ed{animation:ntFade .28s var(--smooth)}
  @keyframes ntFade{from{opacity:.0;transform:translateY(6px)}to{opacity:1;transform:none}}
 }
+
+/* usability layer */
+#toast.act{pointer-events:auto}
+#toast .tact{margin-left:12px;padding:2px 10px;border-radius:999px;border:1px solid currentColor;background:transparent;color:inherit;font:600 12.5px var(--ui);cursor:pointer}
+.lastedit{font:12px var(--ui);color:var(--mut);margin:2px 0 10px}
+.emptyhint{font:13.5px var(--ui);color:var(--mut);padding:10px 12px;border:1px dashed var(--ln);border-radius:10px;margin:6px 0 14px}
+.emptyhint kbd,.hh kbd{font:600 11.5px var(--ui);padding:1px 6px;border:1px solid var(--ln);border-radius:5px;background:var(--bg)}
+.mrare{border-top:1px solid var(--ln);margin-top:4px;padding-top:4px}
+.mrare summary{cursor:pointer;font:600 12px var(--ui);color:var(--mut);padding:6px 10px;list-style:none}
+.mrare summary::-webkit-details-marker{display:none}
+.mrare summary::before{content:'\25B8  '}.mrare[open] summary::before{content:'\25BE  '}
+#ed{zoom:var(--tz,1)}
+#sv:focus-visible,#bnav button:focus-visible{outline:2px solid var(--y);outline-offset:2px}
+#bnav{display:none}
+@media (pointer:coarse){button,.nv,.pg,select,summary{min-height:44px}.ce{min-height:28px}}
+@media (max-width:760px){
+ #bnav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--panel);border-top:1px solid var(--ln);padding:6px 6px max(6px,env(safe-area-inset-bottom))}
+ #bnav button{flex:1;min-height:44px;border:0;background:transparent;color:var(--tx);font:600 12.5px var(--ui);border-radius:10px}
+ #bnav button:active{background:var(--veil2)}
+ #toast{bottom:calc(72px + env(safe-area-inset-bottom))}
+ #ed{padding-bottom:140px}
+}

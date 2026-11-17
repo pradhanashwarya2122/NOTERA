@@ -1,6 +1,6 @@
 /* Notera service worker: the app opens offline, and always prefers the newest version when online. */
 const VERSION = 'notera-v1';
-const SHELL = ['./', 'index.html', 'premium.css', 'premium.js', 'standalone.js', 'manifest.webmanifest', 'favicon.svg', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
+const SHELL = ['./', 'index.html', 'premium.css', 'premium.js', 'ux.js', 'standalone.js', 'manifest.webmanifest', 'favicon.svg', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
 const CDN = 'notera-cdn-v1';
 
 self.addEventListener('install', e => {

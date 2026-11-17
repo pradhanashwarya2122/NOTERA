@@ -93,7 +93,6 @@ body.sidecol #ctb,body.solo.libv #ctb{left:0}
 
 /* gentle, GPU-cheap motion: only opacity and transform */
 @media (prefers-reduced-motion:no-preference){
- #main{scroll-behavior:smooth}
  .pg,.nv{transition:background-color .18s,transform .22s var(--spring)}
  .pg:hover,.nv:hover{transform:translateX(2px)}
  .pg:active,.nv:active{transform:scale(.97)}

@@ -90,3 +90,13 @@ body.sidecol #ctb,body.solo.libv #ctb{left:0}
 .sbpill{position:absolute;left:6px;right:6px;border-radius:9px;background:var(--veil2);z-index:0;pointer-events:none}
 @media (prefers-reduced-motion:no-preference){.sbpill{transition:top .42s cubic-bezier(.34,1.56,.64,1),height .3s cubic-bezier(.32,.72,0,1)}}
 
+
+/* gentle, GPU-cheap motion: only opacity and transform */
+@media (prefers-reduced-motion:no-preference){
+ #main{scroll-behavior:smooth}
+ .pg,.nv{transition:background-color .18s,transform .22s var(--spring)}
+ .pg:hover,.nv:hover{transform:translateX(2px)}
+ .pg:active,.nv:active{transform:scale(.97)}
+ #ed{animation:ntFade .28s var(--smooth)}
+ @keyframes ntFade{from{opacity:.0;transform:translateY(6px)}to{opacity:1;transform:none}}
+}
